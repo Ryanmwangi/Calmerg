@@ -1,0 +1,20 @@
+{
+  "name": "calendar-merger",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "calendar-merger": "file:",
+    "express": "^4.17.1",
+    "ical": "^0.8.0",
+    "ical-generator": "^0.2.2",
+    "node-cron": "^2.0.3"
+  },
+  "description": "cal merge",
+  "main": "script.js",
+  "author": "Ryan",
+  "license": "ISC"
+}

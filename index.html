@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Merger</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Calendar Merger</h1>
+    <form id="merge-form">
+        <label for="cal1-url">Calendar 1 URL:</label>
+        <input type="url" id="cal1-url" name="cal1-url"><br><br>
+        <label for="cal1-prefix">Calendar 1 Prefix:</label>
+        <input type="text" id="cal1-prefix" name="cal1-prefix"><br><br>
+        <label for="cal2-url">Calendar 2 URL:</label>
+        <input type="url" id="cal2-url" name="cal2-url"><br><br>
+        <label for="cal2-prefix">Calendar 2 Prefix:</label>
+        <input type="text" id="cal2-prefix" name="cal2-prefix"><br><br>
+        <button type="submit">Merge Calendars</button>
+    </form>
+    <div id="result"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
