@@ -41,9 +41,18 @@ app.post('/merge', async (req, res) => {
         const validResults = results.filter((result) => result !== null);
 
         // Parse calendar data
-        const cal1 = ical.parseICS(cal1Data.data);
-        const cal2 = ical.parseICS(cal2Data.data);
         const mergedCal = [];
+        validResults.forEach((result) => {
+            const calendar = ical.parseICS(result.data);
+            Object.keys(calendar).forEach((key) => {
+                const event = calendar[key];
+                mergedCal.push({
+                    start: event.start,
+                    end: event.end,
+                    summary: `${result.prefix} ${event.summary}`,
+                });
+            });
+        });
 
         // Merge calendars
         Object.keys(cal1).forEach((key) => {
