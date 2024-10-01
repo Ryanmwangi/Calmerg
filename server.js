@@ -14,9 +14,13 @@ app.get('/', (req, res) => {
 });
 
 app.post('/merge', async (req, res) => {
-    const { cal1Url, cal1Prefix, cal2Url, cal2Prefix } = req.body;
+    const { calendars } = req.body;
 
     try {
+        //validate the input
+        if (!calendars || !Array.isArray(calendars)) {
+            return res.status(400).json({ error: 'Invalid input' });
+        }
         // Fetch calendar data from URLs
         const cal1Data = await axios.get(cal1Url);
         const cal2Data = await axios.get(cal2Url);
