@@ -54,24 +54,6 @@ app.post('/merge', async (req, res) => {
             });
         });
 
-        // Merge calendars
-        Object.keys(cal1).forEach((key) => {
-            let event = cal1[key];
-            mergedCal.push({
-                start: event.start,
-                end: event.end,
-                summary: `${cal1Prefix} ${event.summary}`,
-            });
-        });
-
-        Object.keys(cal2).forEach((key) => {
-            let event = cal2[key];
-            mergedCal.push({
-                start: event.start,
-                end: event.end,
-                summary: `${cal2Prefix} ${event.summary}`,
-            });
-        });
 
         // Save merged calendar to file
         const filename = `merged-${Date.now()}.ics`;
@@ -90,6 +72,7 @@ END:VEVENT
         });
         icalString += `END:VCALENDAR`;
         fs.writeFileSync(filename, icalString);
+
 
         // Generate a unique URL for the merged calendar
         const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
