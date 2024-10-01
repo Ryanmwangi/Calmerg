@@ -22,8 +22,21 @@ app.post('/merge', async (req, res) => {
             return res.status(400).json({ error: 'Invalid input' });
         }
         // Fetch calendar data from URLs
-        const cal1Data = await axios.get(cal1Url);
-        const cal2Data = await axios.get(cal2Url);
+        const promises = calendars.map((calendar) => {
+            return axios.get(calendar.url)
+                .then((response) => {
+                    return {
+                        data: response.data,
+                        prefix: calendar.prefix,
+                    };
+                })
+                .catch((error) => {
+                    console.error(error);
+                    return null;
+                });
+        });
+
+        const results = await Promise.all(promises);
 
         // Parse calendar data
         const cal1 = ical.parseICS(cal1Data.data);
