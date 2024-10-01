@@ -37,6 +37,8 @@ app.post('/merge', async (req, res) => {
         });
 
         const results = await Promise.all(promises);
+        // Filter out any failed requests
+        const validResults = results.filter((result) => result !== null);
 
         // Parse calendar data
         const cal1 = ical.parseICS(cal1Data.data);
