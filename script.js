@@ -1,31 +1,42 @@
 const form = document.getElementById('merge-form');
-const resultDiv = document.getElementById('result');
+        const calendars = document.getElementById('calendars');
+        const addCalendarButton = document.getElementById('add-calendar');
+        const result = document.getElementById('result');
 
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const cal1Url = document.getElementById('cal1-url').value;
-    const cal1Prefix = document.getElementById('cal1-prefix').value;
-    const cal2Url = document.getElementById('cal2-url').value;
-    const cal2Prefix = document.getElementById('cal2-prefix').value;
+        let calendarIndex = 1;
 
-    fetch('/merge', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            cal1Url,
-            cal1Prefix,
-            cal2Url,
-            cal2Prefix
-        })
-    })
-    .then(response => response.json())
-    .then((data) => {
-        resultDiv.innerHTML = `Merged calendar URL: <a href="${data.url}" target="_blank">${data.url}</a>`;
-    })
-    .catch((error) => {
-        console.error(error);
-        resultDiv.innerHTML = 'Error merging calendars';
-    });
-});
+        addCalendarButton.addEventListener('click', () => {
+            const newCalendar = document.createElement('div');
+            newCalendar.className = 'calendar';
+            newCalendar.innerHTML = `
+                <input type="text" id="prefix-${calendarIndex}" placeholder="Prefix">
+                <input type="url" id="url-${calendarIndex}" placeholder="Calendar URL">
+            `;
+            calendars.appendChild(newCalendar);
+            calendarIndex++;
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const calendarsData = [];
+            for (let i = 0; i < calendarIndex; i++) {
+                const prefix = document.getElementById(`prefix-${i}`).value;
+                const url = document.getElementById(`url-${i}`).value;
+                calendarsData.push({ prefix, url });
+            }
+            fetch('/merge', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ calendars: calendarsData })
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                result.innerHTML = `Merged calendar URL: <a href="${data.url}">${data.url}</a>`;
+            })
+            .catch((error) => {
+                console.error(error);
+                result.innerHTML = 'Error merging calendars';
+            });
+        });
