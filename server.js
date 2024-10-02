@@ -118,6 +118,14 @@ async function updateMergedCalendar(){
         console.error(error);
     }
 }
+
+const refreshInterval = 60 * 60 * 1000; // 1 hour
+
+setInterval(() => {
+    // Fetch new calendar data and update the merged calendar
+    updateMergedCalendar();
+}, refreshInterval);
+
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('0 * * * *', () => {
     console.log('Updating merged calendar...');
