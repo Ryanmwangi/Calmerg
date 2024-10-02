@@ -131,6 +131,24 @@ async function updateMergedCalendar(){
         });
     });
 
+    // Save merged calendar to file
+    const filename = `merged-${Date.now()}.ics`;
+    let icalString = `BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+`;
+    mergedCal.forEach((event) => {
+        icalString += `DTSTART:${event.start}
+DTEND:${event.end}
+SUMMARY:${event.summary}
+END:VEVENT
+`;
+    });
+    icalString += `END:VCALENDAR`;
+    fs.writeFileSync(filename, icalString);
+
 
     }  catch (error) {
         console.error(error);
