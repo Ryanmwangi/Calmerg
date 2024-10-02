@@ -40,5 +40,5 @@ const form = document.getElementById('merge-form');
                 result.innerHTML = 'Error merging calendars';
             });
         });
-
+        const refreshInterval = 60 * 60 * 1000; // 1 hour
    
