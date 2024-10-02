@@ -149,6 +149,9 @@ END:VEVENT
     icalString += `END:VCALENDAR`;
     fs.writeFileSync(filename, icalString);
 
+    // Update the merged calendar URL
+    const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
+
 
     }  catch (error) {
         console.error(error);
