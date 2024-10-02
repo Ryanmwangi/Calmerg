@@ -116,6 +116,22 @@ async function updateMergedCalendar(){
         const results = await Promise.all(promises);
         // Filter out any failed requests
     const validResults = results.filter((result) => result !== null);
+
+    // Parse calendar data
+    const mergedCal = [];
+    validResults.forEach((result) => {
+        const calendar = ical.parseICS(result.data);
+        Object.keys(calendar).forEach((key) => {
+            const event = calendar[key];
+            mergedCal.push({
+                start: event.start,
+                end: event.end,
+                summary: `${result.prefix} ${event.summary}`,
+            });
+        });
+    });
+
+
     }  catch (error) {
         console.error(error);
     }
