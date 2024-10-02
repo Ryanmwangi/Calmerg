@@ -149,8 +149,9 @@ END:VEVENT
     icalString += `END:VCALENDAR`;
     fs.writeFileSync(filename, icalString);
 
-    // Update the merged calendar URL
-    const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
+    // Generate a unique URL for the merged calendar
+    const mergedCalendarUrl = `http://localhost:3000/${filename}`;
+    console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
 
 
     }  catch (error) {
@@ -168,7 +169,7 @@ setInterval(() => {
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('0 * * * *', () => {
     console.log('Updating merged calendar...');
-    // TO DO: implement the logic to update the merged calendar
+    updateMergedCalendar();
 });
 
 // Start the server
