@@ -114,6 +114,8 @@ async function updateMergedCalendar(){
         });
 
         const results = await Promise.all(promises);
+        // Filter out any failed requests
+    const validResults = results.filter((result) => result !== null);
     }  catch (error) {
         console.error(error);
     }
