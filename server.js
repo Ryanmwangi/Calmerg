@@ -97,7 +97,14 @@ app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
 
-
+// Function to update the merged calendar
+async function updateMergedCalendar(){
+    try {
+        // Load calendars data from file
+        const calendarsFile = 'calendars.json';
+        const calendars = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
+    }
+}
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('0 * * * *', () => {
     console.log('Updating merged calendar...');
