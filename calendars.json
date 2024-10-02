@@ -1,0 +1,10 @@
+[
+    {
+        "url": "https://example.com/calendar1.ics",
+        "prefix": "Calendar 1"
+    },
+    {
+        "url": "https://example.com/calendar2.ics",
+        "prefix": "Calendar 2"
+    }
+]

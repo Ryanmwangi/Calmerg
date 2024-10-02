@@ -97,6 +97,7 @@ app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
 
+
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('0 * * * *', () => {
     console.log('Updating merged calendar...');
