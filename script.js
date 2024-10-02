@@ -40,3 +40,10 @@ const form = document.getElementById('merge-form');
                 result.innerHTML = 'Error merging calendars';
             });
         });
+
+    //regular refresh
+    const refreshInterval = 60 * 60 * 1000; // 1 hour
+    setInterval(() => {
+    // Fetch new calendar data and update the merged calendar
+         updateMergedCalendar();
+    }, refreshInterval);
