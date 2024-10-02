@@ -41,9 +41,4 @@ const form = document.getElementById('merge-form');
             });
         });
 
-    //regular refresh
-    const refreshInterval = 60 * 60 * 1000; // 1 hour
-    setInterval(() => {
-    // Fetch new calendar data and update the merged calendar
-         updateMergedCalendar();
-    }, refreshInterval);
+   
