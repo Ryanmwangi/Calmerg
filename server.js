@@ -137,10 +137,10 @@ async function updateMergedCalendar(){
 VERSION:2.0
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-BEGIN:VEVENT
 `;
     mergedCal.forEach((event) => {
-        icalString += `DTSTART:${event.start}
+        icalString += `BEGIN:VEVENT
+DTSTART:${event.start}
 DTEND:${event.end}
 SUMMARY:${event.summary}
 END:VEVENT
