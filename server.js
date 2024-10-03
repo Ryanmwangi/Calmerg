@@ -159,12 +159,6 @@ END:VEVENT
     }
 }
 
-const refreshInterval = 60 * 60 * 1000; // 1 hour
-
-setInterval(() => {
-    // Fetch new calendar data and update the merged calendar
-    updateMergedCalendar();
-}, refreshInterval);
 
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('0 * * * *', () => {
