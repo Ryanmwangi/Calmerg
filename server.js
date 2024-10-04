@@ -114,6 +114,7 @@ async function updateMergedCalendar(){
                     return {
                         data: response.data,
                         prefix: calendar.prefix,
+                        override: calendar.override,
                     };
                 })
                 .catch((error) => {
@@ -132,11 +133,19 @@ async function updateMergedCalendar(){
         const calendar = ical.parseICS(result.data);
         Object.keys(calendar).forEach((key) => {
             const event = calendar[key];
-            mergedCal.push({
-                start: event.start,
-                end: event.end,
-                summary: `${result.prefix} ${event.summary}`,
-            });
+            if (result.override) {
+                mergedCal.push({
+                    start: event.start,
+                    end: event.end,
+                    summary: result.prefix,
+                });
+            } else {
+                mergedCal.push({
+                    start: event.start,
+                    end: event.end,
+                    summary: `${result.prefix} ${event.summary}`,
+                });
+            }
         });
     });
 
@@ -158,8 +167,8 @@ END:VEVENT
     icalString += `END:VCALENDAR`;
     fs.writeFileSync(filename, icalString);
 
-    // Generate a unique URL for the merged calendar
-    const mergedCalendarUrl = `http://localhost:3000/${filename}`;
+   // Generate a unique URL for the merged calendar
+   const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
     console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
 
 
