@@ -28,6 +28,7 @@ app.post('/merge', async (req, res) => {
                     return {
                         data: response.data,
                         prefix: calendar.prefix,
+                        override: calendar.override,
                     };
                 })
                 .catch((error) => {
@@ -46,11 +47,19 @@ app.post('/merge', async (req, res) => {
             const calendar = ical.parseICS(result.data);
             Object.keys(calendar).forEach((key) => {
                 const event = calendar[key];
-                mergedCal.push({
-                    start: event.start,
-                    end: event.end,
-                    summary: `${result.prefix} ${event.summary}`,
-                });
+                if (result.override) {
+                    mergedCal.push({
+                        start: event.start,
+                        end: event.end,
+                        summary: result.prefix,
+                    });
+                } else {
+                    mergedCal.push({
+                        start: event.start,
+                        end: event.end,
+                        summary: `${result.prefix} ${event.summary}`,
+                    });
+                }
             });
         });
 
@@ -61,10 +70,10 @@ app.post('/merge', async (req, res) => {
 VERSION:2.0
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-BEGIN:VEVENT
 `;
         mergedCal.forEach((event) => {
-            icalString += `DTSTART:${event.start}
+            icalString += `BEGIN:VEVENT
+DTSTART:${event.start}
 DTEND:${event.end}
 SUMMARY:${event.summary}
 END:VEVENT
