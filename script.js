@@ -23,8 +23,9 @@ const form = document.getElementById('merge-form');
             const calendarsData = [];
             for (let i = 0; i < calendarIndex; i++) {
                 const prefix = document.getElementById(`prefix-${i}`).value;
+                const override = document.getElementById(`override-${i}`).checked;
                 const url = document.getElementById(`url-${i}`).value;
-                calendarsData.push({ prefix, url });
+                calendarsData.push({ prefix, override, url });
             }
             fetch('/merge', {
                 method: 'POST',
