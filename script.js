@@ -10,6 +10,8 @@ const form = document.getElementById('merge-form');
             newCalendar.className = 'calendar';
             newCalendar.innerHTML = `
                 <input type="text" id="prefix-${calendarIndex}" placeholder="Prefix">
+                <input type="checkbox" id="override-${calendarIndex}">
+                <label for="override-${calendarIndex}">Override</label>
                 <input type="url" id="url-${calendarIndex}" placeholder="Calendar URL">
             `;
             calendars.appendChild(newCalendar);
