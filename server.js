@@ -185,13 +185,19 @@ END:VEVENT
     }
 }
 
-
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('0 * * * *', () => {
     console.log('Updating merged calendar...');
     updateMergedCalendar();
 });
 
+// serve updated merged calendar to user
+app.get('/merged-calendar', (req, res) => {
+    const mergedCalendarUrlFile = 'merged_calendar_url.txt';
+    const mergedCalendarUrl = fs.readFileSync(mergedCalendarUrlFile, 'utf8');
+    res.redirect(mergedCalendarUrl);
+  });
+  
 // Start the server
 const port = 3000;
 app.listen(port, () => {
