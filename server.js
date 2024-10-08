@@ -109,7 +109,7 @@ async function updateMergedCalendar(){
         // Load calendars data from file
         const calendarsFile = 'calendars.json';
         const calendars = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
-         
+        
         // Fetch calendar data from URLs
          const promises = calendars.map((calendar) => {
             return axios.get(calendar.url)
@@ -168,10 +168,15 @@ END:VEVENT
 `;
     });
     icalString += `END:VCALENDAR`;
+    
     fs.writeFileSync(filename, icalString);
 
    // Generate a unique URL for the merged calendar
    const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
+  
+   // Store the merged calendar URL in a file
+   fs.writeFileSync(mergedCalendarUrlFile, mergedCalendarUrl);
+
     console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
 
 
