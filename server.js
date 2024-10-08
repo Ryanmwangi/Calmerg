@@ -100,6 +100,9 @@ app.get('/:filename', (req, res) => {
     res.sendFile(filename, { root: '.' });
 });
 
+// Store the merged calendar URL in a file
+const mergedCalendarUrlFile = 'merged_calendar_url.txt';
+
 // Function to update the merged calendar
 async function updateMergedCalendar(){
     try {
