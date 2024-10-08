@@ -172,7 +172,7 @@ END:VEVENT
     fs.writeFileSync(filename, icalString);
 
    // Generate a unique URL for the merged calendar
-   const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
+   const mergedCalendarUrl = `http://localhost:3000/${filename}`;
   
    // Store the merged calendar URL in a file
    fs.writeFileSync(mergedCalendarUrlFile, mergedCalendarUrl);
@@ -197,7 +197,7 @@ app.get('/merged-calendar', (req, res) => {
     const mergedCalendarUrl = fs.readFileSync(mergedCalendarUrlFile, 'utf8');
     res.redirect(mergedCalendarUrl);
   });
-  
+
 // Start the server
 const port = 3000;
 app.listen(port, () => {
