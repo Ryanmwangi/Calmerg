@@ -1,4 +1,5 @@
 **Calendar Merger Project**
+
 **Overview **
 
 The Calendar Merger project is a web application that allows users to merge multiple calendars into a single calendar. The application provides a simple and intuitive interface for users to add calendars, specify prefixes for each calendar, and override the event summaries if desired.
