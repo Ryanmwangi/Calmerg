@@ -73,8 +73,8 @@ METHOD:PUBLISH
 `;
         mergedCal.forEach((event) => {
             icalString += `BEGIN:VEVENT
-DTSTART:${event.start}
-DTEND:${event.end}
+DTSTART;VALUE=DATE:${event.start.toISOString().split('T')[0].replace(/-/g, '')}
+DTEND;VALUE=DATE:${event.end.toISOString().split('T')[0].replace(/-/g, '')}
 SUMMARY:${event.summary}
 END:VEVENT
 `;
