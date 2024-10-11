@@ -103,6 +103,22 @@ app.get('/:filename', (req, res) => {
 // Store the merged calendar URL in a file
 const mergedCalendarUrlFile = 'merged_calendar_url.txt';
 
+
+//calendarData object to store calendar data
+let calendarData = {
+    linkGroups: []
+  };
+
+// Function to add a new link group
+function addLinkGroup(name) {
+    const newLinkGroup = {
+      name,
+      links: []
+    };
+    calendarData.linkGroups.push(newLinkGroup);
+    return newLinkGroup;
+  }
+
 // Function to update the merged calendar
 async function updateMergedCalendar(){
     try {
