@@ -119,6 +119,17 @@ function addLinkGroup(name) {
     return newLinkGroup;
   }
 
+// Function to add a new link to a link group
+function addLinkToGroup(linkGroup, url, prefix, overrideSummary) {
+    const newLink = {
+      url,
+      prefix,
+      overrideSummary
+    };
+    linkGroup.links.push(newLink);
+    return newLink;
+  }
+
 // Function to update the merged calendar
 async function updateMergedCalendar(){
     try {
