@@ -9,6 +9,7 @@ const form = document.getElementById('merge-form');
             const newCalendar = document.createElement('div');
             newCalendar.className = 'calendar';
             newCalendar.innerHTML = `
+                <input type="text" id="link-group-name-${calendarIndex}" placeholder="Link Group Name">
                 <input type="text" id="prefix-${calendarIndex}" placeholder="Prefix">
                 <input type="checkbox" id="override-${calendarIndex}">
                 <label for="override-${calendarIndex}">Override</label>
@@ -22,6 +23,7 @@ const form = document.getElementById('merge-form');
             event.preventDefault();
             const calendarsData = [];
             for (let i = 0; i < calendarIndex; i++) {
+                const linkGroupName = document.getElementById(`link-group-name-${i}`).value;
                 const prefix = document.getElementById(`prefix-${i}`).value;
                 const override = document.getElementById(`override-${i}`).checked;
                 const url = document.getElementById(`url-${i}`).value;
@@ -42,7 +44,7 @@ const form = document.getElementById('merge-form');
                 console.error(error);
                 result.innerHTML = 'Error merging calendars';
             });
-            
+
             // Send the input data to the server
             fetch('/add-links', {
                 method: 'POST',
