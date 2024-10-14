@@ -139,10 +139,19 @@ function addLinkToGroup(linkGroup, url, prefix, overrideSummary) {
     // Add the new link to the calendarData object
     let linkGroup = calendarData.linkGroups.find((group) => group.name === linkGroupName);
     if (!linkGroup) {
-      linkGroup = addLinkGroup(linkGroupName);
-    }
-    addLinkToGroup(linkGroup, linkUrl, prefix, overrideSummary);
-  
+        linkGroup = {
+          name: linkGroupName,
+          links: []
+        };
+        calendarsData.linkGroups.push(linkGroup);
+      }
+      linkGroup.links.push({
+        url: linkUrl,
+        prefix,
+        overrideSummary
+      });
+  // Write the updated data back to calendars.json
+  fs.writeFileSync(calendarsFile, JSON.stringify(calendarsData, null, 2));
     res.json({ message: 'Link added successfully!' });
   });
 
