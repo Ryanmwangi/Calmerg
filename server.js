@@ -100,10 +100,6 @@ app.get('/:filename', (req, res) => {
     res.sendFile(filename, { root: '.' });
 });
 
-// Store the merged calendar URL in a file
-const mergedCalendarUrlFile = 'merged_calendar_url.txt';
-
-
 //calendarData object to store calendar data
 let calendarData = {
     linkGroups: []
@@ -129,6 +125,19 @@ function addLinkToGroup(linkGroup, url, prefix, overrideSummary) {
     linkGroup.links.push(newLink);
     return newLink;
   }
+//adding the new link to the calendarData object
+  app.post('/add-link', (req, res) => {
+    const { linkGroupName, linkUrl, prefix, overrideSummary } = req.body;
+  
+    // Add the new link to the calendarData object
+    let linkGroup = calendarData.linkGroups.find((group) => group.name === linkGroupName);
+    if (!linkGroup) {
+      linkGroup = addLinkGroup(linkGroupName);
+    }
+    addLinkToGroup(linkGroup, linkUrl, prefix, overrideSummary);
+  
+    res.json({ message: 'Link added successfully!' });
+  });
 
 // Function to update the merged calendar
 async function updateMergedCalendar(){
