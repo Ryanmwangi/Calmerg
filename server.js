@@ -128,7 +128,14 @@ function addLinkToGroup(linkGroup, url, prefix, overrideSummary) {
 //adding the new link to the calendarData object
   app.post('/add-link', (req, res) => {
     const { linkGroupName, linkUrl, prefix, overrideSummary } = req.body;
-  
+    // Read the existing data from calendars.json
+    const calendarsFile = 'calendars.json';
+    let calendarsData = {};
+    try {
+        calendarsData = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
+    } catch (error) {
+        console.error(error);
+    }
     // Add the new link to the calendarData object
     let linkGroup = calendarData.linkGroups.find((group) => group.name === linkGroupName);
     if (!linkGroup) {
