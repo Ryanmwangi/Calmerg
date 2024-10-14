@@ -42,7 +42,22 @@ const form = document.getElementById('merge-form');
                 console.error(error);
                 result.innerHTML = 'Error merging calendars';
             });
+            
+            // Send the input data to the server
+            fetch('/add-links', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ calendars: calendarsData })
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Links added successfully!');
+                }) .catch((error) => {
+                console.error('Error adding links:', error);
+            });
+            
         });
+        
         const refreshInterval = 60 * 60 * 1000; // 1 hour
         setInterval(() => {
             fetch('/merge')
