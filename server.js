@@ -158,29 +158,31 @@ function addLinkToGroup(linkGroup, url, prefix, overrideSummary) {
 // Function to update the merged calendar
 async function updateMergedCalendar(){
     try {
-        // Load calendars data from file
+        // Load calendars data from calendars.json file
         const calendarsFile = 'calendars.json';
         const calendars = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
         
-        // Fetch calendar data from URLs
-         const promises = calendars.map((calendar) => {
-            return axios.get(calendar.url)
+        // Fetch calendar data for each link group
+        const promises = calendarsData.linkGroups.map((linkGroup) => {
+            return Promise.all(linkGroup.links.map((link) => {
+            return axios.get(link.url)
                 .then((response) => {
                     return {
                         data: response.data,
-                        prefix: calendar.prefix,
-                        override: calendar.override,
+                        prefix: link.prefix,
+                        override: link.overrideSummary,
                     };
                 })
                 .catch((error) => {
                     console.error(error);
                     return null;
                 });
+        }));
         });
 
         const results = await Promise.all(promises);
         // Filter out any failed requests
-    const validResults = results.filter((result) => result !== null);
+        const validResults = results.flat().filter((result) => result !== null);
 
     // Parse calendar data
     const mergedCal = [];
@@ -227,7 +229,7 @@ END:VEVENT
    const mergedCalendarUrl = `http://localhost:3000/${filename}`;
   
    // Store the merged calendar URL in a file
-   fs.writeFileSync(mergedCalendarUrlFile, mergedCalendarUrl);
+   fs.writeFileSync('merged_calendar_url.txt', mergedCalendarUrl);
 
     console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
 
