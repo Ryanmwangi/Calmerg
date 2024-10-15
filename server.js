@@ -130,25 +130,25 @@ async function updateMergedCalendar(){
     try {
         // Load calendars data from calendars.json file
         const calendarsFile = 'calendars.json';
-        const calendars = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
+        const calendarsData = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
         
         // Fetch calendar data for each link group
-        const promises = calendarsData.linkGroups.map((linkGroup) => {
-            return Promise.all(linkGroup.links.map((link) => {
-            return axios.get(link.url)
+        const promises = calendarsData.calendars.map((calendar) => {
+            return Promise.all(calendar.links.map((link) => {
+              return axios.get(link.url)
                 .then((response) => {
-                    return {
-                        data: response.data,
-                        prefix: link.prefix,
-                        override: link.overrideSummary,
-                    };
+                  return {
+                    data: response.data,
+                    prefix: link.prefix,
+                    override: link.override,
+                  };
                 })
                 .catch((error) => {
-                    console.error(error);
-                    return null;
+                  console.error(error);
+                  return null;
                 });
-        }));
-        });
+            }));
+          });
 
         const results = await Promise.all(promises);
         // Filter out any failed requests
@@ -185,8 +185,8 @@ METHOD:PUBLISH
 `;
     mergedCal.forEach((event) => {
         icalString += `BEGIN:VEVENT
-DTSTART:${event.start}
-DTEND:${event.end}
+DTSTART;VALUE=DATE:${event.start.toISOString().split('T')[0].replace(/-/g, '')}
+DTEND;VALUE=DATE:${event.end.toISOString().split('T')[0].replace(/-/g, '')}
 SUMMARY:${event.summary}
 END:VEVENT
 `;
@@ -210,7 +210,7 @@ END:VEVENT
 }
 
 // Schedule a cron job to update the merged calendar every hour
-cron.schedule('0 * * * *', () => {
+cron.schedule('*/1 * * * *', () => {
     console.log('Updating merged calendar...');
     updateMergedCalendar();
 });
