@@ -39,25 +39,12 @@ const form = document.getElementById('merge-form');
             .then((response) => response.json())
             .then((data) => {
                 result.innerHTML = `Merged calendar URL: <a href="${data.url}">${data.url}</a>`;
+                console.log('Links added successfully!');
             })
             .catch((error) => {
                 console.error(error);
                 result.innerHTML = 'Error merging calendars';
             });
-
-            // Send the input data to the server
-            fetch('/add-links', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ calendars: calendarsData })
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Links added successfully!');
-                }) .catch((error) => {
-                console.error('Error adding links:', error);
-            });
-            
         });
         
         const refreshInterval = 60 * 60 * 1000; // 1 hour
