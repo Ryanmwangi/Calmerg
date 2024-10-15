@@ -85,6 +85,31 @@ END:VEVENT
 
         // Generate a unique URL for the merged calendar
         const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
+       
+        // Save the user input in a calendars.json file
+        const calendarsFile = 'calendars.json';
+        let calendarsData = {};
+        try {
+            calendarsData = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
+        } catch (error) {
+            console.error(error);
+        }
+        calendars.forEach((calendar) => {
+            let linkGroup = calendarsData.linkGroups.find((group) => group.name === calendar.linkGroupName);
+            if (!linkGroup) {
+                linkGroup = {
+                    name: calendar.linkGroupName,
+                    links: []
+                };
+                calendarsData.linkGroups.push(linkGroup);
+            }
+            linkGroup.links.push({
+                url: calendar.url,
+                prefix: calendar.prefix,
+                overrideSummary: calendar.override
+            });
+        });
+        fs.writeFileSync(calendarsFile, JSON.stringify(calendarsData, null, 2));
 
         res.json({ url: mergedCalendarUrl });
     } catch (error) {
@@ -99,61 +124,6 @@ app.get('/:filename', (req, res) => {
     res.setHeader('Content-Type', 'text/calendar');
     res.sendFile(filename, { root: '.' });
 });
-
-//calendarData object to store calendar data
-let calendarData = {
-    linkGroups: []
-  };
-
-// Function to add a new link group
-function addLinkGroup(name) {
-    const newLinkGroup = {
-      name,
-      links: []
-    };
-    calendarData.linkGroups.push(newLinkGroup);
-    return newLinkGroup;
-  }
-
-// Function to add a new link to a link group
-function addLinkToGroup(linkGroup, url, prefix, overrideSummary) {
-    const newLink = {
-      url,
-      prefix,
-      overrideSummary
-    };
-    linkGroup.links.push(newLink);
-    return newLink;
-  }
-//adding the new link to the calendarData object
-  app.post('/add-link', (req, res) => {
-    const { linkGroupName, linkUrl, prefix, overrideSummary } = req.body;
-    // Read the existing data from calendars.json
-    const calendarsFile = 'calendars.json';
-    let calendarsData = {};
-    try {
-        calendarsData = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
-    } catch (error) {
-        console.error(error);
-    }
-    // Add the new link to the calendarData object
-    let linkGroup = calendarData.linkGroups.find((group) => group.name === linkGroupName);
-    if (!linkGroup) {
-        linkGroup = {
-          name: linkGroupName,
-          links: []
-        };
-        calendarsData.linkGroups.push(linkGroup);
-      }
-      linkGroup.links.push({
-        url: linkUrl,
-        prefix,
-        overrideSummary
-      });
-  // Write the updated data back to calendars.json
-  fs.writeFileSync(calendarsFile, JSON.stringify(calendarsData, null, 2));
-    res.json({ message: 'Link added successfully!' });
-  });
 
 // Function to update the merged calendar
 async function updateMergedCalendar(){
