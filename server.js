@@ -132,9 +132,14 @@ async function updateMergedCalendar(){
         const calendarsFile = 'calendars.json';
         const calendarsData = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
         
+        // Check if calendarsData is defined and has the expected structure
+    if (!calendarsData || !calendarsData.linkGroups) {
+        throw new Error('Invalid calendars data structure');
+      }
+      console.log(calendarsData);
         // Fetch calendar data for each link group
-        const promises = calendarsData.calendars.map((calendar) => {
-            return Promise.all(calendar.links.map((link) => {
+        const promises = calendarsData.linkGroups.map((linkGroup) => {
+            return Promise.all(linkGroup.links.map((link) => {
               return axios.get(link.url)
                 .then((response) => {
                   return {
@@ -210,7 +215,7 @@ END:VEVENT
 }
 
 // Schedule a cron job to update the merged calendar every hour
-cron.schedule('*/1 * * * *', () => {
+cron.schedule('*/3 * * * *', () => {
     console.log('Updating merged calendar...');
     updateMergedCalendar();
 });

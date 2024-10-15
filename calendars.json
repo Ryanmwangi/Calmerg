@@ -1,34 +1,34 @@
 {
-    "linkGroups": [
-      {
-        "name": "Group 1",
-        "links": [
-          {
-            "url": "https://example.com/calendar1.ics",
-            "prefix": "Calendar 1",
-            "overrideSummary": false
-          },
-          {
-            "url": "https://example.com/calendar2.ics",
-            "prefix": "Calendar 2",
-            "overrideSummary": true
-          }
-        ]
-      },
-      {
-        "name": "Group 2",
-        "links": [
-          {
-            "url": "https://example.com/calendar3.ics",
-            "prefix": "Calendar 3",
-            "overrideSummary": false
-          },
-          {
-            "url": "https://example.com/calendar4.ics",
-            "prefix": "Calendar 4",
-            "overrideSummary": true
-          }
-        ]
-      }
-    ]
-  }
+  "linkGroups": [
+    {
+      "name": "Group 1",
+      "links": [
+        {
+          "url": "https://example.com/calendar1.ics",
+          "prefix": "Calendar 1",
+          "overrideSummary": false
+        },
+        {
+          "url": "https://example.com/calendar2.ics",
+          "prefix": "Calendar 2",
+          "overrideSummary": true
+        }
+      ]
+    },
+    {
+      "name": "Group 2",
+      "links": [
+        {
+          "url": "https://example.com/calendar3.ics",
+          "prefix": "Calendar 3",
+          "overrideSummary": false
+        },
+        {
+          "url": "https://example.com/calendar4.ics",
+          "prefix": "Calendar 4",
+          "overrideSummary": true
+        }
+      ]
+    }
+  ]
+}
