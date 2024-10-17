@@ -27,7 +27,7 @@ The application also generates a unique URL for the merged calendar and updates 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repository-url
+   git clone git@forge.ftt.gmbh:ryanmwangi/CalMerger.git
    ```
 
 2. Install the dependencies:
