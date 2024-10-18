@@ -97,7 +97,7 @@ END:VEVENT
        
         // Save the user input and generated ID in calendars.json file
         saveCalendarData(calendarId, calendars);
-        
+
         // Save the user input in a calendars.json file
         const calendarsFile = 'calendars.json';
         let calendarsData = {};
@@ -129,6 +129,14 @@ END:VEVENT
         res.status(500).json({ error: 'Failed to merge calendars' });
     }
 });
+
+// Serve the merged calendar file
+app.get('/calendar/:id', (req, res) => {
+    const filename = `${req.params.id}.ics`;
+    res.setHeader('Content-Type', 'text/calendar');
+    res.sendFile(filename, { root: MERGED_CALENDARS_DIR });
+});
+
 //function to save CalendarData to calendars.json
 function saveCalendarData(calendarId, calendars) {
     let calendarsData = { mergedCalendars: [] };
