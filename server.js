@@ -7,7 +7,13 @@ import axios from 'axios';
 const app = express();
 app.use(express.json());
 
-let mergedCalendarUrl = '';
+const CALENDARS_FILE = 'calendars.json';
+const MERGED_CALENDARS_DIR = 'merged_calendars';
+
+// Ensure the merged calendars directory exists
+if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
+    fs.mkdirSync(MERGED_CALENDARS_DIR);
+}
 
 app.get('/', (req, res) => {
     res.sendFile('index.html', { root: '.' });
@@ -21,6 +27,9 @@ app.post('/merge', async (req, res) => {
         if (!calendars || !Array.isArray(calendars)) {
             return res.status(400).json({ error: 'Invalid input' });
         }
+        // Generate a unique identifier for this set of calendars
+        const calendarId = crypto.randomBytes(16).toString('hex');
+        
         // Fetch calendar data from URLs
         const promises = calendars.map((calendar) => {
             return axios.get(calendar.url)
