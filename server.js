@@ -160,8 +160,7 @@ app.get('/:filename', (req, res) => {
 async function updateMergedCalendar(){
     try {
         // Load calendars data from calendars.json file
-        const calendarsFile = 'calendars.json';
-        const calendarsData = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
+        const calendarsData = JSON.parse(fs.readFileSync(CALENDARS_FILE, 'utf8'));
         
         // Check if calendarsData is defined and has the expected structure
     if (!calendarsData || !calendarsData.linkGroups) {
@@ -213,7 +212,7 @@ async function updateMergedCalendar(){
     });
 
     // Save merged calendar to file
-    const filename = `merged-${Date.now()}.ics`;
+    const filename = `${mergedCalendar.id}.ics`;
     let icalString = `BEGIN:VCALENDAR
 VERSION:2.0
 CALSCALE:GREGORIAN
@@ -235,7 +234,7 @@ END:VEVENT
    const mergedCalendarUrl = `http://localhost:3000/${filename}`;
   
    // Store the merged calendar URL in a file
-   fs.writeFileSync('merged_calendar_url.txt', mergedCalendarUrl);
+   fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
     console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
 
