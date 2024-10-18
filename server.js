@@ -29,7 +29,7 @@ app.post('/merge', async (req, res) => {
         }
         // Generate a unique identifier for this set of calendars
         const calendarId = crypto.randomBytes(16).toString('hex');
-        
+
         // Fetch calendar data from URLs
         const promises = calendars.map((calendar) => {
             return axios.get(calendar.url)
@@ -73,8 +73,8 @@ app.post('/merge', async (req, res) => {
         });
 
 
-        // Save merged calendar to file
-        const filename = `merged-${Date.now()}.ics`;
+        // Save merged calendar to file with unique identifier
+        const filename = `${calendarId}.ics`;
         let icalString = `BEGIN:VCALENDAR
 VERSION:2.0
 CALSCALE:GREGORIAN
