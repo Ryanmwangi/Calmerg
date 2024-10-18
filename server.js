@@ -95,6 +95,9 @@ END:VEVENT
         // Generate URL for the merged calendar
         const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/calendar/${calendarId}`;
        
+        // Save the user input and generated ID in calendars.json file
+        saveCalendarData(calendarId, calendars);
+        
         // Save the user input in a calendars.json file
         const calendarsFile = 'calendars.json';
         let calendarsData = {};
@@ -126,7 +129,18 @@ END:VEVENT
         res.status(500).json({ error: 'Failed to merge calendars' });
     }
 });
-
+//function to save CalendarData to calendars.json
+function saveCalendarData(calendarId, calendars) {
+    let calendarsData = { mergedCalendars: [] };
+    if (fs.existsSync(CALENDARS_FILE)) {
+        calendarsData = JSON.parse(fs.readFileSync(CALENDARS_FILE, 'utf8'));
+    }
+    calendarsData.mergedCalendars.push({
+        id: calendarId,
+        calendars: calendars
+    });
+    fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
+}
 // Serve the merged calendar file
 app.get('/:filename', (req, res) => {
     const filename = req.params.filename;
