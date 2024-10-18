@@ -89,11 +89,11 @@ END:VEVENT
 `;
         });
         icalString += `END:VCALENDAR`;
-        fs.writeFileSync(filename, icalString);
+        fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
 
-        // Generate a unique URL for the merged calendar
-        const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/${filename}`;
+        // Generate URL for the merged calendar
+        const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/calendar/${calendarId}`;
        
         // Save the user input in a calendars.json file
         const calendarsFile = 'calendars.json';
