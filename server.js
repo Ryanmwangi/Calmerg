@@ -126,10 +126,17 @@ function saveCalendarData(calendarId, linkGroupName, calendars) {
             console.error('Error reading calendars file:', error);
         }
     }
+    // Ensure mergedCalendars array exists
+    if (!calendarsData.mergedCalendars) {
+        calendarsData.mergedCalendars = [];
+    }
+
     calendarsData.mergedCalendars.push({
         id: calendarId,
+        linkGroupName: linkGroupName,
         calendars: calendars
     });
+    
     fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
 }
 
