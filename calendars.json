@@ -2,15 +2,14 @@
   "mergedCalendars": [
     {
       "id": "uniqueId1",
+      "linkGroupName": "Group 1",
       "calendars": [
         {
-          "linkGroupName": "Group 1",
           "url": "https://example.com/calendar1.ics",
           "prefix": "Calendar 1",
           "override": false
         },
         {
-          "linkGroupName": "Group 1",
           "url": "https://example.com/calendar2.ics",
           "prefix": "Calendar 2",
           "override": true
@@ -19,15 +18,14 @@
     },
     {
       "id": "uniqueId2",
+      "linkGroupName": "Group 2",
       "calendars": [
         {
-          "linkGroupName": "Group 2",
           "url": "https://example.com/calendar3.ics",
           "prefix": "Calendar 3",
           "override": false
         },
         {
-          "linkGroupName": "Group 2",
           "url": "https://example.com/calendar4.ics",
           "prefix": "Calendar 4",
           "override": true
