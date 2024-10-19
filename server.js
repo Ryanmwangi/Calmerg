@@ -16,6 +16,11 @@ if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
     fs.mkdirSync(MERGED_CALENDARS_DIR);
 }
 
+app.get('/script.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.sendFile('script.js', { root: '.' });
+});
+
 app.get('/', (req, res) => {
     res.sendFile('index.html', { root: '.' });
 });
@@ -73,7 +78,6 @@ app.post('/merge', async (req, res) => {
             });
         });
 
-
         // Save merged calendar to file with unique identifier
         const filename = `${calendarId}.ics`;
         let icalString = `BEGIN:VCALENDAR
@@ -84,14 +88,14 @@ METHOD:PUBLISH
         mergedCal.forEach((event) => {
             icalString += `BEGIN:VEVENT
 DTSTART;VALUE=DATE:${event.start.toISOString().split('T')[0].replace(/-/g, '')}
-DTEND;VALUE=DATE:${event.end.toISOString().split('T')[0].replace(/-/g, '')}
+DTEND;VALUE=DATE:${ event.end.toISOString().split('T')[0].replace(/-/g, '')}
 SUMMARY:${event.summary}
 END:VEVENT
 `;
         });
         icalString += `END:VCALENDAR`;
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
-         
+
         // Save the user input and generated ID in calendars.json file
         saveCalendarData(calendarId, calendars);
 
@@ -191,7 +195,7 @@ END:VEVENT
    // Store the merged calendar URL in a file
     fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
-    console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
+    console.log(`Merged calendar updated: ${mergedCalendar.id}`);
 
 }
     }  catch (error) {
@@ -200,7 +204,7 @@ END:VEVENT
 }
 
 // Schedule a cron job to update the merged calendar every hour
-cron.schedule('*/3 * * * *', () => {
+cron.schedule('1 * * * *', () => {
     console.log('Updating merged calendar...');
     updateMergedCalendars();
 });

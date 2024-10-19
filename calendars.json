@@ -1,32 +1,36 @@
 {
-  "linkGroups": [
+  "mergedCalendars": [
     {
-      "name": "Group 1",
-      "links": [
+      "id": "uniqueId1",
+      "calendars": [
         {
+          "linkGroupName": "Group 1",
           "url": "https://example.com/calendar1.ics",
           "prefix": "Calendar 1",
-          "overrideSummary": false
+          "override": false
         },
         {
+          "linkGroupName": "Group 1",
           "url": "https://example.com/calendar2.ics",
           "prefix": "Calendar 2",
-          "overrideSummary": true
+          "override": true
         }
       ]
     },
     {
-      "name": "Group 2",
-      "links": [
+      "id": "uniqueId2",
+      "calendars": [
         {
+          "linkGroupName": "Group 2",
           "url": "https://example.com/calendar3.ics",
           "prefix": "Calendar 3",
-          "overrideSummary": false
+          "override": false
         },
         {
+          "linkGroupName": "Group 2",
           "url": "https://example.com/calendar4.ics",
           "prefix": "Calendar 4",
-          "overrideSummary": true
+          "override": true
         }
       ]
     }
