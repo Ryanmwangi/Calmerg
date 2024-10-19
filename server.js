@@ -187,7 +187,7 @@ async function updateMergedCalendar(){
 
         const results = await Promise.all(promises);
         // Filter out any failed requests
-        const validResults = results.flat().filter((result) => result !== null);
+        const validResults = results.filter((result) => result !== null);
 
     // Parse calendar data
     const mergedCal = [];
@@ -228,17 +228,12 @@ END:VEVENT
     });
     icalString += `END:VCALENDAR`;
     
-    fs.writeFileSync(filename, icalString);
-
-   // Generate a unique URL for the merged calendar
-   const mergedCalendarUrl = `http://localhost:3000/${filename}`;
-  
    // Store the merged calendar URL in a file
    fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
     console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
 
-
+}
     }  catch (error) {
         console.error(error);
     }
