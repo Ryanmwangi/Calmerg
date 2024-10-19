@@ -114,10 +114,17 @@ app.get('/calendar/:id', (req, res) => {
 });
 
 //function to save CalendarData to calendars.json
-function saveCalendarData(calendarId, calendars) {
+function saveCalendarData(calendarId, linkGroupName, calendars) {
     let calendarsData = { mergedCalendars: [] };
     if (fs.existsSync(CALENDARS_FILE)) {
-        calendarsData = JSON.parse(fs.readFileSync(CALENDARS_FILE, 'utf8'));
+        try {
+            const fileContent = fs.readFileSync(CALENDARS_FILE, 'utf8');
+            if (fileContent) {
+                calendarsData = JSON.parse(fileContent);
+            }
+        } catch (error) {
+            console.error('Error reading calendars file:', error);
+        }
     }
     calendarsData.mergedCalendars.push({
         id: calendarId,
