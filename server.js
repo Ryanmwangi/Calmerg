@@ -121,18 +121,14 @@ function saveCalendarData(calendarId, calendars) {
     });
     fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
 }
+
 // Function to update the merged calendar
-async function updateMergedCalendar(){
+async function updateMergedCalendars(){
     try {
         // Load calendars data from calendars.json file
         const calendarsData = JSON.parse(fs.readFileSync(CALENDARS_FILE, 'utf8'));
         
-        // Check if calendarsData is defined and has the expected structure
-    if (!calendarsData || !calendarsData.linkGroups) {
-        throw new Error('Invalid calendars data structure');
-      }
-
-        // Fetch calendar data for each link group
+        // Fetch calendar data for each merged calendar
         for (const mergedCalendar of calendarsData.mergedCalendars) {
             const promises = mergedCalendar.calendars.map((calendar) => {
                 return axios.get(calendar.url)
@@ -193,7 +189,7 @@ END:VEVENT
     icalString += `END:VCALENDAR`;
     
    // Store the merged calendar URL in a file
-   fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
+    fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
     console.log(`Merged calendar updated: ${mergedCalendarUrl}`);
 
@@ -206,7 +202,7 @@ END:VEVENT
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('*/3 * * * *', () => {
     console.log('Updating merged calendar...');
-    updateMergedCalendar();
+    updateMergedCalendars();
 });
 
 // Start the server
