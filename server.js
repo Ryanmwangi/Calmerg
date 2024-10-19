@@ -167,24 +167,23 @@ async function updateMergedCalendar(){
     if (!calendarsData || !calendarsData.linkGroups) {
         throw new Error('Invalid calendars data structure');
       }
-      console.log(calendarsData);
+
         // Fetch calendar data for each link group
-        const promises = calendarsData.linkGroups.map((linkGroup) => {
-            return Promise.all(linkGroup.links.map((link) => {
-              return axios.get(link.url)
-                .then((response) => {
-                  return {
-                    data: response.data,
-                    prefix: link.prefix,
-                    override: link.override,
-                  };
-                })
-                .catch((error) => {
-                  console.error(error);
-                  return null;
-                });
-            }));
-          });
+        for (const mergedCalendar of calendarsData.mergedCalendars) {
+            const promises = mergedCalendar.calendars.map((calendar) => {
+                return axios.get(calendar.url)
+                    .then((response) => {
+                        return {
+                            data: response.data,
+                            prefix: calendar.prefix,
+                            override: calendar.override,
+                        };
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        return null;
+                    });
+            });
 
         const results = await Promise.all(promises);
         // Filter out any failed requests
