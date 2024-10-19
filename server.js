@@ -121,13 +121,6 @@ function saveCalendarData(calendarId, calendars) {
     });
     fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
 }
-// Serve the merged calendar file
-app.get('/:filename', (req, res) => {
-    const filename = req.params.filename;
-    res.setHeader('Content-Type', 'text/calendar');
-    res.sendFile(filename, { root: '.' });
-});
-
 // Function to update the merged calendar
 async function updateMergedCalendar(){
     try {
