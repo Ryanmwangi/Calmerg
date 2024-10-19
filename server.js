@@ -136,8 +136,12 @@ function saveCalendarData(calendarId, linkGroupName, calendars) {
         linkGroupName: linkGroupName,
         calendars: calendars
     });
-    
-    fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
+
+    try {
+        fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
+    } catch (error) {
+        console.error('Error writing to calendars file:', error);
+    }
 }
 
 // Function to update the merged calendar
