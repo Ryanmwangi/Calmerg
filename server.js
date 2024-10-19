@@ -91,40 +91,11 @@ END:VEVENT
         });
         icalString += `END:VCALENDAR`;
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
-
-
-        // Generate URL for the merged calendar
-        const mergedCalendarUrl = `${req.protocol}://${req.get('host')}/calendar/${calendarId}`;
-       
+         
         // Save the user input and generated ID in calendars.json file
         saveCalendarData(calendarId, calendars);
 
-        // Save the user input in a calendars.json file
-        const calendarsFile = 'calendars.json';
-        let calendarsData = {};
-        try {
-            calendarsData = JSON.parse(fs.readFileSync(calendarsFile, 'utf8'));
-        } catch (error) {
-            console.error(error);
-        }
-        calendars.forEach((calendar) => {
-            let linkGroup = calendarsData.linkGroups.find((group) => group.name === calendar.linkGroupName);
-            if (!linkGroup) {
-                linkGroup = {
-                    name: calendar.linkGroupName,
-                    links: []
-                };
-                calendarsData.linkGroups.push(linkGroup);
-            }
-            linkGroup.links.push({
-                url: calendar.url,
-                prefix: calendar.prefix,
-                overrideSummary: calendar.override
-            });
-        });
-        fs.writeFileSync(calendarsFile, JSON.stringify(calendarsData, null, 2));
-
-        res.json({ url: mergedCalendarUrl });
+        res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${calendarId}` });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to merge calendars' });
