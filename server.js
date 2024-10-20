@@ -26,11 +26,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/merge', async (req, res) => {
-    const { calendars } = req.body;
+    const { linkGroupName, calendars } = req.body;
 
     try {
-        //validate the input
-        if (!calendars || !Array.isArray(calendars)) {
+        // Validate the input
+        if (!linkGroupName || !calendars || !Array.isArray(calendars)) {
             return res.status(400).json({ error: 'Invalid input' });
         }
         // Generate a unique identifier for this set of calendars
@@ -97,7 +97,7 @@ END:VEVENT
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
         // Save the user input and generated ID in calendars.json file
-        saveCalendarData(calendarId, calendars);
+        saveCalendarData(calendarId, linkGroupName, calendars);
 
         res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${calendarId}` });
     } catch (error) {
