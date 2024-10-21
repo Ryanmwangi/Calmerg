@@ -23,9 +23,9 @@ const form = document.getElementById('merge-form');
             const linkGroupName = document.getElementById('link-group-name').value;
             const calendarsData = [];
             for (let i = 0; i < calendarIndex; i++) {
-                const prefix = document.getElementById(`prefix-${i}`).value;
-                const override = document.getElementById(`override-${i}`).checked;
-                const url = document.getElementById(`url-${i}`).value;
+                const prefix = document.getElementById(`prefix-${i}`);
+                const override = document.getElementById(`override-${i}`);
+                const url = document.getElementById(`url-${i}`);
                 if (prefix && override && url) {
                     calendarsData.push({
                         prefix: prefix.value,
@@ -53,6 +53,6 @@ const form = document.getElementById('merge-form');
             })
             .catch((error) => {
                 console.error('Error:', error);
-                result.innerHTML = `Error merging calendars: ${error.message}`
+                result.innerHTML = `Error merging calendars: ${error.message || 'Unknown error'}`
             });
         });
