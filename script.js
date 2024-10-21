@@ -52,8 +52,8 @@ const form = document.getElementById('merge-form');
                 console.log('Links added successfully!');
             })
             .catch((error) => {
-                console.error(error);
-                result.innerHTML = 'Error merging calendars';
+                console.error('Error:', error);
+                result.innerHTML = `Error merging calendars: ${error.message}`
             });
         });
         
