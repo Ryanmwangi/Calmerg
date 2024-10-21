@@ -56,17 +56,3 @@ const form = document.getElementById('merge-form');
                 result.innerHTML = `Error merging calendars: ${error.message}`
             });
         });
-        
-        const refreshInterval = 60 * 60 * 1000; // 1 hour
-        setInterval(() => {
-            fetch('/merge')
-                .then((response) => response.json())
-                .then((data) => {
-                    result.innerHTML = `Merged calendar URL: <a href="${data.url}">${data.url}</a>`;
-                })
-                .catch((error) => {
-                    console.error(error);
-                    result.innerHTML = 'Error merging calendars';
-                });
-        }, refreshInterval);
-   
