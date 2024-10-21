@@ -221,6 +221,12 @@ END:VEVENT
     }
 }
 
+// Endpoint to refresh the merged calendar
+app.post('/refresh/:id', async (req, res) => {
+    const calendarId = req.params.id;
+    await updateMergedCalendars(calendarId);
+});
+
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('1 * * * *', () => {
     console.log('Updating merged calendar...');
