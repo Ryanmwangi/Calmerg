@@ -1,9 +1,11 @@
 const form = document.getElementById('merge-form');
 const calendars = document.getElementById('calendars');
 const addCalendarButton = document.getElementById('add-calendar');
+const refreshCalendarsButton = document.getElementById('refresh-calendars');
 const result = document.getElementById('result');
 
 let calendarIndex = 1;
+let mergedUrl = '';
 
 // Function to validate URL format
 function isValidUrl(url) {
@@ -64,6 +66,7 @@ function isValidUrl(url) {
                 return response.json();
             })        
             .then((data) => {
+                mergedUrl = data.url;
                 result.innerHTML = `Merged calendar URL: <a href="${data.url}">${data.url}</a>`;
                 console.log('Links added successfully!');
             })
@@ -73,3 +76,28 @@ function isValidUrl(url) {
             });
         }
     });
+
+    // Refresh button event listener
+refreshCalendarsButton.addEventListener('click', () => {
+    if (mergedUrl) {
+        // Call the server to refresh the merged calendar
+        fetch(`/refresh/${mergedUrl.split('/').pop()}`) // Extract the calendar ID from the URL
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to refresh calendar data');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                result.innerHTML = `Merged calendar URL: <a href="${mergedUrl}">${mergedUrl}</a>`;
+                console.log('Calendar data refreshed successfully!');
+            })
+            .catch((error) => {
+                console.error('Error refreshing calendar data:', error);
+                result.innerHTML = `Error refreshing calendar data: ${error.message || 'Unknown error'}`;
+            });
+    } else {
+        alert('No merged calendar URL available to refresh.');
+    }
+});
+
