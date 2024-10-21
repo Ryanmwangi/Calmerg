@@ -41,7 +41,12 @@ const form = document.getElementById('merge-form');
                 },
                 body: JSON.stringify({ calendars: calendarsData })
             })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })        
             .then((data) => {
                 result.innerHTML = `Merged calendar URL: <a href="${data.url}">${data.url}</a>`;
                 console.log('Links added successfully!');
