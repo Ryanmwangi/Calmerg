@@ -26,7 +26,13 @@ const form = document.getElementById('merge-form');
                 const prefix = document.getElementById(`prefix-${i}`).value;
                 const override = document.getElementById(`override-${i}`).checked;
                 const url = document.getElementById(`url-${i}`).value;
-                calendarsData.push({ linkGroupName, prefix, override, url });
+                if (prefix && override && url) {
+                    calendarsData.push({
+                        prefix: prefix.value,
+                        override: override.checked,
+                        url: url.value
+                    });
+                }
             }
             fetch('/merge', {
                 method: 'POST',
