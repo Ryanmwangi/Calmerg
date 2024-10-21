@@ -39,7 +39,7 @@ const form = document.getElementById('merge-form');
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ calendars: calendarsData })
+                body: JSON.stringify({ linkGroupName, calendars: calendarsData })
             })
             .then((response) => {
                 if (!response.ok) {
