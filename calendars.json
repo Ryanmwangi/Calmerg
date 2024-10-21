@@ -1,34 +1,18 @@
 {
   "mergedCalendars": [
     {
-      "id": "uniqueId1",
-      "linkGroupName": "Group 1",
+      "id": "a5dcf2ba0a4859fed0d4e5a1cc0a60b3",
+      "linkGroupName": "test",
       "calendars": [
         {
-          "url": "https://example.com/calendar1.ics",
-          "prefix": "Calendar 1",
-          "override": false
+          "prefix": "work",
+          "override": false,
+          "url": "https://calendar.google.com/calendar/ical/b4c66eb4bb2cc15257d071bab3f935385778b042112ea1aaedada47f3f1a6e3a%40group.calendar.google.com/public/basic.ics"
         },
         {
-          "url": "https://example.com/calendar2.ics",
-          "prefix": "Calendar 2",
-          "override": true
-        }
-      ]
-    },
-    {
-      "id": "uniqueId2",
-      "linkGroupName": "Group 2",
-      "calendars": [
-        {
-          "url": "https://example.com/calendar3.ics",
-          "prefix": "Calendar 3",
-          "override": false
-        },
-        {
-          "url": "https://example.com/calendar4.ics",
-          "prefix": "Calendar 4",
-          "override": true
+          "prefix": "Other work",
+          "override": false,
+          "url": "https://calendar.google.com/calendar/ical/774518759e4e2dd42aab0c511b02397bb216f3b67dc425d76bae07d1eff529d6%40group.calendar.google.com/public/basic.ics"
         }
       ]
     }
