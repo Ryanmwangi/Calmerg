@@ -1,15 +1,15 @@
 const form = document.getElementById('merge-form');
-        const calendars = document.getElementById('calendars');
-        const addCalendarButton = document.getElementById('add-calendar');
-        const result = document.getElementById('result');
+const calendars = document.getElementById('calendars');
+const addCalendarButton = document.getElementById('add-calendar');
+const result = document.getElementById('result');
 
-        let alendarIndex = 1;
+let alendarIndex = 1;
 
-        // Function to validate URL format
-        function isValidUrl(url) {
-            const urlPattern = /^(https?:\/\/[^\s$.?#].[^\s]*)$/; // Regex for URL validation
-            return urlPattern.test(url);
-        }
+// Function to validate URL format
+function isValidUrl(url) {
+    const urlPattern = /^(https?:\/\/[^\s$.?#].[^\s]*)$/; // Regex for URL validation
+    return urlPattern.test(url);
+}
 
         addCalendarButton.addEventListener('click', () => {
             const newCalendar = document.createElement('div');
@@ -24,7 +24,7 @@ const form = document.getElementById('merge-form');
             calendarIndex++;
         });
 
-        form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', (event) => {
             event.preventDefault();
             const linkGroupName = document.getElementById('link-group-name').value;
             const calendarsData = [];
@@ -34,6 +34,7 @@ const form = document.getElementById('merge-form');
                 const prefix = document.getElementById(`prefix-${i}`);
                 const override = document.getElementById(`override-${i}`);
                 const url = document.getElementById(`url-${i}`);
+
                 if (prefix && override && url) {
                     // Validate the URL
                     if (!isValidUrl(url.value)) {
@@ -48,6 +49,7 @@ const form = document.getElementById('merge-form');
                     }
                 }
             }
+        if (valid) {
             fetch('/merge', {
                 method: 'POST',
                 headers: {
@@ -69,4 +71,5 @@ const form = document.getElementById('merge-form');
                 console.error('Error:', error);
                 result.innerHTML = `Error merging calendars: ${error.message || 'Unknown error'}`
             });
-        });
+        }
+    });
