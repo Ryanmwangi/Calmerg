@@ -3,7 +3,7 @@ const calendars = document.getElementById('calendars');
 const addCalendarButton = document.getElementById('add-calendar');
 const result = document.getElementById('result');
 
-let alendarIndex = 1;
+let calendarIndex = 1;
 
 // Function to validate URL format
 function isValidUrl(url) {
