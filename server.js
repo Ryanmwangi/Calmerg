@@ -30,8 +30,8 @@ app.post('/merge', async (req, res) => {
 
     try {
         // Validate the input
-        if (!linkGroupName || !calendars || !Array.isArray(calendars)) {
-            return res.status(400).json({ error: 'Invalid input' });
+        if (!linkGroupName || !calendars || !Array.isArray(calendars) || calendars.length === 0) {
+            return res.status(400).json({ error: 'Invalid input. Please provide a linkGroupName and at least one calendar.' });
         }
         // Generate a unique identifier for this set of calendars
         const calendarId = crypto.randomBytes(16).toString('hex');
