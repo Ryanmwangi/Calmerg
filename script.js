@@ -3,7 +3,13 @@ const form = document.getElementById('merge-form');
         const addCalendarButton = document.getElementById('add-calendar');
         const result = document.getElementById('result');
 
-        let calendarIndex = 1;
+        let alendarIndex = 1;
+
+        // Function to validate URL format
+        function isValidUrl(url) {
+            const urlPattern = /^(https?:\/\/[^\s$.?#].[^\s]*)$/; // Regex for URL validation
+            return urlPattern.test(url);
+        }
 
         addCalendarButton.addEventListener('click', () => {
             const newCalendar = document.createElement('div');
