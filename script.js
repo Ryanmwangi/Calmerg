@@ -28,16 +28,23 @@ const form = document.getElementById('merge-form');
             event.preventDefault();
             const linkGroupName = document.getElementById('link-group-name').value;
             const calendarsData = [];
+            let valid = true; // Flag to track URL validity
+
             for (let i = 0; i < calendarIndex; i++) {
                 const prefix = document.getElementById(`prefix-${i}`);
                 const override = document.getElementById(`override-${i}`);
                 const url = document.getElementById(`url-${i}`);
                 if (prefix && override && url) {
-                    calendarsData.push({
-                        prefix: prefix.value,
-                        override: override.checked,
-                        url: url.value
-                    });
+                    // Validate the URL
+            if (!isValidUrl(url.value)) {
+                valid = false; // Set flag to false if any URL is invalid
+                alert(`Invalid URL format for calendar ${i + 1}: ${url.value}`);
+            } else {
+                calendarsData.push({
+                    prefix: prefix.value,
+                    override: override.checked,
+                    url: url.value
+                });
                 }
             }
             fetch('/merge', {
