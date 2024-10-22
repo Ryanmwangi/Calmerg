@@ -241,7 +241,10 @@ app.post('/refresh/:id', async (req, res) => {
 // Schedule a cron job to update the merged calendar every hour
 cron.schedule('1 * * * *', () => {
     console.log('Updating merged calendar...');
-    updateMergedCalendars();
+    const calendarsData = JSON.parse(fs.readFileSync(CALENDARS_FILE, 'utf8'));
+    calendarsData.mergedCalendars.forEach((mergedCalendar) => {
+        updateMergedCalendars(mergedCalendar.id);
+    });
 });
 
 // Start the server
