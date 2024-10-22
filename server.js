@@ -87,8 +87,8 @@ METHOD:PUBLISH
 `;
         mergedCal.forEach((event) => {
             icalString += `BEGIN:VEVENT
-DTSTART;VALUE=DATE:${event.start.toISOString().split('T')[0].replace(/-/g, '')}
-DTEND;VALUE=DATE:${ event.end.toISOString().split('T')[0].replace(/-/g, '')}
+DTSTART;VALUE=DATETIME:${event.start.toISOString().replace(/-|:|\.\d{3}/g, '')}
+DTEND;VALUE=DATETIME:${event.end.toISOString().replace(/-|:|\.\d{3}/g, '')}
 SUMMARY:${event.summary}
 END:VEVENT
 `;
@@ -208,8 +208,8 @@ METHOD:PUBLISH
 `;
     mergedCal.forEach((event) => {
         icalString += `BEGIN:VEVENT
-DTSTART;VALUE=DATE:${event.start.toISOString().split('T')[0].replace(/-/g, '')}
-DTEND;VALUE=DATE:${event.end.toISOString().split('T')[0].replace(/-/g, '')}
+DTSTART;VALUE=DATETIME:${event.start.toISOString().replace(/-|:|\.\d{3}/g, '')}
+DTEND;VALUE=DATETIME:${event.end.toISOString().replace(/-|:|\.\d{3}/g, '')}
 SUMMARY:${event.summary}
 END:VEVENT
 `;
