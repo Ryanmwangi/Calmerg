@@ -145,27 +145,33 @@ function saveCalendarData(calendarId, linkGroupName, calendars) {
 }
 
 // Function to update the merged calendar
-async function updateMergedCalendars(){
+async function updateMergedCalendars(calendarId){
     try {
         // Load calendars data from calendars.json file
         const calendarsData = JSON.parse(fs.readFileSync(CALENDARS_FILE, 'utf8'));
+
+        // Find the merged calendar with the specified ID
+        const mergedCalendar = calendarsData.mergedCalendars.find((calendar) => calendar.id === calendarId);
         
+        if (!mergedCalendar) {
+            throw new Error(`Merged calendar with ID ${calendarId} not found`);
+        }
+
         // Fetch calendar data for each merged calendar
-        for (const mergedCalendar of calendarsData.mergedCalendars) {
-            const promises = mergedCalendar.calendars.map((calendar) => {
-                return axios.get(calendar.url)
-                    .then((response) => {
-                        return {
-                            data: response.data,
-                            prefix: calendar.prefix,
-                            override: calendar.override,
-                        };
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        return null;
-                    });
-            });
+        const promises = mergedCalendar.calendars.map((calendar) => {
+            return axios.get(calendar.url)
+                .then((response) => {
+                    return {
+                        data: response.data,
+                        prefix: calendar.prefix,
+                        override: calendar.override,
+                    };
+                })
+                .catch((error) => {
+                    console.error(error);
+                    return null;
+                });
+        });
 
         const results = await Promise.all(promises);
         // Filter out any failed requests
@@ -194,7 +200,7 @@ async function updateMergedCalendars(){
     });
 
     // Save merged calendar to file
-    const filename = `${mergedCalendar.id}.ics`;
+    const filename = `${calendarId}.ics`;
     let icalString = `BEGIN:VCALENDAR
 VERSION:2.0
 CALSCALE:GREGORIAN
@@ -213,9 +219,8 @@ END:VEVENT
    // Store the merged calendar URL in a file
     fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
-    console.log(`Merged calendar updated: ${mergedCalendar.id}`);
+    console.log(`Merged calendar updated: ${calendarId}`);
 
-}
     }  catch (error) {
         console.error(error);
     }
