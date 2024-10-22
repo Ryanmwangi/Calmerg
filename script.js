@@ -87,7 +87,7 @@ refreshCalendarsButton.addEventListener('click', () => {
         fetch(`/refresh/${calendarId}`, { method: 'POST' })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error('Failed to refresh calendar data');
+                    return response.json().then(err => { throw err; });
                 }
                 return response.json();
             })
