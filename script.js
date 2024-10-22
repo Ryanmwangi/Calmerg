@@ -80,8 +80,11 @@ function isValidUrl(url) {
     // Refresh button event listener
 refreshCalendarsButton.addEventListener('click', () => {
     if (mergedUrl) {
+        // Extract the calendar ID from the URL
+        const calendarId = mergedUrl.split('/').pop();
+
         // Call the server to refresh the merged calendar
-        fetch(`/refresh/${mergedUrl.split('/').pop()}`) // Extract the calendar ID from the URL
+        fetch(`/refresh/${calendarId}`, { method: 'POST' })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to refresh calendar data');
