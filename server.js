@@ -229,7 +229,13 @@ END:VEVENT
 // Endpoint to refresh the merged calendar
 app.post('/refresh/:id', async (req, res) => {
     const calendarId = req.params.id;
-    await updateMergedCalendars(calendarId);
+    try {
+        await updateMergedCalendars(calendarId);
+        res.json({ message: `Merged calendar refreshed: ${calendarId}` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: `Failed to refresh merged calendar: ${calendarId}` });
+    }
 });
 
 // Schedule a cron job to update the merged calendar every hour
