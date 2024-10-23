@@ -78,7 +78,7 @@ app.post('/merge', async (req, res) => {
             });
         });
 
-        // Save merged calendar to file with unique identifier
+        // Save merged calendar to .ics file with unique identifier
         const filename = `${calendarId}.ics`;
         let icalString = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -96,7 +96,7 @@ END:VEVENT
         icalString += `END:VCALENDAR`;
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
-        // Save the user input and generated ID in calendars.json file
+        // Save the user input and generated ID in a separate JSON file
         saveCalendarData(calendarId, linkGroupName, calendars);
 
         res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${calendarId}` });
@@ -162,8 +162,9 @@ function saveCalendarData(calendarId, linkGroupName, calendars) {
 // Function to update the merged calendar
 async function updateMergedCalendars(calendarId){
     try {
-        // Load calendars data from calendars.json file
-        const calendarsData = JSON.parse(fs.readFileSync(CALENDARS_FILE, 'utf8'));
+        // Load calendar data from the individual JSON file
+        const calendarFile = `${MERGED_CALENDARS_DIR}/${calendarId}.json`;
+        const calendarsData = JSON.parse(fs.readFileSync(calendarFile, 'utf8'));
 
         // Find the merged calendar with the specified ID
         const mergedCalendar = calendarsData.mergedCalendars.find((calendar) => calendar.id === calendarId);
