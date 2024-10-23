@@ -164,17 +164,10 @@ async function updateMergedCalendars(calendarId){
     try {
         // Load calendar data from the individual JSON file
         const calendarFile = `${MERGED_CALENDARS_DIR}/${calendarId}.json`;
-        const calendarsData = JSON.parse(fs.readFileSync(calendarFile, 'utf8'));
-
-        // Find the merged calendar with the specified ID
-        const mergedCalendar = calendarsData.mergedCalendars.find((calendar) => calendar.id === calendarId);
-        
-        if (!mergedCalendar) {
-            throw new Error(`Merged calendar with ID ${calendarId} not found`);
-        }
+        const calendarData = JSON.parse(fs.readFileSync(calendarFile, 'utf8'));
 
         // Fetch calendar data for each merged calendar
-        const promises = mergedCalendar.calendars.map((calendar) => {
+        const promises = calendarData.calendars.map((calendar) => {
             return axios.get(calendar.url)
                 .then((response) => {
                     return {
