@@ -114,7 +114,7 @@ app.get('/calendar/:id', (req, res) => {
 });
 
 //function to save CalendarData to calendars.json
-function saveCalendarData(calendarId, linkGroupName, calendars) {
+function saveCalendarDataJoint(calendarId, linkGroupName, calendars) {
     let calendarsData = { mergedCalendars: [] };
     if (fs.existsSync(CALENDARS_FILE)) {
         try {
@@ -141,6 +141,21 @@ function saveCalendarData(calendarId, linkGroupName, calendars) {
         fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
     } catch (error) {
         console.error('Error writing to calendars file:', error);
+    }
+}
+//function to save calendar data to seperate .json files
+function saveCalendarData(calendarId, linkGroupName, calendars) {
+    const calendarFile = `${MERGED_CALENDARS_DIR}/${calendarId}.json`;
+    const calendarData = {
+        id: calendarId,
+        linkGroupName: linkGroupName,
+        calendars: calendars
+    };
+
+    try {
+        fs.writeFileSync(calendarFile, JSON.stringify(calendarData, null, 2));
+    } catch (error) {
+        console.error('Error writing to calendar file:', error);
     }
 }
 
