@@ -121,6 +121,10 @@ app.get('/calendar/:name', async (req, res) => {
             // Check if the file is older than one hour
             if (now - lastModified > 60 * 60 * 1000) {
                 console .log('Refreshing calendar data...');
+
+                // Read the JSON file to get the source URL and other details
+                const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
+                const { linkGroupName, calendars } = jsonData;
             }
         }
     }
