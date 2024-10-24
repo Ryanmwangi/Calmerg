@@ -112,6 +112,15 @@ app.get('/calendar/:name', async (req, res) => {
     const icsFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
     const jsonFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.json`);
 
+    try {
+        // Check if the .ics file exists
+        if (fs.existsSync(icsFilePath)) {
+            const stats = fs.statSync(icsFilePath);
+            const lastModified = new Date(stats.mtime);
+            const now = new Date();
+        }
+    }
+
 });
 
 // Serve the merged calendar file 
