@@ -108,6 +108,7 @@ END:VEVENT
 
 // Serve the merged calendar file and refresh if older than an hour
 app.get('/calendar/:name', async (req, res) => {
+    const calendarName = req.params.name;
     
 
 });
