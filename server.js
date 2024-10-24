@@ -106,43 +106,13 @@ END:VEVENT
     }
 });
 
-// Serve the merged calendar file
+// Serve the merged calendar file 
 app.get('/calendar/:id', (req, res) => {
     const filename = `${req.params.id}.ics`;
     res.setHeader('Content-Type', 'text/calendar');
     res.sendFile(filename, { root: MERGED_CALENDARS_DIR });
 });
 
-//function to save CalendarData to calendars.json
-function saveCalendarDataJoint(calendarId, linkGroupName, calendars) {
-    let calendarsData = { mergedCalendars: [] };
-    if (fs.existsSync(CALENDARS_FILE)) {
-        try {
-            const fileContent = fs.readFileSync(CALENDARS_FILE, 'utf8');
-            if (fileContent) {
-                calendarsData = JSON.parse(fileContent);
-            }
-        } catch (error) {
-            console.error('Error reading calendars file:', error);
-        }
-    }
-    // Ensure mergedCalendars array exists
-    if (!calendarsData.mergedCalendars) {
-        calendarsData.mergedCalendars = [];
-    }
-
-    calendarsData.mergedCalendars.push({
-        id: calendarId,
-        linkGroupName: linkGroupName,
-        calendars: calendars
-    });
-
-    try {
-        fs.writeFileSync(CALENDARS_FILE, JSON.stringify(calendarsData, null, 2));
-    } catch (error) {
-        console.error('Error writing to calendars file:', error);
-    }
-}
 //function to save calendar data to seperate .json files
 function saveCalendarData(calendarId, linkGroupName, calendars) {
     const calendarFile = `${MERGED_CALENDARS_DIR}/${calendarId}.json`;
