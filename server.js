@@ -168,8 +168,29 @@ app.get('/calendar/:name', async (req, res) => {
                     });
                 });
 
+                //save merged calendar to file
+                let icalString = `BEGIN:VCALENDAR
+                VERSION:2.0
+                CALSCALE:GREGORIAN
+                METHOD:PUBLISH
+                `;
+                                mergedCal.forEach((event) => {
+                                    icalString += `BEGIN:VEVENT
+                DTSTART;VALUE=DATETIME:${event.start.toISOString().replace(/-|:|\.\d{3}/g, '')}
+                DTEND;VALUE=DATETIME:${event.end.toISOString().replace(/-|:|\.\d{3}/g, '')}
+                SUMMARY:${event.summary}
+                END:VEVENT
+                `;
+                                });
+                                icalString += `END:VCALENDAR`;
+                                fs.writeFileSync(icsFilePath, icalString);
+                
+                                console.log('Calendar data refreshed.');
             }
+        } else {
+            return res.status(404).json({ error: 'Calendar not found.' });
         }
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to retrieve calendar data.' });
