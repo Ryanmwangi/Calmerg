@@ -125,6 +125,22 @@ app.get('/calendar/:name', async (req, res) => {
                 // Read the JSON file to get the source URL and other details
                 const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
                 const { linkGroupName, calendars } = jsonData;
+
+                // Fetch calendar data for each merged calendar
+                const promises = calendars.map((calendar) => {
+                    return axios.get(calendar.url)
+                        .then((response) => {
+                            return {
+                                data: response.data,
+                                prefix: calendar.prefix,
+                                override: calendar.override,
+                            };
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            return null;
+                        });
+                });
             }
         }
     }
