@@ -8,8 +8,7 @@ import crypto from 'crypto';
 const app = express();
 app.use(express.json());
 
-const CALENDARS_FILE = 'calendars.json';
-const MERGED_CALENDARS_DIR = 'merged_calendars';
+const MERGED_CALENDARS_DIR = 'calendar';
 
 // Ensure the merged calendars directory exists
 if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
