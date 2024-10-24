@@ -191,6 +191,10 @@ app.get('/calendar/:name', async (req, res) => {
             return res.status(404).json({ error: 'Calendar not found.' });
         }
 
+        // Return the contents of the .ics file
+        res.setHeader('Content-Type', 'text/calendar');
+        res.sendFile(icsFilePath);
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to retrieve calendar data.' });
