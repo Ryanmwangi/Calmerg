@@ -143,8 +143,10 @@ app.get('/calendar/:name', async (req, res) => {
                 });
             }
         }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to retrieve calendar data.' });
     }
-
 });
 
 // Serve the merged calendar file 
