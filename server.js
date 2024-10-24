@@ -118,6 +118,10 @@ app.get('/calendar/:name', async (req, res) => {
             const stats = fs.statSync(icsFilePath);
             const lastModified = new Date(stats.mtime);
             const now = new Date();
+            // Check if the file is older than one hour
+            if (now - lastModified > 60 * 60 * 1000) {
+                console .log('Refreshing calendar data...');
+            }
         }
     }
 
