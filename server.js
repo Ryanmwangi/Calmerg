@@ -106,6 +106,12 @@ END:VEVENT
     }
 });
 
+// Serve the merged calendar file and refresh if older than an hour
+app.get('/calendar/:name', async (req, res) => {
+    
+
+});
+
 // Serve the merged calendar file 
 app.get('/calendar/:id', (req, res) => {
     const filename = `${req.params.id}.ics`;
