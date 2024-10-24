@@ -141,6 +141,10 @@ app.get('/calendar/:name', async (req, res) => {
                             return null;
                         });
                 });
+
+                const results = await Promise.all(promises);
+                // Filter out any failed requests
+                const validResults = results.filter((result) => result !== null);
             }
         }
     } catch (error) {
