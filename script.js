@@ -1,7 +1,6 @@
 const form = document.getElementById('merge-form');
 const calendars = document.getElementById('calendars');
 const addCalendarButton = document.getElementById('add-calendar');
-const refreshCalendarsButton = document.getElementById('refresh-calendars');
 const result = document.getElementById('result');
 
 let calendarIndex = 1;
