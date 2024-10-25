@@ -110,7 +110,7 @@ END:VEVENT
 app.get('/calendar/:name', async (req, res) => {
     const calendarName = req.params.name;
     const icsFilePath = path.resolve(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
-    const jsonFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.json`);
+    const jsonFilePath = path.resolve(MERGED_CALENDARS_DIR, `${calendarName}.json`);
 
     try {
         // Check if the .ics file exists
