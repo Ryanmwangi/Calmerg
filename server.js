@@ -109,7 +109,7 @@ END:VEVENT
 // Serve the merged calendar file and refresh if older than an hour
 app.get('/calendar/:name', async (req, res) => {
     const calendarName = req.params.name;
-    const icsFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
+    const icsFilePath = path.resolve(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
     const jsonFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.json`);
 
     try {
