@@ -76,31 +76,3 @@ function isValidUrl(url) {
             });
         }
     });
-
-    // Refresh button event listener
-refreshCalendarsButton.addEventListener('click', () => {
-    if (mergedUrl) {
-        // Extract the calendar ID from the URL
-        const calendarId = mergedUrl.split('/').pop();
-
-        // Call the server to refresh the merged calendar
-        fetch(`/refresh/${calendarId}`, { method: 'POST' })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw err; });
-                }
-                return response.json();
-            })
-            .then((data) => {
-                result.innerHTML = `Merged calendar URL: <a href="${mergedUrl}">${mergedUrl}</a>`;
-                console.log('Calendar data refreshed successfully!');
-            })
-            .catch((error) => {
-                console.error('Error refreshing calendar data:', error);
-                result.innerHTML = `Error refreshing calendar data: ${error.message || 'Unknown error'}`;
-            });
-    } else {
-        alert('No merged calendar URL available to refresh.');
-    }
-});
-
