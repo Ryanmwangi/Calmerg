@@ -201,12 +201,6 @@ app.get('/calendar/:name', async (req, res) => {
     }
 });
 
-// Serve the merged calendar file 
-app.get('/calendar/:id', (req, res) => {
-    const filename = `${req.params.id}.ics`;
-    res.setHeader('Content-Type', 'text/calendar');
-    res.sendFile(filename, { root: MERGED_CALENDARS_DIR });
-});
 
 //function to save calendar data to seperate .json files
 function saveCalendarData(calendarId, linkGroupName, calendars) {
