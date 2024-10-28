@@ -25,6 +25,11 @@ app.get('/', (req, res) => {
     res.sendFile('index.html', { root: '.' });
 });
 
+// Function to sanitize the linkGroupName for use as a filename
+function sanitizeFilename(filename) {
+    return filename.replace(/[<>:"/\\|?*]/g, '_'); // Replace invalid characters with underscores
+}
+
 // Merge calendars endpoint
 app.post('/merge', async (req, res) => {
     const { linkGroupName, calendars } = req.body;
