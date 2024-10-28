@@ -87,7 +87,7 @@ app.post('/merge', async (req, res) => {
         
         // Save the calendar to a file
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, calendar.toString());
-        
+
         // Save the user input and sanitizedLinkGroupName in a separate JSON file
         saveCalendarData(sanitizedLinkGroupName, linkGroupName, calendars);
 
@@ -137,6 +137,9 @@ app.get('/calendar/:name', async (req, res) => {
                 const results = await Promise.all(promises);
                 // Filter out any failed requests
                 const validResults = results.filter((result) => result !== null);
+
+                // Create a new iCalendar instance
+                const calendar = icalGenerator({ name: calendarName });
 
                 // Parse calendar data
                 const mergedCal = [];
