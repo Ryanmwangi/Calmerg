@@ -159,22 +159,8 @@ app.get('/calendar/:name', async (req, res) => {
                     });
                 });
 
-                //save merged calendar to file
-                let icalString = `BEGIN:VCALENDAR
-                VERSION:2.0
-                CALSCALE:GREGORIAN
-                METHOD:PUBLISH
-                `;
-                                mergedCal.forEach((event) => {
-                                    icalString += `BEGIN:VEVENT
-                DTSTART;VALUE=DATETIME:${event.start.toISOString().replace(/-|:|\.\d{3}/g, '')}
-                DTEND;VALUE=DATETIME:${event.end.toISOString().replace(/-|:|\.\d{3}/g, '')}
-                SUMMARY:${event.summary}
-                END:VEVENT
-                `;
-                                });
-                                icalString += `END:VCALENDAR`;
-                                fs.writeFileSync(icsFilePath, icalString);
+                // Save the calendar to a file
+                fs.writeFileSync(icsFilePath, calendar.toString());
                 
                                 console.log('Calendar data refreshed.');
             }
