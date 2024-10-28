@@ -85,8 +85,9 @@ app.post('/merge', async (req, res) => {
         });
 
         
-        fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
-
+        // Save the calendar to a file
+        fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, calendar.toString());
+        
         // Save the user input and sanitizedLinkGroupName in a separate JSON file
         saveCalendarData(sanitizedLinkGroupName, linkGroupName, calendars);
 
