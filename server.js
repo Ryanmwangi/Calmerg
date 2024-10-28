@@ -162,7 +162,7 @@ app.get('/calendar/:name', async (req, res) => {
                 // Save the calendar to a file
                 fs.writeFileSync(icsFilePath, calendar.toString());
                 
-                                console.log('Calendar data refreshed.');
+                console.log('Calendar data refreshed.');
             }
         } else {
             return res.status(404).json({ error: 'Calendar not found.' });
@@ -270,19 +270,6 @@ END:VEVENT
         console.error(error);
     }
 }
-
-// Endpoint to refresh the merged calendar
-app.post('/refresh/:id', async (req, res) => {
-    const calendarId = req.params.id;
-    try {
-        await updateMergedCalendars(calendarId);
-        res.json({ message: `Merged calendar refreshed: ${calendarId}` });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: `Failed to refresh merged calendar: ${calendarId}` });
-    }
-});
-
 
 // Start the server
 const port = 3000;
