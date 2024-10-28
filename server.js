@@ -40,6 +40,10 @@ app.post('/merge', async (req, res) => {
             return res.status(400).json({ error: 'Invalid input. Please provide a linkGroupName and at least one calendar.' });
         }
         
+        // Sanitize the linkGroupName to create a valid filename
+        const sanitizedLinkGroupName = sanitizeFilename(linkGroupName);
+        const filename = `${sanitizedLinkGroupName}.ics`;
+
         // Fetch calendar data from URLs
         const promises = calendars.map((calendar) => {
             return axios.get(calendar.url)
