@@ -67,42 +67,24 @@ app.post('/merge', async (req, res) => {
         const calendar = icalGenerator({ name: linkGroupName });
 
         // Parse calendar data
-        const mergedCal = [];
         validResults.forEach((result) => {
-            const calendar = ical.parseICS(result.data);
-            Object.keys(calendar).forEach((key) => {
-                const event = calendar[key];
-                if (result.override) {
-                    mergedCal.push({
-                        start: event.start,
-                        end: event.end,
-                        summary: result.prefix,
-                    });
-                } else {
-                    mergedCal.push({
-                        start: event.start,
-                        end: event.end,
-                        summary: `${result.prefix} ${event.summary}`,
-                    });
-                }
+            const parsedCalendar = ical.parseICS(result.data);
+            Object.keys(parsedCalendar).forEach((key) => {
+                const event = parsedCalendar[key];
+                const start = new Date(event.start);
+                const end = new Date(event.end);
+                const summary = result.override ? result.prefix : `${result.prefix} ${event.summary}`;
+
+                // Add event to the calendar
+                calendar.createEvent({
+                    start: start,
+                    end: end,
+                    summary: summary,
+                });
             });
         });
 
-        // Save merged calendar to .ics file with the sanitized linkGroupName
-        let icalString = `BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-METHOD:PUBLISH
-`;
-        mergedCal.forEach((event) => {
-            icalString += `BEGIN:VEVENT
-DTSTART;VALUE=DATETIME:${event.start.toISOString().replace(/-|:|\.\d{3}/g, '')}
-DTEND;VALUE=DATETIME:${event.end.toISOString().replace(/-|:|\.\d{3}/g, '')}
-SUMMARY:${event.summary}
-END:VEVENT
-`;
-        });
-        icalString += `END:VCALENDAR`;
+        
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
         // Save the user input and sanitizedLinkGroupName in a separate JSON file
