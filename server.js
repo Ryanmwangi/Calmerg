@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
     res.sendFile('index.html', { root: '.' });
 });
 
+// Merge calendars endpoint
 app.post('/merge', async (req, res) => {
     const { linkGroupName, calendars } = req.body;
 
@@ -124,7 +125,7 @@ app.get('/calendar/:name', async (req, res) => {
 
                 // Read the JSON file to get the source URL and other details
                 const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
-                const { linkGroupName, calendars } = jsonData;
+                const { calendars } = jsonData;
 
                 // Fetch calendar data for each merged calendar
                 const promises = calendars.map((calendar) => {
