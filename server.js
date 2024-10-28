@@ -3,6 +3,7 @@ import ical from 'ical';
 import fs from 'fs';
 import axios from 'axios';
 import path from 'path';
+import icalGenerator from 'ical-generator';
 
 const app = express();
 app.use(express.json());
