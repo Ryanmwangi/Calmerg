@@ -104,7 +104,7 @@ END:VEVENT
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
         // Save the user input and generated ID in a separate JSON file
-        saveCalendarData(calendarId, linkGroupName, calendars);
+        saveCalendarData(sanitizedLinkGroupName, linkGroupName, calendars);
 
         res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${calendarId}` });
     } catch (error) {
