@@ -103,10 +103,10 @@ END:VEVENT
         icalString += `END:VCALENDAR`;
         fs.writeFileSync(`${MERGED_CALENDARS_DIR}/${filename}`, icalString);
 
-        // Save the user input and generated ID in a separate JSON file
+        // Save the user input and sanitizedLinkGroupName in a separate JSON file
         saveCalendarData(sanitizedLinkGroupName, linkGroupName, calendars);
 
-        res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${calendarId}` });
+        res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${sanitizedLinkGroupName}` });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to merge calendars' });
