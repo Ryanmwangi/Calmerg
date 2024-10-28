@@ -142,24 +142,20 @@ app.get('/calendar/:name', async (req, res) => {
                 const calendar = icalGenerator({ name: calendarName });
 
                 // Parse calendar data
-                const mergedCal = [];
                 validResults.forEach((result) => {
-                    const calendar = ical.parseICS(result.data);
-                    Object.keys(calendar).forEach((key) => {
-                        const event = calendar[key];
-                        if (result.override) {
-                            mergedCal.push({
-                                start: event.start,
-                                end: event.end,
-                                summary: result.prefix,
-                            });
-                        } else {
-                            mergedCal.push({
-                                start: event.start,
-                                end: event.end,
-                                summary: `${result.prefix} ${event.summary}`,
-                            });
-                        }
+                    const parsedCalendar = ical.parseICS(result.data);
+                    Object.keys(parsedCalendar).forEach((key) => {
+                        const event = parsedCalendar[key];
+                        const start = new Date(event.start);
+                        const end = new Date(event.end);
+                        const summary = result.override ? result.prefix : `${result.prefix} ${event.summary}`;
+
+                        // Add event to the calendar
+                        calendar.createEvent({
+                            start: start,
+                            end: end,
+                            summary: summary,
+                        });
                     });
                 });
 
