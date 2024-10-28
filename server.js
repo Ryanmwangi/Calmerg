@@ -1,7 +1,6 @@
 import express from 'express';
 import ical from 'ical';
 import fs from 'fs';
-import cron from 'node-cron';
 import axios from 'axios';
 import path from 'path';
 
