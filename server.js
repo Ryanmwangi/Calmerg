@@ -39,7 +39,7 @@ app.post('/merge', async (req, res) => {
         if (!linkGroupName || !calendars || !Array.isArray(calendars) || calendars.length === 0) {
             return res.status(400).json({ error: 'Invalid input. Please provide a linkGroupName and at least one calendar.' });
         }
-        
+
         // Sanitize the linkGroupName to create a valid filename
         const sanitizedLinkGroupName = sanitizeFilename(linkGroupName);
         const filename = `${sanitizedLinkGroupName}.ics`;
@@ -86,8 +86,7 @@ app.post('/merge', async (req, res) => {
             });
         });
 
-        // Save merged calendar to .ics file with unique identifier
-        const filename = `${calendarId}.ics`;
+        // Save merged calendar to .ics file with the sanitized linkGroupName
         let icalString = `BEGIN:VCALENDAR
 VERSION:2.0
 CALSCALE:GREGORIAN
