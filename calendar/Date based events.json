@@ -1,11 +1,11 @@
 {
-  "id": "Date based events",
-  "linkGroupName": "Date based events",
+  "id": "date based events",
+  "linkGroupName": "date based events",
   "calendars": [
     {
-      "prefix": "Us holidays",
+      "prefix": "holidays",
       "override": false,
-      "url": "https://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
+      "url": "https://www.gov.uk/bank-holidays/england-and-wales.ics"
     }
   ]
 }

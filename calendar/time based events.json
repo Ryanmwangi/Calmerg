@@ -3,7 +3,7 @@
   "linkGroupName": "time based events",
   "calendars": [
     {
-      "prefix": "Holidays in sanfransisco",
+      "prefix": "holidays",
       "override": false,
       "url": "https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics"
     }
