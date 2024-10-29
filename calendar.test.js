@@ -38,5 +38,26 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
+    test('Merge time-based calendar', async () => {
+        const response = await request(app)
+            .post('/merge')
+            .send({
+                linkGroupName: 'Time Based Calendar',
+                calendars: [
+                    {
+                        url: 'https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics',
+                        prefix: 'Time Event',
+                        override: false,
+                    },
+                ],
+            });
+
+        expect(response.status).toBe(200);
+        expect(response.body.url).toMatch(/calendar\/Time_Based_Calendar/);
+        
+        // Check if the file was created
+        const filePath = path.join(MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
+        expect(fs.existsSync(filePath)).toBe(true);
+    });
 
 });
