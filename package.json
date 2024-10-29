@@ -20,6 +20,8 @@
   "author": "Ryan",
   "license": "ISC",
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "@babel/register": "^7.25.9",
     "jest": "^29.7.0"
   }
 }
