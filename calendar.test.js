@@ -80,5 +80,26 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
+    test('Merge calendar with override', async () => {
+        const response = await request(app)
+            .post('/merge')
+            .send({
+                linkGroupName: 'Override Calendar',
+                calendars: [
+                    {
+                        url: 'https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics',
+                        prefix: 'Override Event',
+                        override: true,
+                    },
+                ],
+            });
+
+        expect(response.status).toBe(200);
+        expect(response.body.url).toMatch(/calendar\/Override_Calendar/);
+        
+        // Check if the file was created
+        const filePath = path.join(MERGED_CALENDARS_DIR, 'Override_Calendar.ics');
+        expect(fs.existsSync(filePath)).toBe(true);
+    });
 
 });
