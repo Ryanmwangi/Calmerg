@@ -18,4 +18,8 @@ describe('Calendar Merging API', () => {
         fs.rmdirSync(MERGED_CALENDARS_DIR, { recursive: true });
     });
 
+    test('Merge date-based calendar', async () => {
+        
+    })
+
 });
