@@ -19,7 +19,18 @@ describe('Calendar Merging API', () => {
     });
 
     test('Merge date-based calendar', async () => {
-        
+        const response = await request(app)
+            .post('/merge')
+            .send({
+                linkGroupName: 'Date Based Calendar',
+                calendars: [
+                    {
+                        url: 'https://www.schulferien.org/media/ical/deutschland/ferien_bayern_2023.ics?k=PsL0S2B9rScFMn5PAxtf4OVQjMkWZsqqkK13zEJ0FCW5Q-2xQejfLJYaTN4EdYUsQHLDDbGVnVl93ms7en5vMUISjZ3H9Esu88Vp2ndnL5Q',
+                        prefix: 'Date Event',
+                        override: false,
+                    },
+                ],
+            });
     })
 
 });
