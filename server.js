@@ -86,8 +86,8 @@ app.post('/merge', async (req, res) => {
                 } else {
                     // Date-based event
                     calendar.createEvent({
-                        start: start,
-                        end: end,
+                        start: start.toISOString().split('T')[0], // Use only the date part
+                        end: end.toISOString().split('T')[0],     // Use only the date part
                         summary: summary,
                         allDay: true, // Mark as an all-day event
                     });
