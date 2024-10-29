@@ -11,7 +11,8 @@
     "express": "^4.17.1",
     "ical": "^0.8.0",
     "ical-generator": "^0.2.10",
-    "node-cron": "^2.0.3"
+    "node-cron": "^2.0.3",
+    "supertest": "^7.0.0"
   },
   "description": "cal merge",
   "main": "script.js",
