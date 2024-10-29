@@ -75,12 +75,23 @@ app.post('/merge', async (req, res) => {
                 const end = new Date(event.end);
                 const summary = result.override ? result.prefix : `${result.prefix} ${event.summary}`;
 
-                // Add event to the calendar
-                calendar.createEvent({
-                    start: start,
-                    end: end,
-                    summary: summary,
-                });
+                // Check if the event is date-based or time-based
+                if (event.start.includes('T')) {
+                    // Time-based event
+                    calendar.createEvent({
+                        start: start,
+                        end: end,
+                        summary: summary,
+                    });
+                } else {
+                    // Date-based event
+                    calendar.createEvent({
+                        start: start,
+                        end: end,
+                        summary: summary,
+                        allDay: true, // Mark as an all-day event
+                    });
+                }
             });
         });
 
