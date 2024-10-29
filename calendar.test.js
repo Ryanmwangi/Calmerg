@@ -33,6 +33,10 @@ describe('Calendar Merging API', () => {
             });
         expect(response.status).toBe(200);
         expect(response.body.url).toMatch(/calendar\/Date_Based_Calendar/);
-    })
+
+        // Check if the file was created
+        const filePath = path.join(MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
+        expect(fs.existsSync(filePath)).toBe(true);
+    });
 
 });
