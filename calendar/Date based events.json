@@ -1,0 +1,11 @@
+{
+  "id": "Date based events",
+  "linkGroupName": "Date based events",
+  "calendars": [
+    {
+      "prefix": "Us holidays",
+      "override": false,
+      "url": "https://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
+    }
+  ]
+}
