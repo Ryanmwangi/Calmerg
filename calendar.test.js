@@ -31,6 +31,8 @@ describe('Calendar Merging API', () => {
                     },
                 ],
             });
+        expect(response.status).toBe(200);
+        expect(response.body.url).toMatch(/calendar\/Date_Based_Calendar/);
     })
 
 });
