@@ -59,5 +59,26 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
+    test('Merge calendar without prefix', async () => {
+        const response = await request(app)
+            .post('/merge')
+            .send({
+                linkGroupName: 'No Prefix Calendar',
+                calendars: [
+                    {
+                        url: 'https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics',
+                        prefix: '',
+                        override: false,
+                    },
+                ],
+            });
+
+        expect(response.status).toBe(200);
+        expect(response.body.url).toMatch(/calendar\/No_Prefix_Calendar/);
+        
+        // Check if the file was created
+        const filePath = path.join(MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
+        expect(fs.existsSync(filePath)).toBe(true);
+    });
 
 });
