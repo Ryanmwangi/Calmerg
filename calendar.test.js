@@ -9,7 +9,11 @@ const MERGED_CALENDARS_DIR = 'calendar';
 let server;
 
 describe('Calendar Merging API', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
+        // Start the server
+        server = app.listen(0, () => {
+            console.log(`Server started on port 3000`);
+        });
         // Ensure the merged calendars directory exists
         if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
             fs.mkdirSync(MERGED_CALENDARS_DIR);
