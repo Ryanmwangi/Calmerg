@@ -11,7 +11,7 @@ let server;
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Start the server
-        server = app.listen(0, () => {
+        server = app.listen(0);
             console.log(`Server started on port 3000`);
         });
         // Ensure the merged calendars directory exists
