@@ -23,7 +23,7 @@ describe('Calendar Merging API', () => {
     afterAll( async () => {
         // Clean up the merged calendars directory after tests
         if (fs.existsSync(MERGED_CALENDARS_DIR)) {
-            fs.rmdirSync(MERGED_CALENDARS_DIR, { recursive: true });
+            fs.rmSync(MERGED_CALENDARS_DIR, { recursive: true, force: true });
         }
         // Close the server
         await new Promise(resolve => server.close(resolve));
