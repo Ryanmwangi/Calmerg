@@ -45,6 +45,7 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
+
     test('Merge time-based calendar', async () => {
         const response = await request(app)
             .post('/merge')
@@ -66,6 +67,7 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
+
     test('Merge calendar without prefix', async () => {
         const response = await request(app)
             .post('/merge')
@@ -87,6 +89,7 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
+    
     test('Merge calendar with override', async () => {
         const response = await request(app)
             .post('/merge')
