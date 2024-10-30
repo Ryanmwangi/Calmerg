@@ -76,7 +76,10 @@ app.post('/merge', async (req, res) => {
                 const summary = result.override ? result.prefix : `${result.prefix} ${event.summary}`;
 
                 // Check if the event is date-based or time-based
-                if (event.start.includes('T')) {
+                const startString = typeof event.start === 'string' ? event.start : start.toISOString();
+                const endString = typeof event.end === 'string' ? event.end : end.toISOString();
+
+                if (startString.includes('T')) {
                     // Time-based event
                     calendar.createEvent({
                         start: start,
@@ -86,8 +89,8 @@ app.post('/merge', async (req, res) => {
                 } else {
                     // Date-based event
                     calendar.createEvent({
-                        start: start.toISOString().split('T')[0], // Use only the date part
-                        end: end.toISOString().split('T')[0],     // Use only the date part
+                        start: startString.split('T')[0], // Use only the date part
+                        end: endString.split('T')[0],     // Use only the date part
                         summary: summary,
                         allDay: true, // Mark as an all-day event
                     });
@@ -161,23 +164,26 @@ app.get('/calendar/:name', async (req, res) => {
                         const end = new Date(event.end);
                         const summary = result.override ? result.prefix : `${result.prefix} ${event.summary}`;
 
-                        // Check if the event is date-based or time-based
-                        if (event.start.includes('T')) {
-                            // Time-based event
-                            calendar.createEvent({
-                                start: start,
-                                end: end,
-                                summary: summary,
-                            });
-                        } else {
-                            // Date-based event
-                            calendar.createEvent({
-                                start: start.toISOString().split('T')[0], // Use only the date part
-                                end: end.toISOString().split('T')[0],     // Use only the date part
-                                summary: summary,
-                                allDay: true, // Mark as an all-day event
-                            });
-                        }
+                       // Check if the event is date-based or time-based
+                       const startString = typeof event.start === 'string' ? event.start : start.toISOString();
+                       const endString = typeof event.end === 'string' ? event.end : end.toISOString();
+
+                       if (startString.includes('T')) {
+                           // Time-based event
+                           calendar.createEvent({
+                               start: start,
+                               end: end,
+                               summary: summary,
+                           });
+                       } else {
+                           // Date-based event
+                           calendar.createEvent({
+                               start: startString.split('T')[0], // Use only the date part
+                               end: endString.split('T')[0],     // Use only the date part
+                               summary: summary,
+                               allDay: true, // Mark as an all-day event
+                           });
+                       }
                     });
                 });
 
