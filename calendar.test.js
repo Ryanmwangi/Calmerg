@@ -22,7 +22,9 @@ describe('Calendar Merging API', () => {
 
     afterAll( async () => {
         // Clean up the merged calendars directory after tests
-        fs.rmdirSync(MERGED_CALENDARS_DIR, { recursive: true });
+        if (fs.existsSync(MERGED_CALENDARS_DIR)) {
+            fs.rmdirSync(MERGED_CALENDARS_DIR, { recursive: true });
+        }
     });
 
     test('Merge date-based calendar', async () => {
