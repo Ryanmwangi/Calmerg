@@ -1,0 +1,11 @@
+{
+  "id": "Time Based Calendar",
+  "linkGroupName": "Time Based Calendar",
+  "calendars": [
+    {
+      "url": "https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics",
+      "prefix": "Time Event",
+      "override": false
+    }
+  ]
+}

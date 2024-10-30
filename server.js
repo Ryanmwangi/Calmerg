@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 // Function to sanitize the linkGroupName for use as a filename
 function sanitizeFilename(filename) {
-    return filename.replace(/[<>:"/\\|?*]/g, '_'); // Replace invalid characters with underscores
+    return filename.replace(/[<>:"/\\|?* ]/g, '_'); // Replace invalid characters with underscores
 }
 
 // Merge calendars endpoint
