@@ -19,7 +19,8 @@ describe('Calendar Merging API', () => {
             fs.mkdirSync(MERGED_CALENDARS_DIR);
         }
     });
-    afterAll(() => {
+
+    afterAll( async () => {
         // Clean up the merged calendars directory after tests
         fs.rmdirSync(MERGED_CALENDARS_DIR, { recursive: true });
     });
