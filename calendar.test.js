@@ -13,7 +13,7 @@ describe('Calendar Merging API', () => {
         // Start the server
         server = app.listen(0);
             console.log(`Server started on port 3000`);
-        });
+        
         // Ensure the merged calendars directory exists
         if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
             fs.mkdirSync(MERGED_CALENDARS_DIR);
@@ -30,7 +30,7 @@ describe('Calendar Merging API', () => {
     });
 
     test('Merge date-based calendar', async () => {
-        const response = await request(app)
+        const response = await request(server)
             .post('/merge')
             .send({
                 linkGroupName: 'Date Based Calendar',
@@ -51,7 +51,7 @@ describe('Calendar Merging API', () => {
     });
 
     test('Merge time-based calendar', async () => {
-        const response = await request(app)
+        const response = await request(server)
             .post('/merge')
             .send({
                 linkGroupName: 'Time Based Calendar',
@@ -73,7 +73,7 @@ describe('Calendar Merging API', () => {
     });
 
     test('Merge calendar without prefix', async () => {
-        const response = await request(app)
+        const response = await request(server)
             .post('/merge')
             .send({
                 linkGroupName: 'No Prefix Calendar',
@@ -95,7 +95,7 @@ describe('Calendar Merging API', () => {
     });
     
     test('Merge calendar with override', async () => {
-        const response = await request(app)
+        const response = await request(server)
             .post('/merge')
             .send({
                 linkGroupName: 'Override Calendar',
