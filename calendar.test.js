@@ -44,7 +44,7 @@ describe('Calendar Merging API', () => {
                         "prefix": "holidays",
                         "override": false,
                         "url": "https://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
-                      },
+                    },
                 ],
             });
         expect(response.status).toBe(200);
@@ -65,6 +65,11 @@ describe('Calendar Merging API', () => {
                         url: 'https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics',
                         prefix: 'Time Event',
                         override: false,
+                    },
+                    {
+                        "prefix": "work",
+                        "override": false,
+                        "url": "https://calendar.google.com/calendar/ical/b4c66eb4bb2cc15257d071bab3f935385778b042112ea1aaedada47f3f1a6e3a%40group.calendar.google.com/public/basic.ics"
                     },
                 ],
             });
