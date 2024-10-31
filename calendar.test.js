@@ -52,7 +52,7 @@ describe('Calendar Merging API', () => {
 
     test('Merge time-based calendar', async () => {
         const response = await request(server)
-            .post('/merge')
+            .post('/merge') 
             .send({
                 linkGroupName: 'Time Based Calendar',
                 calendars: [

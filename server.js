@@ -54,7 +54,7 @@ app.post('/merge', async (req, res) => {
                     };
                 })
                 .catch((error) => {
-                    console.error(error);
+                    console.error(`Error fetching calendar from ${calendar.url}:`, error);
                     return null;
                 });
         });
