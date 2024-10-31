@@ -1,11 +1,11 @@
 {
-  "id": "Override_Calendar",
-  "linkGroupName": "Override Calendar",
+  "id": "No Prefix Calendar",
+  "linkGroupName": "No Prefix Calendar",
   "calendars": [
     {
       "url": "https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics",
-      "prefix": "Override Event",
-      "override": true
+      "prefix": "",
+      "override": false
     }
   ]
 }
