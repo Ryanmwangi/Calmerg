@@ -109,7 +109,7 @@ app.post('/merge', async (req, res) => {
 
         res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${sanitizedLinkGroupName}` });
     } catch (error) {
-        console.error(error);
+        console.error('Error merging calendars:', error);
         res.status(500).json({ error: 'Failed to merge calendars' });
     }
 });
