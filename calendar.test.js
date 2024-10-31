@@ -40,6 +40,11 @@ describe('Calendar Merging API', () => {
                         prefix: 'Date Event',
                         override: false,
                     },
+                    {
+                        "prefix": "holidays",
+                        "override": false,
+                        "url": "https://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
+                      },
                 ],
             });
         expect(response.status).toBe(200);
