@@ -40,6 +40,26 @@ The application also generates a unique URL for the merged calendar and updates 
    npm start
    ```
 
+## Running Tests
+
+This project uses [Jest](https://jestjs.io/) for testing to ensure the Calendar Merger works as expected.
+
+### Run the test suite:
+
+   ```bash
+   npm test
+   ```
+
+   Jest will automatically locate and execute all test files, providing pass/fail status and error details in your terminal.
+
+For additional insights, you can run tests in coverage mode:
+
+```bash
+npm test -- --coverage
+```
+
+This generates a `coverage` report, showing how much of the codebase is tested.
+
 ## Key Terms
 
 - **Calendar Feed**: A data format that allows users to subscribe to calendar events (e.g., iCalendar `.ics` format).
