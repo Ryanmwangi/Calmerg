@@ -115,7 +115,7 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Override Calendar',
                 calendars: [
                     {
-                        url: 'https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics',
+                        url: loadCalendarFile(`San_Francisco_Public_Holidays.ics`),
                         prefix: 'Override Event',
                         override: true,
                     },
