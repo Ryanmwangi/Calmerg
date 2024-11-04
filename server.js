@@ -87,7 +87,33 @@ app.post('/merge', async (req, res) => {
 
         // Parse calendar data
         validResults.forEach((result) => {
-            const parsedCalendar = ical.parseICS(result.data);
+            const parsed = ical.parse(result.data);
+            const component = new ICAL.Component(parsed);
+            const events = component.getAllSubcomponents('vevent');
+
+            events.forEach((event) => {
+                const vevent = new ICAL.Event(event);
+                const start = vevent.startDate.toJSDate();
+                const end = vevent.endDate.toJSDate();
+                const summary = result.override ? result.prefix : `${result.prefix} ${vevent.summary}`;
+
+                if (vevent.startDate.isDate) {
+                    calendar.createEvent({
+                        start: start.toISOString().split('T')[0],
+                        end: end.toISOString().split('T')[0],
+                        summary: summary,
+                        allDay: true,
+                    });
+                } else {
+                    calendar.createEvent({
+                        start: start,
+                        end: end,
+                        summary: summary,
+                    });
+                }
+
+            })
+
             Object.keys(parsedCalendar).forEach((key) => {
                 const event = parsedCalendar[key];
                 const start = new Date(event.start);
