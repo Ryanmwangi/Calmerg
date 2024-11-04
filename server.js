@@ -43,8 +43,10 @@ app.post('/merge', async (req, res) => {
         const sanitizedLinkGroupName = sanitizeFilename(linkGroupName);
         const filename = `${sanitizedLinkGroupName}.ics`;
 
-        // Fetch calendar data from URLs
+        // Fetch calendar data from URLs or load from local files
         const promises = calendars.map((calendar) => {
+            // Check if calendar URL is a file path or a URL
+            const isFilePath = !calendar.url.startsWith('http');
             return axios.get(calendar.url)
                 .then((response) => {
                     return {
