@@ -66,14 +66,14 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Time Based Calendar',
                 calendars: [
                     {
-                        url: 'https://www.calendarlabs.com/ical-calendar/ics/65/San_Francisco_Public_Holidays.ics',
-                        prefix: 'Time Event',
+                        url: loadCalendarFile(`San_Francisco_Public_Holidays.ics`),
+                        prefix: 'San_Francisco_Public_Holidays',
                         override: false,
                     },
                     {
+                        url: loadCalendarFile(`work.ics`),
                         prefix: 'work',
                         override: false,
-                        url: "https://calendar.google.com/calendar/ical/b4c66eb4bb2cc15257d071bab3f935385778b042112ea1aaedada47f3f1a6e3a%40group.calendar.google.com/public/basic.ics"
                     },
                 ],
             });
