@@ -8,7 +8,8 @@ import icalGenerator from 'ical-generator';
 const app = express();
 app.use(express.json());
 
-const MERGED_CALENDARS_DIR = 'calendar';
+const MERGED_CALENDARS_DIR = process.env.TEST_MERGED_CALENDARS_DIR || 'calendar';
+
 
 // Ensure the merged calendars directory exists
 if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
