@@ -11,11 +11,13 @@ let server;
 
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
+        // Set environment variable for the test directory
+        process.env.TEST_MERGED_CALENDARS_DIR = TEST_MERGED_CALENDARS_DIR;
         // Start the server
         server = app.listen(0);
-        // Ensure the merged calendars directory exists
-        if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
-            fs.mkdirSync(MERGED_CALENDARS_DIR);
+        // Ensure the test merged calendars directory exists
+        if (!fs.existsSync(TEST_MERGED_CALENDARS_DIR)) {
+            fs.mkdirSync(TEST_MERGED_CALENDARS_DIR, { recursive: true });
         }
     });
 
