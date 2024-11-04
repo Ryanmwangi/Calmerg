@@ -5,6 +5,7 @@ import path from 'path';
 import app from './server';
 
 const MERGED_CALENDARS_DIR = 'calendar';
+const TEST_CALENDARS_DIR = 'test_calendars';
 let server;
 
 describe('Calendar Merging API', () => {
