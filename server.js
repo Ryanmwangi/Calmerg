@@ -1,5 +1,5 @@
 import express from 'express';
-import ical from 'ical.js';
+import ICAL from 'ical.js';
 import fs from 'fs';
 import axios from 'axios';
 import path from 'path';
@@ -87,7 +87,7 @@ app.post('/merge', async (req, res) => {
 
         // Parse calendar data
         validResults.forEach((result) => {
-            const parsed = ical.parse(result.data);
+            const parsed = ICAL.parse(result.data);
             const component = new ICAL.Component(parsed);
             const events = component.getAllSubcomponents('vevent');
 
@@ -109,35 +109,6 @@ app.post('/merge', async (req, res) => {
                         start: start,
                         end: end,
                         summary: summary,
-                    });
-                }
-
-            })
-
-            Object.keys(parsedCalendar).forEach((key) => {
-                const event = parsedCalendar[key];
-                const start = new Date(event.start);
-                const end = new Date(event.end);
-                const summary = result.override ? result.prefix : `${result.prefix} ${event.summary}`;
-
-                // Check if the event is date-based or time-based
-                const startString = typeof event.start === 'string' ? event.start : start.toISOString();
-                const endString = typeof event.end === 'string' ? event.end : end.toISOString();
-
-                if (startString.includes('T')) {
-                    // Time-based event
-                    calendar.createEvent({
-                        start: start,
-                        end: end,
-                        summary: summary,
-                    });
-                } else {
-                    // Date-based event
-                    calendar.createEvent({
-                        start: startString.split('T')[0], // Use only the date part
-                        end: endString.split('T')[0],     // Use only the date part
-                        summary: summary,
-                        allDay: true, // Mark as an all-day event
                     });
                 }
             });
