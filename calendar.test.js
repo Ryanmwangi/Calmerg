@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import app from './server';
 
+const TEST_MERGED_CALENDARS_DIR = path.join(__dirname, 'temp_test_calendar');
 const MERGED_CALENDARS_DIR = 'calendar';
 const TEST_CALENDARS_DIR = 'test_calendars';
 let server;
