@@ -47,6 +47,20 @@ app.post('/merge', async (req, res) => {
         const promises = calendars.map((calendar) => {
             // Check if calendar URL is a file path or a URL
             const isFilePath = !calendar.url.startsWith('http');
+            if (isFilePath) {
+                try{
+                    // Read calendar data from local file
+                    const data = fs.readFileSync(path.resolve(calendar.url), 'utf-8');
+                    return Promise.resolve({
+                        url: data,
+                        prefix: calendar.prefix,
+                        override: calendar.override,
+                    });
+
+                } catch (error){
+
+                }
+            } else {
             return axios.get(calendar.url)
                 .then((response) => {
                     return {
@@ -59,6 +73,7 @@ app.post('/merge', async (req, res) => {
                     console.error(`Error fetching calendar from ${calendar.url}:`, error);
                     return null;
                 });
+            }
         });
 
         const results = await Promise.all(promises);
