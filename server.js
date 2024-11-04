@@ -1,5 +1,5 @@
 import express from 'express';
-import ical from 'ical';
+import ical from 'ical.js';
 import fs from 'fs';
 import axios from 'axios';
 import path from 'path';
