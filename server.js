@@ -200,35 +200,6 @@ app.get('/calendar/:name', async (req, res) => {
                             });
                         }
                     });
-
-                    const parsedCalendar = ical.parseICS(result.data);
-                    Object.keys(parsedCalendar).forEach((key) => {
-                        const event = parsedCalendar[key];
-                        const start = new Date(event.start);
-                        const end = new Date(event.end);
-                        const summary = result.override ? result.prefix : `${result.prefix} ${event.summary}`;
-
-                       // Check if the event is date-based or time-based
-                       const startString = typeof event.start === 'string' ? event.start : start.toISOString();
-                       const endString = typeof event.end === 'string' ? event.end : end.toISOString();
-
-                       if (startString.includes('T')) {
-                           // Time-based event
-                           calendar.createEvent({
-                               start: start,
-                               end: end,
-                               summary: summary,
-                           });
-                       } else {
-                           // Date-based event
-                           calendar.createEvent({
-                               start: startString.split('T')[0], // Use only the date part
-                               end: endString.split('T')[0],     // Use only the date part
-                               summary: summary,
-                               allDay: true, // Mark as an all-day event
-                           });
-                       }
-                    });
                 });
 
                 // Save the calendar to a file
