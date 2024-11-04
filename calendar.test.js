@@ -12,15 +12,13 @@ describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Start the server
         server = app.listen(0);
-            console.log(`Server started on port 3000`);
-        
         // Ensure the merged calendars directory exists
         if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
             fs.mkdirSync(MERGED_CALENDARS_DIR);
         }
     });
 
-    afterAll( async () => {
+    afterAll(async () => {
         // Clean up the merged calendars directory after tests
         if (fs.existsSync(MERGED_CALENDARS_DIR)) {
             fs.rmSync(MERGED_CALENDARS_DIR, { recursive: true, force: true });
@@ -40,13 +38,13 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Date Based Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile(`ferien_bayern_2023.ics`),
+                        url: loadCalendarFile('ferien_bayern_2023.ics'),
                         prefix: 'Ferien_Bayern_2023',
                         override: false,
                     },
                     {
-                        url: loadCalendarFile(`US_Holidays.ics`), 
-                        prefix: "US_holidays",
+                        url: loadCalendarFile('US_Holidays.ics'),
+                        prefix: 'US_holidays',
                         override: false,
                     },
                 ],
@@ -61,17 +59,17 @@ describe('Calendar Merging API', () => {
 
     test('Merge time-based calendar', async () => {
         const response = await request(server)
-            .post('/merge') 
+            .post('/merge')
             .send({
                 linkGroupName: 'Time Based Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile(`other_work.ics`),
+                        url: loadCalendarFile('other_work.ics'),
                         prefix: 'other_work',
                         override: false,
                     },
                     {
-                        url: loadCalendarFile(`work.ics`),
+                        url: loadCalendarFile('work.ics'),
                         prefix: 'work',
                         override: false,
                     },
@@ -93,7 +91,7 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'No Prefix Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile(`San_Francisco_Public_Holidays.ics`),
+                        url: loadCalendarFile('San_Francisco_Public_Holidays.ics'),
                         prefix: '',
                         override: false,
                     },
@@ -115,7 +113,7 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Override Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile(`San_Francisco_Public_Holidays.ics`),
+                        url: loadCalendarFile('San_Francisco_Public_Holidays.ics'),
                         prefix: 'Override Event',
                         override: true,
                     },
