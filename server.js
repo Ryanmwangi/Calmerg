@@ -184,6 +184,21 @@ app.get('/calendar/:name', async (req, res) => {
                         const start = vevent.startDate.toJSDate();
                         const end = vevent.endDate.toJSDate();
                         const summary = result.override ? result.prefix : `${result.prefix} ${vevent.summary}`;
+
+                        if (vevent.startDate.isDate) {
+                            calendar.createEvent({
+                                start: start.toISOString().split('T')[0],
+                                end: end.toISOString().split('T')[0],
+                                summary: summary,
+                                allDay: true,
+                            });
+                        } else {
+                            calendar.createEvent({
+                                start: start,
+                                end: end,
+                                summary: summary,
+                            });
+                        }
                     });
 
                     const parsedCalendar = ical.parseICS(result.data);
