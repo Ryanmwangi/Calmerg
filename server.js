@@ -58,7 +58,8 @@ app.post('/merge', async (req, res) => {
                     });
 
                 } catch (error){
-
+                    console.error(`Error reading calendar file ${calendar.url}:`, error);
+                    return Promise.resolve(null);
                 }
             } else {
             return axios.get(calendar.url)
