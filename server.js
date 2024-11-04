@@ -52,7 +52,7 @@ app.post('/merge', async (req, res) => {
                     // Read calendar data from local file
                     const data = fs.readFileSync(path.resolve(calendar.url), 'utf-8');
                     return Promise.resolve({
-                        url: data,
+                        data: data,
                         prefix: calendar.prefix,
                         override: calendar.override,
                     });
@@ -62,18 +62,19 @@ app.post('/merge', async (req, res) => {
                     return Promise.resolve(null);
                 }
             } else {
-            return axios.get(calendar.url)
-                .then((response) => {
-                    return {
-                        data: response.data,
-                        prefix: calendar.prefix,
-                        override: calendar.override,
-                    };
-                })
-                .catch((error) => {
-                    console.error(`Error fetching calendar from ${calendar.url}:`, error);
-                    return null;
-                });
+                // Fetch calendar data from URL
+                return axios.get(calendar.url)
+                    .then((response) => {
+                        return {
+                            data: response.data,
+                            prefix: calendar.prefix,
+                            override: calendar.override,
+                        };
+                    })
+                    .catch((error) => {
+                        console.error(`Error fetching calendar from ${calendar.url}:`, error);
+                        return null;
+                    });
             }
         });
 
