@@ -175,6 +175,17 @@ app.get('/calendar/:name', async (req, res) => {
 
                 // Parse calendar data
                 validResults.forEach((result) => {
+                    const parsed = ICAL.parse(result.data);
+                    const component = new ICAL.Component(parsed);
+                    const events = component.getAllSubcomponents('vevent');
+
+                    events.forEach((event) => {
+                        const vevent = new ICAL.Event(event);
+                        const start = vevent.startDate.toJSDate();
+                        const end = vevent.endDate.toJSDate();
+                        const summary = result.override ? result.prefix : `${result.prefix} ${vevent.summary}`;
+                    });
+
                     const parsedCalendar = ical.parseICS(result.data);
                     Object.keys(parsedCalendar).forEach((key) => {
                         const event = parsedCalendar[key];
