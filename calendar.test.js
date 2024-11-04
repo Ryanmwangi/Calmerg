@@ -71,9 +71,9 @@ describe('Calendar Merging API', () => {
                         override: false,
                     },
                     {
-                        "prefix": "work",
-                        "override": false,
-                        "url": "https://calendar.google.com/calendar/ical/b4c66eb4bb2cc15257d071bab3f935385778b042112ea1aaedada47f3f1a6e3a%40group.calendar.google.com/public/basic.ics"
+                        prefix: "work",
+                        override: false,
+                        url: "https://calendar.google.com/calendar/ical/b4c66eb4bb2cc15257d071bab3f935385778b042112ea1aaedada47f3f1a6e3a%40group.calendar.google.com/public/basic.ics"
                     },
                 ],
             });
