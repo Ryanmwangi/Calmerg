@@ -29,6 +29,10 @@ describe('Calendar Merging API', () => {
         await new Promise(resolve => server.close(resolve));
     });
 
+    const loadCalendarFile = (filename) => {
+        return path.join(__dirname, TEST_CALENDARS_DIR, filename);
+    };
+
     test('Merge date-based calendar', async () => {
         const response = await request(server)
             .post('/merge')
