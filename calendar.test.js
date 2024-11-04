@@ -40,14 +40,14 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Date Based Calendar',
                 calendars: [
                     {
-                        url: 'https://www.schulferien.org/media/ical/deutschland/ferien_bayern_2023.ics?k=PsL0S2B9rScFMn5PAxtf4OVQjMkWZsqqkK13zEJ0FCW5Q-2xQejfLJYaTN4EdYUsQHLDDbGVnVl93ms7en5vMUISjZ3H9Esu88Vp2ndnL5Q',
-                        prefix: 'Date Event',
+                        url: loadCalendarFile(`ferien_bayern_2023.ics`),
+                        prefix: 'Ferien_Bayern_2023',
                         override: false,
                     },
                     {
-                        "prefix": "holidays",
-                        "override": false,
-                        "url": "https://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
+                        url: "https://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics", 
+                        prefix: "US_holidays",
+                         override: false,
                     },
                 ],
             });
