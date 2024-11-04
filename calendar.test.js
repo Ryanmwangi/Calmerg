@@ -66,8 +66,8 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Time Based Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile(`San_Francisco_Public_Holidays.ics`),
-                        prefix: 'San_Francisco_Public_Holidays',
+                        url: loadCalendarFile(`other_work.ics`),
+                        prefix: 'other_work',
                         override: false,
                     },
                     {
