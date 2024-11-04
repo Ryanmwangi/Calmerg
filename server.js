@@ -245,11 +245,12 @@ function saveCalendarData(calendarId, linkGroupName, calendars) {
 }
 
 // Start the server
-const port = 3000;
-app.listen(port, () => {
-    if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
+    const port = 3000;
+    app.listen(port, () => {
         console.log(`Server started on port ${port}`);
-    }
-});
+    });
+}
+
 
 export default app;
