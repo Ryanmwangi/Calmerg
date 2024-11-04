@@ -45,9 +45,9 @@ describe('Calendar Merging API', () => {
                         override: false,
                     },
                     {
-                        url: "https://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics", 
+                        url: loadCalendarFile(`US_Holidays.ics`), 
                         prefix: "US_holidays",
-                         override: false,
+                        override: false,
                     },
                 ],
             });
