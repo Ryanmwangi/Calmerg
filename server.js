@@ -8,7 +8,10 @@ import icalGenerator from 'ical-generator';
 const app = express();
 app.use(express.json());
 
-const MERGED_CALENDARS_DIR = 'temp_test_calendar' || 'calendar';
+// Determine the merged calendars directory based on the environment
+const MERGED_CALENDARS_DIR = process.env.NODE_ENV === 'test' 
+    ? 'temp_test_calendar' 
+    : 'calendar';
 console.log(`Merged calendars directory: ${MERGED_CALENDARS_DIR}`);
 
 
