@@ -9,6 +9,7 @@ const app = express();
 app.use(express.json());
 
 const MERGED_CALENDARS_DIR = process.env.TEST_MERGED_CALENDARS_DIR || 'calendar';
+console.log(`Merged calendars directory: ${MERGED_CALENDARS_DIR}`);
 
 
 // Ensure the merged calendars directory exists

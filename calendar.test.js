@@ -4,15 +4,16 @@ import fs from 'fs';
 import path from 'path';
 import app from './server';
 
-const TEST_MERGED_CALENDARS_DIR = path.join(__dirname, 'temp_test_calendar');
-const MERGED_CALENDARS_DIR = 'calendar';
+// Set environment variable for the test directory
+process.env.TEST_MERGED_CALENDARS_DIR = path.join(__dirname, 'temp_test_calendar');
+
+const TEST_MERGED_CALENDARS_DIR = process.env.TEST_MERGED_CALENDARS_DIR;
 const TEST_CALENDARS_DIR = 'test_calendars';
+console.log(`Test Merged Calendars Directory: ${TEST_MERGED_CALENDARS_DIR}`);
 let server;
 
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
-        // Set environment variable for the test directory
-        process.env.TEST_MERGED_CALENDARS_DIR = TEST_MERGED_CALENDARS_DIR;
         // Start the server
         server = app.listen(0);
         // Ensure the test merged calendars directory exists
@@ -22,8 +23,10 @@ describe('Calendar Merging API', () => {
     });
 
     afterAll(async () => {
-        // Clean up the merged calendars directory after tests
-         fs.rmSync(TEST_MERGED_CALENDARS_DIR, { recursive: true, force: true });
+        // // Clean up the merged calendars directory after tests
+        // if (fs.existsSync(TEST_MERGED_CALENDARS_DIR)) {
+        //     fs.rmSync(TEST_MERGED_CALENDARS_DIR, { recursive: true, force: true });
+        // }
         
          // Close the server
         await new Promise(resolve => server.close(resolve));
@@ -104,7 +107,7 @@ describe('Calendar Merging API', () => {
         expect(response.body.url).toMatch(/calendar\/No_Prefix_Calendar/);
         
         // Check if the file was created in the test directory
-        const filePath = path.join(MTEST_MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
     
