@@ -55,7 +55,7 @@ describe('Calendar Merging API', () => {
                 ],
             });
         expect(response.status).toBe(200);
-        expect(response.body.url).toMatch(/temp_test_calendar\/Date_Based_Calendar/);
+        expect(response.body.url).toMatch(/calendar\/Date_Based_Calendar/);
 
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
@@ -85,7 +85,7 @@ describe('Calendar Merging API', () => {
             });
 
         expect(response.status).toBe(200);
-        expect(response.body.url).toMatch(/temp_test_calendar\/Time_Based_Calendar/);
+        expect(response.body.url).toMatch(/calendar\/Time_Based_Calendar/);
         
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
@@ -110,7 +110,7 @@ describe('Calendar Merging API', () => {
             });
 
         expect(response.status).toBe(200);
-        expect(response.body.url).toMatch(/temp_test_calendar\/No_Prefix_Calendar/);
+        expect(response.body.url).toMatch(/calendar\/No_Prefix_Calendar/);
         
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
@@ -135,7 +135,7 @@ describe('Calendar Merging API', () => {
             });
 
         expect(response.status).toBe(200);
-        expect(response.body.url).toMatch(/temp_test_calendar\/Override_Calendar/);
+        expect(response.body.url).toMatch(/calendar\/Override_Calendar/);
         
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Override_Calendar.ics');
