@@ -9,6 +9,7 @@ process.env.TEST_MERGED_CALENDARS_DIR = path.join(__dirname, 'temp_test_calendar
 
 const TEST_MERGED_CALENDARS_DIR = process.env.TEST_MERGED_CALENDARS_DIR;
 const TEST_CALENDARS_DIR = 'test_calendars';
+const EXPECTED_OUTPUTS_DIR = 'expected_outputs';
 console.log(`Test Merged Calendars Directory: ${TEST_MERGED_CALENDARS_DIR}`);
 let server;
 
@@ -65,8 +66,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Use Jest's snapshot feature to save the output
-        expect(response.body).toMatchSnapshot();
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('Date_Based_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge time-based calendar', async () => {
@@ -95,8 +98,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Use Jest's snapshot feature to save the output
-        expect(response.body).toMatchSnapshot();
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('Time_Based_Calendar.ics');
+        const actualOutput = fs.readFileSync (filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge calendar without prefix', async () => {
@@ -120,8 +125,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Use Jest's snapshot feature to save the output
-        expect(response.body).toMatchSnapshot();
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('No_Prefix_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
     
     test('Merge calendar with override', async () => {
@@ -145,8 +152,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Override_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Use Jest's snapshot feature to save the output
-        expect(response.body).toMatchSnapshot();
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('Override_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
 
 });
