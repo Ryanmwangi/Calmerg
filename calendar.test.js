@@ -54,8 +54,8 @@ describe('Calendar Merging API', () => {
         expect(response.status).toBe(200);
         expect(response.body.url).toMatch(/calendar\/Date_Based_Calendar/);
 
-        // Check if the file was created
-        const filePath = path.join(MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
+        // Check if the file was created in the test directory
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
 
@@ -81,8 +81,8 @@ describe('Calendar Merging API', () => {
         expect(response.status).toBe(200);
         expect(response.body.url).toMatch(/calendar\/Time_Based_Calendar/);
         
-        // Check if the file was created
-        const filePath = path.join(MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
+        // Check if the file was created in the test directory
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
 
@@ -103,8 +103,8 @@ describe('Calendar Merging API', () => {
         expect(response.status).toBe(200);
         expect(response.body.url).toMatch(/calendar\/No_Prefix_Calendar/);
         
-        // Check if the file was created
-        const filePath = path.join(MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
+        // Check if the file was created in the test directory
+        const filePath = path.join(MTEST_MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
     
@@ -125,8 +125,8 @@ describe('Calendar Merging API', () => {
         expect(response.status).toBe(200);
         expect(response.body.url).toMatch(/calendar\/Override_Calendar/);
         
-        // Check if the file was created
-        const filePath = path.join(MERGED_CALENDARS_DIR, 'Override_Calendar.ics');
+        // Check if the file was created in the test directory
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Override_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
     });
 
