@@ -36,6 +36,10 @@ describe('Calendar Merging API', () => {
         return path.join(__dirname, TEST_CALENDARS_DIR, filename);
     };
 
+    const loadExpectedOutput = (filename) => {
+        return fs.readFileSync(path.join(EXPECTED_OUTPUTS_DIR, filename), 'utf8');
+    };
+
     test('Merge date-based calendar', async () => {
         const response = await request(server)
             .post('/merge')

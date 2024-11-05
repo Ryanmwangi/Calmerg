@@ -1,0 +1,16 @@
+{
+  "id": "Date_Based_Calendar",
+  "linkGroupName": "Date Based Calendar",
+  "calendars": [
+    {
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship tasks\\final calmerg\\test_calendars\\ferien_bayern_2023.ics",
+      "prefix": "Ferien_Bayern_2023",
+      "override": false
+    },
+    {
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship tasks\\final calmerg\\test_calendars\\US_Holidays.ics",
+      "prefix": "US_holidays",
+      "override": false
+    }
+  ]
+}
