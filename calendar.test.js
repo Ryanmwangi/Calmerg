@@ -60,6 +60,9 @@ describe('Calendar Merging API', () => {
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
+
+        // Use Jest's snapshot feature to save the output
+        expect(response.body).toMatchSnapshot();
     });
 
     test('Merge time-based calendar', async () => {
@@ -87,6 +90,9 @@ describe('Calendar Merging API', () => {
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
+
+        // Use Jest's snapshot feature to save the output
+        expect(response.body).toMatchSnapshot();
     });
 
     test('Merge calendar without prefix', async () => {
@@ -109,6 +115,9 @@ describe('Calendar Merging API', () => {
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
+
+        // Use Jest's snapshot feature to save the output
+        expect(response.body).toMatchSnapshot();
     });
     
     test('Merge calendar with override', async () => {
@@ -131,6 +140,9 @@ describe('Calendar Merging API', () => {
         // Check if the file was created in the test directory
         const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Override_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
+
+        // Use Jest's snapshot feature to save the output
+        expect(response.body).toMatchSnapshot();
     });
 
 });
