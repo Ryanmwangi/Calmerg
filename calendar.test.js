@@ -4,40 +4,30 @@ import fs from 'fs';
 import path from 'path';
 import app from './server';
 
-// Set environment variable for the test directory
-process.env.TEST_MERGED_CALENDARS_DIR = path.join(__dirname, 'temp_test_calendar');
-
-const TEST_MERGED_CALENDARS_DIR = process.env.TEST_MERGED_CALENDARS_DIR;
+const TEST_MERGED_CALENDARS_DIR = path.join(__dirname, 'tests');
 const TEST_CALENDARS_DIR = 'test_calendars';
 const EXPECTED_OUTPUTS_DIR = 'expected_outputs';
-console.log(`Test Merged Calendars Directory: ${TEST_MERGED_CALENDARS_DIR}`);
 let server;
-
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
-        // Change the working directory to the test-specific directory
-        process.chdir(path.join(__dirname, 'temp_test_calendar'));
-
-        // Start the server
-        server = app.listen(0);
-        
+        console.log(`Test Merged Calendars Directory: ${TEST_MERGED_CALENDARS_DIR}`);
         // Ensure the test merged calendars directory exists
         if (!fs.existsSync(TEST_MERGED_CALENDARS_DIR)) {
             fs.mkdirSync(TEST_MERGED_CALENDARS_DIR, { recursive: true });
         }
+        // Change the working directory to the test-specific directory
+        process.chdir(TEST_MERGED_CALENDARS_DIR);
+        console.log(process.cwd());
+        // Start the server
+        server = app.listen(0);
     });
 
     afterAll(async () => {
         // Ensure the server is closed before cleanup
-    await new Promise(resolve => server.close(resolve));
+        await new Promise(resolve => server.close(resolve));
 
-    // Optional: Add a delay to ensure all handles are released
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    // Clean up the merged calendars directory after tests
-    if (fs.existsSync(TEST_MERGED_CALENDARS_DIR)) {
-        fs.rmSync(TEST_MERGED_CALENDARS_DIR, { recursive: true, force: true });
-    }
+        // Optional: Add a delay to ensure all handles are released
+        await new Promise(resolve => setTimeout(resolve, 100));
     });
 
     const loadCalendarFile = (filename) => {
