@@ -3,12 +3,12 @@
   "linkGroupName": "Time Based Calendar",
   "calendars": [
     {
-      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship tasks\\final calmerg\\test_calendars\\other_work.ics",
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship_tasks\\final calmerg\\test_calendars\\other_work.ics",
       "prefix": "other_work",
       "override": false
     },
     {
-      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship tasks\\final calmerg\\test_calendars\\work.ics",
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship_tasks\\final calmerg\\test_calendars\\work.ics",
       "prefix": "work",
       "override": false
     }
