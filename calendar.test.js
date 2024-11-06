@@ -17,8 +17,10 @@ describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Change the working directory to the test-specific directory
         process.chdir(path.join(__dirname, 'temp_test_calendar'));
+
         // Start the server
         server = app.listen(0);
+        
         // Ensure the test merged calendars directory exists
         if (!fs.existsSync(TEST_MERGED_CALENDARS_DIR)) {
             fs.mkdirSync(TEST_MERGED_CALENDARS_DIR, { recursive: true });
@@ -26,13 +28,16 @@ describe('Calendar Merging API', () => {
     });
 
     afterAll(async () => {
-        // // Clean up the merged calendars directory after tests
-        // if (fs.existsSync(TEST_MERGED_CALENDARS_DIR)) {
-        //     fs.rmSync(TEST_MERGED_CALENDARS_DIR, { recursive: true, force: true });
-        // }
-        
-         // Close the server
-        await new Promise(resolve => server.close(resolve));
+        // Ensure the server is closed before cleanup
+    await new Promise(resolve => server.close(resolve));
+
+    // Optional: Add a delay to ensure all handles are released
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Clean up the merged calendars directory after tests
+    if (fs.existsSync(TEST_MERGED_CALENDARS_DIR)) {
+        fs.rmSync(TEST_MERGED_CALENDARS_DIR, { recursive: true, force: true });
+    }
     });
 
     const loadCalendarFile = (filename) => {
