@@ -13,8 +13,6 @@ const MERGED_CALENDARS_DIR = path.join(__dirname, process.env.NODE_ENV === 'test
     ? 'temp_test_calendar' 
     : 'calendar');
     
-console.log(`Merged calendars directory: ${MERGED_CALENDARS_DIR}`);
-
 
 // Ensure the merged calendars directory exists
 if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
