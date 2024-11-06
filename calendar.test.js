@@ -16,7 +16,7 @@ let server;
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Change the working directory to the test-specific directory
-        process.chdir(__dirname);
+        process.chdir(path.join(__dirname, 'temp_test_calendar'));
         // Start the server
         server = app.listen(0);
         // Ensure the test merged calendars directory exists
