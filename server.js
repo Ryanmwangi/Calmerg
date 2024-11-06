@@ -9,15 +9,11 @@ const app = express();
 app.use(express.json());
 
 // Determine the merged calendars directory based on the environment
-const MERGED_CALENDARS_DIR = path.join(__dirname, process.env.NODE_ENV === 'test' 
-    ? 'temp_test_calendar' 
-    : 'calendar');
-    
+const MERGED_CALENDARS_DIR = 'calendar';
+console.log(`Merged calendars directory: ${MERGED_CALENDARS_DIR} under ${process.cwd()}`);
 
 // Ensure the merged calendars directory exists
-if (!fs.existsSync(MERGED_CALENDARS_DIR)) {
-    fs.mkdirSync(MERGED_CALENDARS_DIR);
-}
+fs.mkdirSync(MERGED_CALENDARS_DIR, { recursive: true });
 
 app.get('/script.js', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript');
