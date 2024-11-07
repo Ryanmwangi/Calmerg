@@ -105,6 +105,19 @@ app.post('/merge', async (req, res) => {
     }
 });
 
+// Refresh calendar if outdated
+const refreshCalendarData = async (calendarName) => {
+    const jsonFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.json`);
+    const { calendars } = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+
+    const results = await Promise.all(calendars.map(fetchCalendarData));
+    const calendarInstance = icalGenerator({ name: calendarName });
+    mergeCalendarEvents(calendarInstance, results);
+
+    saveCalendarFile(`${calendarName}.ics`, calendarInstance.toString());
+    console.log('Calendar data refreshed.');
+};
+
 // Serve the merged calendar file and refresh if older than an hour
 app.get('/calendar/:name', async (req, res) => {
     const calendarName = req.params.name;
