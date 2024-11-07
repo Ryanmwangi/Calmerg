@@ -1,9 +1,8 @@
 {
   "name": "calendar-merger",
-  "version": "1.0.0",
-  "type": "module",
+  "version": "1.1.0",
   "scripts": {
-    "start": "node server.js",
+    "start": "node app.js",
     "test": "jest ./test"
   },
   "dependencies": {
@@ -16,8 +15,9 @@
     "node-cron": "^2.0.3",
     "supertest": "^7.0.0"
   },
-  "description": "cal merge",
-  "main": "script.js",
+  "description": "calmerger",
+  "main": "server.js",
+  "type": "module",
   "author": "Ryan",
   "license": "ISC",
   "devDependencies": {
