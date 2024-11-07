@@ -40,6 +40,28 @@ const fetchCalendarData = async (calendar) => {
     }
 };
 
+// Merge calendar events
+const mergeCalendarEvents = (calendarInstance, results) => {
+    results.forEach((result) => {
+        const parsed = ICAL.parse(result.data);
+        const component = new ICAL.Component(parsed);
+        component.getAllSubcomponents('vevent').forEach((event) => {
+            const vevent = new ICAL.Event(event);
+            const start = vevent.startDate.toJSDate();
+            const end = vevent.endDate.toJSDate();
+            const summary = result.override ? result.prefix : `${result.prefix} ${vevent.summary}`;
+
+            const eventOptions = {
+                start: start,
+                end: end,
+                summary: summary,
+                allDay: vevent.startDate.isDate
+            };
+            calendarInstance.createEvent(eventOptions);
+        });
+    });
+};
+
 // Merge calendars endpoint
 app.post('/merge', async (req, res) => {
     const { linkGroupName, calendars } = req.body;
