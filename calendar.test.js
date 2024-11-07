@@ -5,8 +5,8 @@ import path from 'path';
 import app from './server';
 
 const TEST_MERGED_CALENDARS_DIR = path.join(__dirname, 'tests');
-const TEST_CALENDARS_DIR = 'test_calendars';
-const EXPECTED_OUTPUTS_DIR = 'expected_outputs';
+const TEST_CALENDARS_DIR = path.join(__dirname, 'tests', 'test_calendars');
+const EXPECTED_OUTPUTS_DIR = path.join(__dirname,'test', 'expected_outputs');
 let server;
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
@@ -31,7 +31,7 @@ describe('Calendar Merging API', () => {
     });
 
     const loadCalendarFile = (filename) => {
-        return path.join(__dirname, TEST_CALENDARS_DIR, filename);
+        return path.join(TEST_CALENDARS_DIR, filename);
     };
 
     const loadExpectedOutput = (filename) => {
@@ -57,16 +57,17 @@ describe('Calendar Merging API', () => {
                 ],
             });
         expect(response.status).toBe(200);
-        expect(response.body.url).toMatch(/calendar\/Date_Based_Calendar/);
+        expect(response.body.url).toMatch(new RegExp(`calendar/Date_Based_Calendar`));
 
         // Check if the file was created in the test directory
-        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Date_Based_Calendar.ics');
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'calendar', 'Date_Based_Calendar.ics');
+        console.log('Checking if file exists at:', filePath);
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Load expected output and compare
-        const expectedOutput = loadExpectedOutput('Date_Based_Calendar.ics');
-        const actualOutput = fs.readFileSync(filePath, 'utf8');
-        // expect(actualOutput).toBe(expectedOutput);
+        // // Load expected output and compare
+        // const expectedOutput = loadExpectedOutput('Date_Based_Calendar.ics');
+        // const actualOutput = fs.readFileSync(filePath, 'utf8');
+        // // expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge time-based calendar', async () => {
@@ -92,13 +93,13 @@ describe('Calendar Merging API', () => {
         expect(response.body.url).toMatch(/calendar\/Time_Based_Calendar/);
         
         // Check if the file was created in the test directory
-        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Time_Based_Calendar.ics');
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'calendar','Time_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Load expected output and compare
-        const expectedOutput = loadExpectedOutput('Time_Based_Calendar.ics');
-        const actualOutput = fs.readFileSync (filePath, 'utf8');
-        // expect(actualOutput).toBe(expectedOutput);
+        // // Load expected output and compare
+        // const expectedOutput = loadExpectedOutput('Time_Based_Calendar.ics');
+        // const actualOutput = fs.readFileSync (filePath, 'utf8');
+        // // expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge calendar without prefix', async () => {
@@ -119,13 +120,13 @@ describe('Calendar Merging API', () => {
         expect(response.body.url).toMatch(/calendar\/No_Prefix_Calendar/);
         
         // Check if the file was created in the test directory
-        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'No_Prefix_Calendar.ics');
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'calendar', 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Load expected output and compare
-        const expectedOutput = loadExpectedOutput('No_Prefix_Calendar.ics');
-        const actualOutput = fs.readFileSync(filePath, 'utf8');
-        // expect(actualOutput).toBe(expectedOutput);
+        // // Load expected output and compare
+        // const expectedOutput = loadExpectedOutput('No_Prefix_Calendar.ics');
+        // const actualOutput = fs.readFileSync(filePath, 'utf8');
+        // // expect(actualOutput).toBe(expectedOutput);
     });
     
     test('Merge calendar with override', async () => {
@@ -146,13 +147,13 @@ describe('Calendar Merging API', () => {
         expect(response.body.url).toMatch(/calendar\/Override_Calendar/);
         
         // Check if the file was created in the test directory
-        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'Override_Calendar.ics');
+        const filePath = path.join(TEST_MERGED_CALENDARS_DIR, 'calendar', 'Override_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // Load expected output and compare
-        const expectedOutput = loadExpectedOutput('Override_Calendar.ics');
-        const actualOutput = fs.readFileSync(filePath, 'utf8');
-        // expect(actualOutput).toBe(expectedOutput);
+        // // Load expected output and compare
+        // const expectedOutput = loadExpectedOutput('Override_Calendar.ics');
+        // const actualOutput = fs.readFileSync(filePath, 'utf8');
+        // // expect(actualOutput).toBe(expectedOutput);
     });
 
 });
