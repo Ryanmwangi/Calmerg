@@ -76,6 +76,7 @@ const addEventsToCalendar = (calendarComponent, results) => {
 // Save calendar data to file
 const saveCalendarFile = (filename, content) => {
     const filePath = path.join(MERGED_CALENDARS_DIR, filename);
+    console.log(`Saving calendar data to file: ${filePath}`);
     fs.writeFileSync(filePath, content);
     return filePath;
 };
@@ -86,32 +87,33 @@ app.post('/merge', async (req, res) => {
 
     // Validate the input
     if (!linkGroupName || !Array.isArray(calendars) || calendars.length === 0) {
+        console.warn('Invalid input provided for merge endpoint.');
         return res.status(400).json({ error: 'Invalid input. Please provide a linkGroupName and at least one calendar.' });
     }
 
     try {
         
         // Sanitize the linkGroupName to create a valid filename
+        console.log(`Merging calendars for group: ${linkGroupName}`);
         const sanitizedLinkGroupName = sanitizeFilename(linkGroupName);
         const filename = `${sanitizedLinkGroupName}.ics`;
 
         // Fetch calendar data
         const results = await Promise.all(calendars.map(fetchCalendarData));
         
-        // Generate merged calendar
-        const calendarInstance = icalGenerator({ name: linkGroupName });
-        mergeCalendarEvents(calendarInstance, results);
-
+        // Generate merged calendar using ical.js
+        const calendarComponent = createCalendarComponent(linkGroupName);
+        addEventsToCalendar(calendarComponent, results);
         
         // Save the calendar to a file
-        saveCalendarFile(filename, calendarInstance.toString());
+        saveCalendarFile(filename, calendarComponent.toString());
 
         // Save the user input and sanitizedLinkGroupName in a separate JSON file
         saveCalendarFile(`${sanitizedLinkGroupName}.json`, JSON.stringify({ linkGroupName, calendars }, null, 2));
 
         res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${sanitizedLinkGroupName}` });
     } catch (error) {
-        console.error('Error merging calendars:', error);
+        console.error('Error merging calendars:', erro.message);
         res.status(500).json({ error: 'Failed to merge calendars' });
     }
 });
@@ -119,16 +121,17 @@ app.post('/merge', async (req, res) => {
 // Refresh calendar if outdated
 const refreshCalendarData = async (calendarName) => {
     const jsonFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.json`);
-    
+    console.log(`Refreshing calendar data for: ${calendarName}`);
+
     // Read the JSON file to get the source URL and other details
     const { calendars } = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
 
     const results = await Promise.all(calendars.map(fetchCalendarData));
-    const calendarInstance = icalGenerator({ name: calendarName });
-    mergeCalendarEvents(calendarInstance, results);
+    const calendarComponent = createCalendarComponent(calendarName);
+    addEventsToCalendar(calendarComponent, results);
 
-    saveCalendarFile(`${calendarName}.ics`, calendarInstance.toString());
-    console.log('Calendar data refreshed.');
+    saveCalendarFile(`${calendarName}.ics`, calendarComponent.toString());
+    console.log('Calendar data refreshed and saved.');
 };
 
 // Serve the merged calendar file and refresh if older than an hour
@@ -138,11 +141,16 @@ app.get('/calendar/:name', async (req, res) => {
 
     try {
         // Check if the .ics file exists
+        console.log(`Serving calendar for: ${calendarName}`);
         if (fs.existsSync(icsFilePath)) {
             const stats = fs.statSync(icsFilePath);
             const isOutdated = new Date() - new Date(stats.mtime) > 60 * 60 * 1000;
 
-            if (isOutdated) await refreshCalendarData(calendarName);
+            if (isOutdated){
+                console.log(`Calendar ${calendarName} is outdated. Refreshing...`);
+                await refreshCalendarData(calendarName);
+
+            }
 
             res.setHeader('Content-Type', 'text/calendar');
             res.sendFile(icsFilePath);
@@ -152,7 +160,7 @@ app.get('/calendar/:name', async (req, res) => {
         }
 
     } catch (error) {
-        console.error('Error retrieving calendar data:', error);
+        console.error('Error retrieving calendar data:', error.message);
         res.status(500).json({ error: 'Failed to retrieve calendar data.' });
     }
 });
