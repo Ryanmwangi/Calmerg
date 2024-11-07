@@ -108,6 +108,8 @@ app.post('/merge', async (req, res) => {
 // Refresh calendar if outdated
 const refreshCalendarData = async (calendarName) => {
     const jsonFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.json`);
+    
+    // Read the JSON file to get the source URL and other details
     const { calendars } = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
 
     const results = await Promise.all(calendars.map(fetchCalendarData));
@@ -121,109 +123,27 @@ const refreshCalendarData = async (calendarName) => {
 // Serve the merged calendar file and refresh if older than an hour
 app.get('/calendar/:name', async (req, res) => {
     const calendarName = req.params.name;
-    const icsFilePath = path.resolve(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
-    const jsonFilePath = path.resolve(MERGED_CALENDARS_DIR, `${calendarName}.json`);
+    const icsFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
 
     try {
         // Check if the .ics file exists
         if (fs.existsSync(icsFilePath)) {
             const stats = fs.statSync(icsFilePath);
-            const lastModified = new Date(stats.mtime);
-            const now = new Date();
-            // Check if the file is older than one hour
-            if (now - lastModified > 60 * 60 * 1000) {
-                console .log('Refreshing calendar data...');
+            const isOutdated = new Date() - new Date(stats.mtime) > 60 * 60 * 1000;
 
-                // Read the JSON file to get the source URL and other details
-                const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
-                const { calendars } = jsonData;
+            if (isOutdated) await refreshCalendarData(calendarName);
 
-                // Fetch calendar data for each merged calendar
-                const promises = calendars.map((calendar) => {
-                    return axios.get(calendar.url)
-                        .then((response) => {
-                            return {
-                                data: response.data,
-                                prefix: calendar.prefix,
-                                override: calendar.override,
-                            };
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                            return null;
-                        });
-                });
+            res.setHeader('Content-Type', 'text/calendar');
+            res.sendFile(icsFilePath);
 
-                const results = await Promise.all(promises);
-                // Filter out any failed requests
-                const validResults = results.filter((result) => result !== null);
-
-                // Create a new iCalendar instance
-                const calendar = icalGenerator({ name: calendarName });
-
-                // Parse calendar data
-                validResults.forEach((result) => {
-                    const parsed = ICAL.parse(result.data);
-                    const component = new ICAL.Component(parsed);
-                    const events = component.getAllSubcomponents('vevent');
-
-                    events.forEach((event) => {
-                        const vevent = new ICAL.Event(event);
-                        const start = vevent.startDate.toJSDate();
-                        const end = vevent.endDate.toJSDate();
-                        const summary = result.override ? result.prefix : `${result.prefix} ${vevent.summary}`;
-
-                        if (vevent.startDate.isDate) {
-                            calendar.createEvent({
-                                start: start.toISOString().split('T')[0],
-                                end: end.toISOString().split('T')[0],
-                                summary: summary,
-                                allDay: true,
-                            });
-                        } else {
-                            calendar.createEvent({
-                                start: start,
-                                end: end,
-                                summary: summary,
-                            });
-                        }
-                    });
-                });
-
-                // Save the calendar to a file
-                fs.writeFileSync(icsFilePath, calendar.toString());
-                
-                console.log('Calendar data refreshed.');
-            }
         } else {
-            return res.status(404).json({ error: 'Calendar not found.' });
+            res.status(404).json({ error: 'Calendar not found.' });
         }
 
-        // Return the contents of the .ics file
-        res.setHeader('Content-Type', 'text/calendar');
-        res.sendFile(icsFilePath);
-
     } catch (error) {
-        console.error(error);
+        console.error('Error retrieving calendar data:', error);
         res.status(500).json({ error: 'Failed to retrieve calendar data.' });
     }
 });
-
-
-//function to save calendar data to seperate .json files
-function saveCalendarData(calendarId, linkGroupName, calendars) {
-    const calendarFile = `${MERGED_CALENDARS_DIR}/${calendarId}.json`;
-    const calendarData = {
-        id: calendarId,
-        linkGroupName: linkGroupName,
-        calendars: calendars
-    };
-
-    try {
-        fs.writeFileSync(calendarFile, JSON.stringify(calendarData, null, 2));
-    } catch (error) {
-        console.error('Error writing to calendar file:', error);
-    }
-}
 
 export default app;
