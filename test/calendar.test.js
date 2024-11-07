@@ -41,8 +41,8 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Date Based Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile('ferien_bayern_2023.ics'),
-                        prefix: 'Ferien_Bayern_2023',
+                        url: loadCalendarFile('holiday_calendar_2023.ics'),
+                        prefix: 'holiday_calendar_2023',
                         override: false,
                     },
                     {
@@ -73,13 +73,13 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Time Based Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile('other_work.ics'),
-                        prefix: 'other_work',
+                        url: loadCalendarFile('team_meeting_calendar.ics'),
+                        prefix: 'team_meeting_calendar',
                         override: false,
                     },
                     {
-                        url: loadCalendarFile('work.ics'),
-                        prefix: 'work',
+                        url: loadCalendarFile('work_task_calendar.ics'),
+                        prefix: 'work_task',
                         override: false,
                     },
                 ],
@@ -105,7 +105,7 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'No Prefix Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile('San_Francisco_Public_Holidays.ics'),
+                        url: loadCalendarFile('sf_public_holidays.ics'),
                         prefix: '',
                         override: false,
                     },
@@ -132,7 +132,7 @@ describe('Calendar Merging API', () => {
                 linkGroupName: 'Override Calendar',
                 calendars: [
                     {
-                        url: loadCalendarFile('San_Francisco_Public_Holidays.ics'),
+                        url: loadCalendarFile('sf_public_holidays.ics'),
                         prefix: 'Override Event',
                         override: true,
                     },
@@ -150,6 +150,69 @@ describe('Calendar Merging API', () => {
         // const expectedOutput = loadExpectedOutput('Override_Calendar.ics');
         // const actualOutput = fs.readFileSync(filePath, 'utf8');
         // // expect(actualOutput).toBe(expectedOutput);
+    });
+
+    test('Merge UTC and EAT time zone calendar', async () => {
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'UTCEAT Time Zone Calendar',
+                calendars: [
+                    {
+                        url: loadCalendarFile('utc_time_zone_event.ics'),
+                        prefix: 'UTC_Event',
+                        override: false,
+                    },
+                    {
+                        url: loadCalendarFile('eat_time_zone_event.ics'),
+                        prefix: 'EAT_Event',
+                        override: false,
+                    },
+                ],
+            });
+        expect(response.status).toBe(200);
+        expect(response.body.url).toMatch(new RegExp(`calendar/UTCEAT_Time_Zone_Calendar`));
+
+        // Check if the file was created in the test directory
+        const filePath = path.join(CALENDARS_DIR, 'UTCEAT_Time_Zone_Calendar.ics');
+        expect(fs.existsSync(filePath)).toBe(true);
+
+        // // Load expected output and compare
+        // const expectedOutput = loadExpectedOutput('UTC_Time_Zone_Calendar.ics');
+        // const actualOutput = fs.readFileSync(filePath, 'utf8');
+        // // expect(actualOutput).toBe(expectedOutput);
+    });
+
+    test('Merge date-based and time-based calendars', async () => {
+    const response = await request(server)
+        .post('/merge')
+        .send({
+            linkGroupName: 'Merged Date and Time Based Calendar',
+            calendars: [
+                {
+                    url: loadCalendarFile('holiday_calendar_2023.ics'), // Date-based calendar
+                    prefix: 'Holiday_2023',
+                    override: false,
+                },
+                {
+                    url: loadCalendarFile('work_task_calendar.ics'), // Time-based calendar
+                    prefix: 'Work_Task',
+                    override: false,
+                },
+            ],
+        });
+
+    expect(response.status).toBe(200);
+    expect(response.body.url).toMatch(new RegExp('calendar/Merged_Date_and_Time_Based_Calendar'));
+
+    // Check if the file was created in the test directory
+    const filePath = path.join(CALENDARS_DIR, 'Merged_Date_and_Time_Based_Calendar.ics');
+    expect(fs.existsSync(filePath)).toBe(true);
+
+    // // Load expected output and compare
+    // const expectedOutput = loadExpectedOutput('Merged_Date_and_Time_Based_Calendar.ics');
+    // const actualOutput = fs.readFileSync(filePath, 'utf8');
+    // // expect(actualOutput).toBe(expectedOutput);
     });
 
 });
