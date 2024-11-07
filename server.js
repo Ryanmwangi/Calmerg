@@ -64,10 +64,25 @@ const addEventsToCalendar = (calendarComponent, results) => {
             const newEvent = new ICAL.Component('vevent');
 
             console.log(`Adding event: ${vevent.summary} to calendar.`);
+
+            // Get start and end dates directly
+            const startDate = vevent.startDate;
+            const endDate = vevent.endDate;
+
+            // Log the start and end dates
+            console.log(`Start Date: ${startDate}`);
+            console.log(`End Date: ${endDate}`);
+
+            // Check if the dates are valid
+            if (!startDate.isValid() || !endDate.isValid()) {
+                console.warn(`Invalid date for event: ${vevent.summary}`);
+                return; // Skip this event or handle it accordingly
+            }
+
             newEvent.updatePropertyWithValue('uid', vevent.uid);
             newEvent.updatePropertyWithValue('summary', result.override ? result.prefix : `${result.prefix} ${vevent.summary}`);
-            newEvent.updatePropertyWithValue('dtstart', vevent.startDate.toICALString());
-            newEvent.updatePropertyWithValue('dtend', vevent.endDate.toICALString());
+            newEvent.updatePropertyWithValue('dtstart', startDate.toICALString());
+            newEvent.updatePropertyWithValue('dtend', endDate.toICALString());
 
             calendarComponent.addSubcomponent(newEvent);
         });
