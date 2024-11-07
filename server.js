@@ -3,7 +3,6 @@ import ICAL from 'ical.js';
 import fs from 'fs';
 import axios from 'axios';
 import path from 'path';
-import icalGenerator from 'ical-generator';
 
 const app = express();
 app.use(express.json());
@@ -26,18 +25,30 @@ const fetchCalendarData = async (calendar) => {
     const isFilePath = !calendar.url.startsWith('http');
     try {
         if (isFilePath) {
+            console.log(`Fetching calendar data from file: ${calendar.url}`);
             return {
                 data: fs.readFileSync(path.resolve(calendar.url), 'utf-8'),
                 ...calendar
             };
         } else {
+            console.log(`Fetching calendar data from URL: ${calendar.url}`);
             const response = await axios.get(calendar.url);
             return { data: response.data, ...calendar };
         }
     } catch (error) {
-        console.error(`Error retrieving calendar from ${calendar.url}:`, error);
+        console.error(`Error retrieving calendar from ${calendar.url}:`, error.message);
         throw error;
     }
+};
+
+// Create a top-level VCALENDAR component
+const createCalendarComponent = (name) => {
+    console.log(`Creating calendar component for: ${name}`);
+    const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
+    calendarComponent.updatePropertyWithValue('prodid', '-//Your Product ID//EN');
+    calendarComponent.updatePropertyWithValue('version', '2.0');
+    calendarComponent.updatePropertyWithValue('name', name); // calendar name
+    return calendarComponent;
 };
 
 // Merge calendar events
