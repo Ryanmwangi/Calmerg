@@ -62,6 +62,13 @@ const mergeCalendarEvents = (calendarInstance, results) => {
     });
 };
 
+// Save calendar data to file
+const saveCalendarFile = (filename, content) => {
+    const filePath = path.join(MERGED_CALENDARS_DIR, filename);
+    fs.writeFileSync(filePath, content);
+    return filePath;
+};
+
 // Merge calendars endpoint
 app.post('/merge', async (req, res) => {
     const { linkGroupName, calendars } = req.body;
