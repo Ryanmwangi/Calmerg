@@ -73,91 +73,30 @@ const saveCalendarFile = (filename, content) => {
 app.post('/merge', async (req, res) => {
     const { linkGroupName, calendars } = req.body;
 
-    try {
-        // Validate the input
-        if (!linkGroupName || !calendars || !Array.isArray(calendars) || calendars.length === 0) {
-            return res.status(400).json({ error: 'Invalid input. Please provide a linkGroupName and at least one calendar.' });
-        }
+    // Validate the input
+    if (!linkGroupName || !Array.isArray(calendars) || calendars.length === 0) {
+        return res.status(400).json({ error: 'Invalid input. Please provide a linkGroupName and at least one calendar.' });
+    }
 
+    try {
+        
         // Sanitize the linkGroupName to create a valid filename
         const sanitizedLinkGroupName = sanitizeFilename(linkGroupName);
         const filename = `${sanitizedLinkGroupName}.ics`;
 
-        // Fetch calendar data from URLs or load from local files
-        const promises = calendars.map((calendar) => {
-            // Check if calendar URL is a file path or a URL
-            const isFilePath = !calendar.url.startsWith('http');
-            if (isFilePath) {
-                try{
-                    // Read calendar data from local file
-                    const data = fs.readFileSync(path.resolve(calendar.url), 'utf-8');
-                    return Promise.resolve({
-                        data: data,
-                        prefix: calendar.prefix,
-                        override: calendar.override,
-                    });
-                } catch (error) {
-                    console.error(`Error reading calendar file ${calendar.url}: ${error}`);
-                    return Promise.reject(error)
-                }
-            } else {
-                // Fetch calendar data from URL
-                return axios.get(calendar.url)
-                    .then((response) => {
-                        return {
-                            data: response.data,
-                            prefix: calendar.prefix,
-                            override: calendar.override,
-                        };
-                    })
-                    .catch((error) => {
-                        console.error(`Error fetching calendar from ${calendar.url}:`, error);
-                        return null;
-                    });
-            }
-        });
-
-        const results = await Promise.all(promises);
-        // Create a new iCalendar instance
-        const calendar = icalGenerator({ name: linkGroupName });
-
-        // Parse calendar data
-        results.forEach((result) => {
-            const parsed = ICAL.parse(result.data);
-            const component = new ICAL.Component(parsed);
-            const events = component.getAllSubcomponents('vevent');
-
-            events.forEach((event) => {
-                const vevent = new ICAL.Event(event);
-                const start = vevent.startDate.toJSDate();
-                const end = vevent.endDate.toJSDate();
-                const summary = result.override ? result.prefix : `${result.prefix} ${vevent.summary}`;
-
-                if (vevent.startDate.isDate) {
-                    calendar.createEvent({
-                        start: start.toISOString().split('T')[0],
-                        end: end.toISOString().split('T')[0],
-                        summary: summary,
-                        allDay: true,
-                    });
-                } else {
-                    calendar.createEvent({
-                        start: start,
-                        end: end,
-                        summary: summary,
-                    });
-                }
-            });
-        });
+        // Fetch calendar data
+        const results = await Promise.all(calendars.map(fetchCalendarData));
+        
+        // Generate merged calendar
+        const calendarInstance = icalGenerator({ name: linkGroupName });
+        mergeCalendarEvents(calendarInstance, results);
 
         
         // Save the calendar to a file
-        const filePath = `${MERGED_CALENDARS_DIR}/${filename}`;
-        fs.writeFileSync(filePath, calendar.toString());
-        console.log(`Calendar saved to ${filePath}`);
+        saveCalendarFile(filename, calendarInstance.toString());
 
         // Save the user input and sanitizedLinkGroupName in a separate JSON file
-        saveCalendarData(sanitizedLinkGroupName, linkGroupName, calendars);
+        saveCalendarFile(`${sanitizedLinkGroupName}.json`, JSON.stringify({ linkGroupName, calendars }, null, 2));
 
         res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${sanitizedLinkGroupName}` });
     } catch (error) {
