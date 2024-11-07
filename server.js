@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 // Determine the merged calendars directory based on the environment
-const MERGED_CALENDARS_DIR = path.join(__dirname, 'calendar');
+const MERGED_CALENDARS_DIR = path.join(process.cwd(), 'calendar');
 console.log(`Merged calendars directory: ${MERGED_CALENDARS_DIR} under ${process.cwd()}`);
 
 // Ensure the merged calendars directory exists
@@ -56,10 +56,9 @@ app.post('/merge', async (req, res) => {
                         prefix: calendar.prefix,
                         override: calendar.override,
                     });
-
-                } catch (error){
-                    console.error(`Error reading calendar file ${calendar.url}:`, error);
-                    return Promise.resolve(null);
+                } catch (error) {
+                    console.error(`Error reading calendar file ${calendar.url}: ${error}`);
+                    return Promise.reject(error)
                 }
             } else {
                 // Fetch calendar data from URL
@@ -79,14 +78,11 @@ app.post('/merge', async (req, res) => {
         });
 
         const results = await Promise.all(promises);
-        // Filter out any failed requests
-        const validResults = results.filter((result) => result !== null);
-
         // Create a new iCalendar instance
         const calendar = icalGenerator({ name: linkGroupName });
 
         // Parse calendar data
-        validResults.forEach((result) => {
+        results.forEach((result) => {
             const parsed = ICAL.parse(result.data);
             const component = new ICAL.Component(parsed);
             const events = component.getAllSubcomponents('vevent');
