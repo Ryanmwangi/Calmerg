@@ -55,6 +55,7 @@ const createCalendarComponent = (name) => {
 const addEventsToCalendar = (calendarComponent, results) => {
     console.log(`Adding events to calendar component.`);
     results.forEach((result) => {
+        console.log(result.data);
         const parsed = ICAL.parse(result.data);
         const component = new ICAL.Component(parsed);
 
@@ -113,7 +114,7 @@ app.post('/merge', async (req, res) => {
 
         res.json({ url: `${req.protocol}://${req.get('host')}/calendar/${sanitizedLinkGroupName}` });
     } catch (error) {
-        console.error('Error merging calendars:', erro.message);
+        console.error('Error merging calendars:', error.message);
         res.status(500).json({ error: 'Failed to merge calendars' });
     }
 });
