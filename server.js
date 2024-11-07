@@ -8,21 +8,15 @@ import icalGenerator from 'ical-generator';
 const app = express();
 app.use(express.json());
 
-// Determine the merged calendars directory based on the environment
 const MERGED_CALENDARS_DIR = path.join(process.cwd(), 'calendar');
 console.log(`Merged calendars directory: ${MERGED_CALENDARS_DIR} under ${process.cwd()}`);
 
 // Ensure the merged calendars directory exists
 fs.mkdirSync(MERGED_CALENDARS_DIR, { recursive: true });
 
-app.get('/script.js', (req, res) => {
-    res.setHeader('Content-Type', 'application/javascript');
-    res.sendFile('script.js', { root: '.' });
-});
-
-app.get('/', (req, res) => {
-    res.sendFile('index.html', { root: '.' });
-});
+// Serve static files
+app.get('/script.js', (req, res) => res.sendFile('script.js', { root: '.' }));
+app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }));
 
 // Function to sanitize the linkGroupName for use as a filename
 function sanitizeFilename(filename) {
