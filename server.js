@@ -18,10 +18,8 @@ fs.mkdirSync(MERGED_CALENDARS_DIR, { recursive: true });
 app.get('/script.js', (req, res) => res.sendFile('script.js', { root: '.' }));
 app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }));
 
-// Function to sanitize the linkGroupName for use as a filename
-function sanitizeFilename(filename) {
-    return filename.replace(/[<>:"/\\|?* ]/g, '_'); // Replace invalid characters with underscores
-}
+// Utility to sanitize filenames
+const sanitizeFilename = (filename) => filename.replace(/[<>:"/\\|?* ]/g, '_');
 
 // Merge calendars endpoint
 app.post('/merge', async (req, res) => {
