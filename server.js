@@ -21,6 +21,25 @@ app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }));
 // Utility to sanitize filenames
 const sanitizeFilename = (filename) => filename.replace(/[<>:"/\\|?* ]/g, '_');
 
+// Fetch calendar data from URL or file
+const fetchCalendarData = async (calendar) => {
+    const isFilePath = !calendar.url.startsWith('http');
+    try {
+        if (isFilePath) {
+            return {
+                data: fs.readFileSync(path.resolve(calendar.url), 'utf-8'),
+                ...calendar
+            };
+        } else {
+            const response = await axios.get(calendar.url);
+            return { data: response.data, ...calendar };
+        }
+    } catch (error) {
+        console.error(`Error retrieving calendar from ${calendar.url}:`, error);
+        throw error;
+    }
+};
+
 // Merge calendars endpoint
 app.post('/merge', async (req, res) => {
     const { linkGroupName, calendars } = req.body;
