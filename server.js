@@ -21,7 +21,7 @@ app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }));
 const sanitizeFilename = (filename) => filename.replace(/[<>:"/\\|?* ]/g, '_');
 
 // Fetch calendar data from URL or file
-const fetchCalendarData = async (calendar) => {
+async function fetchCalendarData(calendar) {
     const isFilePath = !calendar.url.startsWith('http');
     try {
         if (isFilePath) {
@@ -39,23 +39,23 @@ const fetchCalendarData = async (calendar) => {
         console.error(`Error retrieving calendar from ${calendar.url}:`, error.message);
         throw error;
     }
-};
+}
 
 // Create a top-level VCALENDAR component
-const createCalendarComponent = (name) => {
+function createCalendarComponent(name) {
     console.log(`Creating calendar component for: ${name}`);
     const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
     calendarComponent.updatePropertyWithValue('prodid', '-//Your Product ID//EN');
     calendarComponent.updatePropertyWithValue('version', '2.0');
     calendarComponent.updatePropertyWithValue('name', name); // calendar name
     return calendarComponent;
-};
+}
 
 // Add events to the calendar component
-const addEventsToCalendar = (calendarComponent, results) => {
+function addEventsToCalendar(calendarComponent, results) {
     console.log(`Adding events to calendar component.`);
     results.forEach((result) => {
-        console.log(result.data);
+        // console.log(result.data);
         const parsed = ICAL.parse(result.data);
         const component = new ICAL.Component(parsed);
 
@@ -87,15 +87,15 @@ const addEventsToCalendar = (calendarComponent, results) => {
             calendarComponent.addSubcomponent(newEvent);
         });
     });
-};
+}
 
 // Save calendar data to file
-const saveCalendarFile = (filename, content) => {
+function saveCalendarFile(filename, content) {
     const filePath = path.join(MERGED_CALENDARS_DIR, filename);
     console.log(`Saving calendar data to file: ${filePath}`);
     fs.writeFileSync(filePath, content);
     return filePath;
-};
+}
 
 // Merge calendars endpoint
 app.post('/merge', async (req, res) => {
@@ -135,7 +135,7 @@ app.post('/merge', async (req, res) => {
 });
 
 // Refresh calendar if outdated
-const refreshCalendarData = async (calendarName) => {
+async function refreshCalendarData(calendarName) {
     const jsonFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.json`);
     console.log(`Refreshing calendar data for: ${calendarName}`);
 
@@ -148,7 +148,7 @@ const refreshCalendarData = async (calendarName) => {
 
     saveCalendarFile(`${calendarName}.ics`, calendarComponent.toString());
     console.log('Calendar data refreshed and saved.');
-};
+}
 
 // Serve the merged calendar file and refresh if older than an hour
 app.get('/calendar/:name', async (req, res) => {
