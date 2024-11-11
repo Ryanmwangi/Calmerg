@@ -10,7 +10,7 @@ const EXPECTED_OUTPUTS_DIR = path.join(__dirname, 'expected_outputs');
 let server;
 process.chdir(__dirname)
 console.log(process.cwd());
-const app = require('../server').default;
+const app = require('../src/server').default;
 
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
