@@ -60,10 +60,10 @@ describe('Calendar Merging API', () => {
         console.log('Checking if file exists at:', filePath);
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // // Load expected output and compare
-        // const expectedOutput = loadExpectedOutput('Date_Based_Calendar.ics');
-        // const actualOutput = fs.readFileSync(filePath, 'utf8');
-        // // expect(actualOutput).toBe(expectedOutput);
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('Date_Based_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge time-based calendar', async () => {
@@ -92,10 +92,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(CALENDARS_DIR, 'Time_Based_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // // Load expected output and compare
-        // const expectedOutput = loadExpectedOutput('Time_Based_Calendar.ics');
-        // const actualOutput = fs.readFileSync (filePath, 'utf8');
-        // // expect(actualOutput).toBe(expectedOutput);
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('Time_Based_Calendar.ics');
+        const actualOutput = fs.readFileSync (filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge calendar without prefix', async () => {
@@ -119,10 +119,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(CALENDARS_DIR, 'No_Prefix_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // // Load expected output and compare
-        // const expectedOutput = loadExpectedOutput('No_Prefix_Calendar.ics');
-        // const actualOutput = fs.readFileSync(filePath, 'utf8');
-        // // expect(actualOutput).toBe(expectedOutput);
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('No_Prefix_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
     
     test('Merge calendar with override', async () => {
@@ -146,10 +146,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(CALENDARS_DIR, 'Override_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // // Load expected output and compare
-        // const expectedOutput = loadExpectedOutput('Override_Calendar.ics');
-        // const actualOutput = fs.readFileSync(filePath, 'utf8');
-        // // expect(actualOutput).toBe(expectedOutput);
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('Override_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge UTC and EAT time zone calendar', async () => {
@@ -177,10 +177,10 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(CALENDARS_DIR, 'UTCEAT_Time_Zone_Calendar.ics');
         expect(fs.existsSync(filePath)).toBe(true);
 
-        // // Load expected output and compare
-        // const expectedOutput = loadExpectedOutput('UTC_Time_Zone_Calendar.ics');
-        // const actualOutput = fs.readFileSync(filePath, 'utf8');
-        // // expect(actualOutput).toBe(expectedOutput);
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('UTCEAT_Time_Zone_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Merge date-based and time-based calendars', async () => {
@@ -209,10 +209,10 @@ describe('Calendar Merging API', () => {
     const filePath = path.join(CALENDARS_DIR, 'Merged_Date_and_Time_Based_Calendar.ics');
     expect(fs.existsSync(filePath)).toBe(true);
 
-    // // Load expected output and compare
-    // const expectedOutput = loadExpectedOutput('Merged_Date_and_Time_Based_Calendar.ics');
-    // const actualOutput = fs.readFileSync(filePath, 'utf8');
-    // // expect(actualOutput).toBe(expectedOutput);
+    // Load expected output and compare
+    const expectedOutput = loadExpectedOutput('Merged_Date_and_Time_Based_Calendar.ics');
+    const actualOutput = fs.readFileSync(filePath, 'utf8');
+    expect(actualOutput).toBe(expectedOutput);
     });
 
 });

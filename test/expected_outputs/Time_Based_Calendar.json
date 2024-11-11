@@ -1,15 +1,14 @@
 {
-  "id": "Time_Based_Calendar",
   "linkGroupName": "Time Based Calendar",
   "calendars": [
     {
-      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship tasks\\final calmerg\\test_calendars\\other_work.ics",
-      "prefix": "other_work",
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship_tasks\\final calmerg\\test\\test_calendars\\team_meeting_calendar.ics",
+      "prefix": "team_meeting_calendar",
       "override": false
     },
     {
-      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship tasks\\final calmerg\\test_calendars\\work.ics",
-      "prefix": "work",
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship_tasks\\final calmerg\\test\\test_calendars\\work_task_calendar.ics",
+      "prefix": "work_task",
       "override": false
     }
   ]

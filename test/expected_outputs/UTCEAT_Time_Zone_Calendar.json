@@ -1,0 +1,15 @@
+{
+  "linkGroupName": "UTCEAT Time Zone Calendar",
+  "calendars": [
+    {
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship_tasks\\final calmerg\\test\\test_calendars\\utc_time_zone_event.ics",
+      "prefix": "UTC_Event",
+      "override": false
+    },
+    {
+      "url": "C:\\Users\\user\\OneDrive\\Desktop\\Internship_tasks\\final calmerg\\test\\test_calendars\\eat_time_zone_event.ics",
+      "prefix": "EAT_Event",
+      "override": false
+    }
+  ]
+}
