@@ -13,9 +13,8 @@ console.log(`Merged calendars directory: ${MERGED_CALENDARS_DIR} under ${process
 // Ensure the merged calendars directory exists
 fs.mkdirSync(MERGED_CALENDARS_DIR, { recursive: true });
 
-// Serve static files
-app.get('/script.js', (req, res) => res.sendFile('script.js', { root: '.' }));
-app.get('/', (req, res) => res.sendFile('index.html', { root: '.' }));
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // Utility to sanitize filenames
 const sanitizeFilename = (filename) => filename.replace(/[<>:"/\\|?* ]/g, '_');
