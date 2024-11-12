@@ -44,24 +44,34 @@ export function addEventsToCalendar(calendarComponent, results) {
             component.getAllSubcomponents('vevent').forEach((event) => {
                 const vevent = new ICAL.Event(event);
                 const newEvent = new ICAL.Component('vevent');
-
+                
                 // Use ICAL.Time to handle dates correctly
                 const startDate = vevent.startDate;
                 const endDate = vevent.endDate;
 
                 // Create new ICAL.Time objects for start and end dates
-                const startTime = new ICAL.Time();
-                startTime.year = startDate.year;
-                startTime.month = startDate.month;
-                startTime.day = startDate.day;
-                startTime.isDate = true; // Set as all-day event
+                const startTime = new ICAL.Time({
+                    year: startDate.year,
+                    month: startDate.month,
+                    day: startDate.day,
+                    hour: startDate.isDate ? null : startDate.hour,
+                    minute: startDate.isDate ? null : startDate.minute,
+                    second: startDate.isDate ? null : startDate.second,
+                    zone: startDate.zone
+                });
+                startTime.isDate = startDate.isDate;
 
-                const endTime = new ICAL.Time();
-                endTime.year = endDate.year;
-                endTime.month = endDate.month;
-                endTime.day = endDate.day;
-                endTime.isDate = true; // Set as all-day event
-
+                const endTime = new ICAL.Time({
+                    year: endDate.year,
+                    month: endDate.month,
+                    day: endDate.day,
+                    hour: endDate.isDate ? null : endDate.hour,
+                    minute: endDate.isDate ? null : endDate.minute,
+                    second: endDate.isDate ? null : endDate.second,
+                    zone: endDate.zone
+                });
+                endTime.isDate = endDate.isDate;
+                
                 // Retain the existing DTSTAMP from vevent
                 const dtstampProperty = event.getFirstProperty('dtstamp');
                 const dtstamp = dtstampProperty ? dtstampProperty.getFirstValue() : null;
