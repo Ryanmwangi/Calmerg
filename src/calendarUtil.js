@@ -43,10 +43,8 @@ export function addEventsToCalendar(calendarComponent, results) {
 
             component.getAllSubcomponents('vevent').forEach((event) => {
                 const vevent = new ICAL.Event(event);
-                console.log('Original event properties:', event.getAllProperties());
-                console.log('Original vevent properties:', vevent);
                 const newEvent = new ICAL.Component('vevent');
-                
+
                 // Use ICAL.Time to handle dates correctly
                 const startDate = vevent.startDate;
                 const endDate = vevent.endDate;
@@ -65,22 +63,25 @@ export function addEventsToCalendar(calendarComponent, results) {
                 endTime.isDate = true; // Set as all-day event
 
                 // Retain the existing DTSTAMP from vevent
-                const dtstampProperty = event.getFirstProperty('dtstamp'); // Get DTSTAMP from the original event
-                const dtstamp = dtstampProperty ? dtstampProperty.value : null; // Safely get the value
+                const dtstampProperty = event.getFirstProperty('dtstamp');
+                const dtstamp = dtstampProperty ? dtstampProperty.getFirstValue() : null;
 
+                // Add properties to the new event
                 newEvent.updatePropertyWithValue('uid', vevent.uid);
-                newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
                 if (dtstamp) {
                     newEvent.updatePropertyWithValue('dtstamp', dtstamp); // Retain the existing DTSTAMP
+                } else {
+                    console.warn('DTSTAMP not found in the original event.'); // Warn if DTSTAMP is missing
                 }
+                newEvent.updatePropertyWithValue('summary', vevent.summary.trim()); // Set SUMMARY without leading spaces
                 
                 // Set the dtstart and dtend properties using ICAL.Time
                 newEvent.updatePropertyWithValue('dtstart', startTime);
                 newEvent.updatePropertyWithValue('dtend', endTime);
 
+
                 // Add the new event to the calendar component
                 calendarComponent.addSubcomponent(newEvent);
-                console.log('New event properties:', newEvent);
             });
 
             // Log the added events for debugging
