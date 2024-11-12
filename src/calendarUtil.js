@@ -29,8 +29,8 @@ export async function fetchCalendarData(calendar) {
 // Create a top-level VCALENDAR component
 export function createCalendarComponent(name) {
     const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
-    calendarComponent.updatePropertyWithValue('version', '2.0');
     calendarComponent.updatePropertyWithValue('name', name);
+    calendarComponent.updatePropertyWithValue('version', '2.0');
     return calendarComponent;
 }
 
@@ -73,11 +73,11 @@ export function addEventsToCalendar(calendarComponent, results) {
                 } else {
                     console.warn('DTSTAMP not found in the original event.'); // Warn if DTSTAMP is missing
                 }
-                newEvent.updatePropertyWithValue('summary', vevent.summary.trim()); // Set SUMMARY without leading spaces
                 
                 // Set the dtstart and dtend properties using ICAL.Time
                 newEvent.updatePropertyWithValue('dtstart', startTime);
                 newEvent.updatePropertyWithValue('dtend', endTime);
+                newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
 
 
                 // Add the new event to the calendar component
