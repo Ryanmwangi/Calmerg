@@ -43,6 +43,8 @@ export function addEventsToCalendar(calendarComponent, results) {
 
             component.getAllSubcomponents('vevent').forEach((event) => {
                 const vevent = new ICAL.Event(event);
+                console.log('Original event properties:', event.getAllProperties());
+                console.log('Original vevent properties:', vevent);
                 const newEvent = new ICAL.Component('vevent');
                 
                 // Use ICAL.Time to handle dates correctly
@@ -78,6 +80,7 @@ export function addEventsToCalendar(calendarComponent, results) {
 
                 // Add the new event to the calendar component
                 calendarComponent.addSubcomponent(newEvent);
+                console.log('New event properties:', newEvent);
             });
 
             // Log the added events for debugging
