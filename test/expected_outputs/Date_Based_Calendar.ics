@@ -1,5 +1,4 @@
 BEGIN:VCALENDAR
-PRODID:-//Your Product ID//EN
 VERSION:2.0
 NAME:Date Based Calendar
 BEGIN:VEVENT

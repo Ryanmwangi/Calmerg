@@ -34,6 +34,31 @@ describe('Calendar Merging API', () => {
         return fs.readFileSync(path.join(EXPECTED_OUTPUTS_DIR, filename), 'utf8');
     };
 
+    test('Preserve date-based calendar', async () => {
+        const input = loadCalendarFile('US_Holidays.ics');
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'US Holidays',
+                calendars: [
+                    {
+                        url: input,
+                        prefix: '',
+                        override: false,
+                    },
+                ],
+            });
+        expect(response.status).toBe(200);
+        // Check if the file was created in the test directory
+        const filePath = path.join(CALENDARS_DIR, 'US_Holidays.ics');
+        console.log('Checking if file exists at:', filePath);
+        expect(fs.existsSync(filePath)).toBe(true);
+        // Load expected output and compare
+        const expectedOutput = fs.readFileSync(input, 'utf8');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
+    });
+
     test('Merge date-based calendar', async () => {
         const response = await request(server)
             .post('/merge')
