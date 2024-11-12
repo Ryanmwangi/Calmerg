@@ -29,7 +29,6 @@ export async function fetchCalendarData(calendar) {
 // Create a top-level VCALENDAR component
 export function createCalendarComponent(name) {
     const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
-    calendarComponent.updatePropertyWithValue('prodid', '-//Your Product ID//EN');
     calendarComponent.updatePropertyWithValue('version', '2.0');
     calendarComponent.updatePropertyWithValue('name', name);
     return calendarComponent;
@@ -38,23 +37,54 @@ export function createCalendarComponent(name) {
 // Add events to the calendar component
 export function addEventsToCalendar(calendarComponent, results) {
     results.forEach((result) => {
-        const parsed = ICAL.parse(result.data);
-        const component = new ICAL.Component(parsed);
+        try {
+            const parsed = ICAL.parse(result.data);
+            const component = new ICAL.Component(parsed);
 
-        component.getAllSubcomponents('vevent').forEach((event) => {
-            const vevent = new ICAL.Event(event);
-            const newEvent = new ICAL.Component('vevent');
+            component.getAllSubcomponents('vevent').forEach((event) => {
+                const vevent = new ICAL.Event(event);
+                const newEvent = new ICAL.Component('vevent');
+                
+                // Use ICAL.Time to handle dates correctly
+                const startDate = vevent.startDate;
+                const endDate = vevent.endDate;
 
-            const startDate = vevent.startDate && ICAL.Time.fromJSDate(vevent.startDate.toJSDate());
-            const endDate = vevent.endDate && ICAL.Time.fromJSDate(vevent.endDate.toJSDate());
+                // Create new ICAL.Time objects for start and end dates
+                const startTime = new ICAL.Time();
+                startTime.year = startDate.year;
+                startTime.month = startDate.month;
+                startTime.day = startDate.day;
+                startTime.isDate = true; // Set as all-day event
 
-            newEvent.updatePropertyWithValue('uid', vevent.uid);
-            newEvent.updatePropertyWithValue('summary', `${result.prefix} ${vevent.summary}`);
-            newEvent.updatePropertyWithValue('dtstart', startDate);
-            newEvent.updatePropertyWithValue('dtend', endDate);
+                const endTime = new ICAL.Time();
+                endTime.year = endDate.year;
+                endTime.month = endDate.month;
+                endTime.day = endDate.day;
+                endTime.isDate = true; // Set as all-day event
 
-            calendarComponent.addSubcomponent(newEvent);
-        });
+                // Retain the existing DTSTAMP from vevent
+                const dtstampProperty = event.getFirstProperty('dtstamp'); // Get DTSTAMP from the original event
+                const dtstamp = dtstampProperty ? dtstampProperty.value : null; // Safely get the value
+
+                newEvent.updatePropertyWithValue('uid', vevent.uid);
+                newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
+                if (dtstamp) {
+                    newEvent.updatePropertyWithValue('dtstamp', dtstamp); // Retain the existing DTSTAMP
+                }
+                
+                // Set the dtstart and dtend properties using ICAL.Time
+                newEvent.updatePropertyWithValue('dtstart', startTime);
+                newEvent.updatePropertyWithValue('dtend', endTime);
+
+                // Add the new event to the calendar component
+                calendarComponent.addSubcomponent(newEvent);
+            });
+
+            // Log the added events for debugging
+            console.log('Added events:', calendarComponent.toString());
+        } catch (error) {
+            console.error('Error processing calendar data:', error.message);
+        }
     });
 }
 
