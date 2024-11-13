@@ -120,6 +120,34 @@ describe('Calendar Merging API', () => {
         expect(actualOutput).toBe(expectedOutput);
     });
 
+    test('EAT Event', async () => {
+        const input = loadCalendarFile('eat_time_zone_event.ics');
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'EAT Event',
+                calendars: [
+                    {
+                        url: input,
+                        prefix: 'EAT Event',
+                        override: false,
+                    },
+                ],
+            });
+
+        expect(response.status).toBe(200);
+        expect(response.body.url).toMatch(/calendar\/EAT_Event/);
+        
+        // Check if the file was created in the test directory
+        const filePath = path.join(CALENDARS_DIR, 'EAT_Event.ics');
+        expect(fs.existsSync(filePath)).toBe(true);
+
+        // Load expected output and compare
+        const expectedOutput = fs.readFileSync(input, 'utf8');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
+    });
+
     // test('Merge calendar without prefix', async () => {
     //     const response = await request(server)
     //         .post('/merge')
