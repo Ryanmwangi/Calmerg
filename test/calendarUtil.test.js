@@ -1,4 +1,5 @@
-import fs from 'fs'; 
+import ICAL from 'ical.js';
+import fs from 'fs';
 import axios from 'axios';
 
 // Describe the test suite for Calendar Utility Functions
@@ -33,19 +34,11 @@ describe('Calendar Utility Functions', () => {
 
     // Test case: reading data from a file
     it('reads data from a file', async () => {
-      const testCalendar = { url: './test_calendars/work_task_calendar.ics' };
-
-      // Mock the fs.readFileSync method to return specific test data
-      jest.spyOn(fs, 'readFileSync').mockReturnValue('file data');
-
+      const testCalendar = { url: './test_calendars/eat_time_zone_event.ics' };
       // Call the fetchCalendarData function with the test calendar object
       const result = await fetchCalendarData(testCalendar);
-
       // Assert that the fetched result's data matches the expected file data
-      expect(result.data).toBe('file data');
-
-      // Restore the original fs.readFileSync method after the test
-      fs.readFileSync.mockRestore();
+      expect(ICAL.parse(result.data)).toBe('file data');
     });
   });
 });
