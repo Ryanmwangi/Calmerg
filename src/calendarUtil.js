@@ -1,4 +1,5 @@
-import ICAL from 'ical.js';
+import ICAL from './lib/ical.js';
+import './lib/ical.timezones.js';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
