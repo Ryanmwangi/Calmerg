@@ -8,7 +8,7 @@
 /* jshint ignore:start */
 if (typeof module === 'object') {
   // CommonJS, where exports may be different each time.
-  ICAL = module.exports;
+  var ICAL = module.exports;
 } else if (typeof ICAL !== 'object') {/* istanbul ignore next */
   /** @ignore */
   this.ICAL = {};
