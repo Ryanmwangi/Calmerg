@@ -33,12 +33,20 @@ describe('Calendar Utility Functions', () => {
     });
 
     // Test case: reading data from a file
-    it('reads data from a file', async () => {
-      const testCalendar = { url: './test_calendars/eat_time_zone_event.ics' };
-      // Call the fetchCalendarData function with the test calendar object
+    it('reads and parses data from a file', async () => {
+      const testCalendar = { url: './test/test_calendars/eat_time_zone_event.ics' };
+  
+      // Call the fetchCalendarData function
       const result = await fetchCalendarData(testCalendar);
-      // Assert that the fetched result's data matches the expected file data
-      expect(ICAL.parse(result.data)).toBe('file data');
-    });
+  
+      // Expected parsed output
+      const expectedParsedData = ICAL.parse(
+          fs.readFileSync(testCalendar.url, 'utf-8')
+      );
+  
+      // Assert that the fetched and parsed data matches
+      expect(ICAL.parse(result.data)).toEqual(expectedParsedData);
   });
+  
+    });
 });
