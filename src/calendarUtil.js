@@ -54,27 +54,53 @@ export function addEventsToCalendar(calendarComponent, results) {
                 const vevent = new ICAL.Event(event);
                 const newEvent = new ICAL.Component('vevent');
 
-                // Copy UID
-                newEvent.updatePropertyWithValue('uid', vevent.uid);
+                // 1. DTEND with time zone
+                if (vevent.endDate) {
+                    const endTime = vevent.endDate.toString(); // Format end date properly
+                    const dtendProp = new ICAL.Property('dtend', newEvent);
+                    dtendProp.setValue(endTime);
+                
+                    // Add TZID parameter if zone is present
+                    if (vevent.endDate.zone) {
+                        dtendProp.setParameter('TZID', vevent.endDate.zone.tzid);
+                    }
+                    newEvent.addProperty(dtendProp);
+                }
 
-                // Copy DTSTAMP
+                // 2. Copy DTSTAMP
                 const dtstamp = event.getFirstPropertyValue('dtstamp');
                 if (dtstamp) newEvent.updatePropertyWithValue('dtstamp', dtstamp);
 
-                  // Copy SUMMARY
-                newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
+                 // 3. DTSTART with time zone
+                 if (vevent.startDate) {
+                    const startTime = vevent.startDate.toString(); // Format start date properly
+                    const dtstartProp = new ICAL.Property('dtstart', newEvent);
+                    dtstartProp.setValue(startTime);
+                
+                    // Add TZID parameter if zone is present
+                    if (vevent.startDate.zone) {
+                        dtstartProp.setParameter('TZID', vevent.startDate.zone.tzid);
+                    }
+                    newEvent.addProperty(dtstartProp);
+                }
 
-                // Copy DTSTART and DTEND
-                newEvent.updatePropertyWithValue('dtstart', vevent.startDate);
-                newEvent.updatePropertyWithValue('dtend', vevent.endDate);
+                // 4. location
+                const location = vevent.location;
+                if (location) newEvent.updatePropertyWithValue('location', location);
 
-                // Copy Recurrence Rules (RRULE) and Recurrence ID
+                // 5. Copy Recurrence Rules (RRULE) and Recurrence ID
                 const rrule = event.getFirstPropertyValue('rrule');
                 if (rrule) newEvent.updatePropertyWithValue('rrule', rrule);
 
                 const recurrenceId = event.getFirstPropertyValue('recurrence-id');
                 if (recurrenceId) newEvent.updatePropertyWithValue('recurrence-id', recurrenceId);
 
+                // 6. Copy SUMMARY
+                newEvent.updatePropertyWithValue('summary', vevent.summary.trim());  
+
+                // 7. Copy UID
+                newEvent.updatePropertyWithValue('uid', vevent.uid);
+                
                 // Add the VEVENT to the calendar
                 calendarComponent.addSubcomponent(newEvent);
             });
