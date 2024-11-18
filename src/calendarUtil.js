@@ -41,61 +41,72 @@ export function addEventsToCalendar(calendarComponent, results) {
             const parsed = ICAL.parse(result.data);
             const component = new ICAL.Component(parsed);
 
-            component.getAllSubcomponents('vevent').forEach((event) => {
-                const vevent = new ICAL.Event(event);
-                const newEvent = new ICAL.Component('vevent');
-                
-                // Use ICAL.Time to handle dates correctly
-                const startDate = vevent.startDate;
-                const endDate = vevent.endDate;
-
-                // Create new ICAL.Time objects for start and end dates
-                const startTime = new ICAL.Time({
-                    year: startDate.year,
-                    month: startDate.month,
-                    day: startDate.day,
-                    hour: startDate.isDate ? null : startDate.hour,
-                    minute: startDate.isDate ? null : startDate.minute,
-                    second: startDate.isDate ? null : startDate.second,
-                    zone: startDate.zone
-                });
-                startTime.isDate = startDate.isDate;
-
-                const endTime = new ICAL.Time({
-                    year: endDate.year,
-                    month: endDate.month,
-                    day: endDate.day,
-                    hour: endDate.isDate ? null : endDate.hour,
-                    minute: endDate.isDate ? null : endDate.minute,
-                    second: endDate.isDate ? null : endDate.second,
-                    zone: endDate.zone
-                });
-                endTime.isDate = endDate.isDate;
-                
-                // Retain the existing DTSTAMP from vevent
-                const dtstampProperty = event.getFirstProperty('dtstamp');
-                const dtstamp = dtstampProperty ? dtstampProperty.getFirstValue() : null;
-
-                // Add properties to the new event
-                newEvent.updatePropertyWithValue('uid', vevent.uid);
-                if (dtstamp) {
-                    newEvent.updatePropertyWithValue('dtstamp', dtstamp); // Retain the existing DTSTAMP
-                } else {
-                    console.warn('DTSTAMP not found in the original event.'); // Warn if DTSTAMP is missing
+            // Extract and add VTIMEZONE components
+            const timezones = component.getAllSubcomponents('vtimezone');
+            timezones.forEach((timezone) => {
+                const tzid = timezone.getFirstPropertyValue('tzid');
+                if (!calendarComponent.getFirstSubcomponent((comp) => comp.name === 'vtimezone' && comp.getFirstPropertyValue('tzid') === tzid)) {
+                    calendarComponent.addSubcomponent(timezone);
                 }
-                
-                // Set the dtstart and dtend properties using ICAL.Time
-                newEvent.updatePropertyWithValue('dtstart', startTime);
-                newEvent.updatePropertyWithValue('dtend', endTime);
-                newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
-
-
-                // Add the new event to the calendar component
-                calendarComponent.addSubcomponent(newEvent);
             });
 
-            // Log the added events for debugging
-            console.log('Added events:', calendarComponent.toString());
+            console.log(`Added VTIMEZONE components for calendar: ${result.name}`);
+
+            // component.getAllSubcomponents('vevent').forEach((event) => {
+            //     const vevent = new ICAL.Event(event);
+            //     const newEvent = new ICAL.Component('vevent');
+                
+            //     // Use ICAL.Time to handle dates correctly
+            //     const startDate = vevent.startDate;
+            //     const endDate = vevent.endDate;
+
+            //     // Create new ICAL.Time objects for start and end dates
+            //     const startTime = new ICAL.Time({
+            //         year: startDate.year,
+            //         month: startDate.month,
+            //         day: startDate.day,
+            //         hour: startDate.isDate ? null : startDate.hour,
+            //         minute: startDate.isDate ? null : startDate.minute,
+            //         second: startDate.isDate ? null : startDate.second,
+            //         zone: startDate.zone
+            //     });
+            //     startTime.isDate = startDate.isDate;
+
+            //     const endTime = new ICAL.Time({
+            //         year: endDate.year,
+            //         month: endDate.month,
+            //         day: endDate.day,
+            //         hour: endDate.isDate ? null : endDate.hour,
+            //         minute: endDate.isDate ? null : endDate.minute,
+            //         second: endDate.isDate ? null : endDate.second,
+            //         zone: endDate.zone
+            //     });
+            //     endTime.isDate = endDate.isDate;
+                
+            //     // Retain the existing DTSTAMP from vevent
+            //     const dtstampProperty = event.getFirstProperty('dtstamp');
+            //     const dtstamp = dtstampProperty ? dtstampProperty.getFirstValue() : null;
+
+            //     // Add properties to the new event
+            //     newEvent.updatePropertyWithValue('uid', vevent.uid);
+            //     if (dtstamp) {
+            //         newEvent.updatePropertyWithValue('dtstamp', dtstamp); // Retain the existing DTSTAMP
+            //     } else {
+            //         console.warn('DTSTAMP not found in the original event.'); // Warn if DTSTAMP is missing
+            //     }
+                
+            //     // Set the dtstart and dtend properties using ICAL.Time
+            //     newEvent.updatePropertyWithValue('dtstart', startTime);
+            //     newEvent.updatePropertyWithValue('dtend', endTime);
+            //     newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
+
+
+            //     // Add the new event to the calendar component
+            //     calendarComponent.addSubcomponent(newEvent);
+            // });
+
+            // // Log the added events for debugging
+            // console.log('Added events:', calendarComponent.toString());
         } catch (error) {
             console.error('Error processing calendar data:', error.message);
         }
@@ -105,7 +116,7 @@ export function addEventsToCalendar(calendarComponent, results) {
 // Save calendar data to file
 export function saveCalendarFile(filename, content) {
     const filePath = path.join(MERGED_CALENDARS_DIR, filename);
-    console.log(`Saving calendar data to file: ${filePath}`);
+    // console.log(`Saving calendar data to file: ${filePath}`);
     fs.writeFileSync(filePath, content);
     return filePath;
 }
