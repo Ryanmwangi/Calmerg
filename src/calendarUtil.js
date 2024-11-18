@@ -4,8 +4,6 @@ import path from 'path';
 import axios from 'axios';
 
 export const MERGED_CALENDARS_DIR = path.join(process.cwd(), 'calendar');
-console.log('ICAL:', ICAL);
-console.log('ICAL.Component:', ICAL.Component);
 
 // Ensure the merged calendars directory exists
 fs.mkdirSync(MERGED_CALENDARS_DIR, { recursive: true });
