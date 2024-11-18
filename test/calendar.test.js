@@ -3,7 +3,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 
-const CALENDARS_DIR = path.join(__dirname, 'calendar')
+const CALENDARS_DIR = path.join(__dirname, 'calendar');
 const TEST_CALENDARS_DIR = path.join(__dirname, 'test_calendars');
 const EXPECTED_OUTPUTS_DIR = path.join(__dirname, 'expected_outputs');
 
