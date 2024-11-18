@@ -35,17 +35,16 @@ describe('Calendar Utility Functions', () => {
 
     // Test case: reading data from a file
     it('reads and parses data from a file', async () => {
-      const testCalendar = { url: path.join(__dirname, 'test_calendars', 'eat_time_zone_event.ics'), };
+      const testCalendar = { url: path.join(__dirname, 'test_calendars', 'nextcloud.ics'), };
   
       // Call the fetchCalendarData function
       const result = await fetchCalendarData(testCalendar);
-  
-      // Expected parsed output
-      const expectedParsedData = '';
-  
+      const parsed = ICAL.parse(result.data);
+      const component = new ICAL.Component(parsed);
+      const firstEvent = new ICAL.Event(component.getAllSubcomponents('vevent')[0]);
       // Assert that the fetched and parsed data matches
-      expect(ICAL.parse(result.data)).toEqual(expectedParsedData);
-  });
-  
+      expect(firstEvent.startDate.toJSON()).toEqual({"day": 20, "hour": 21, "isDate": false, "minute": 15, "month": 11, "second": 0, "timezone": "Europe/Berlin", "year": 2024});
     });
+  
+  });
 });

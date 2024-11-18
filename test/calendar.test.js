@@ -26,7 +26,7 @@ describe('Calendar Merging API', () => {
         await new Promise(resolve => setTimeout(resolve, 100));
     });
 
-    const loadCalendarFile = (filename) => {
+    const getTestCalendarFilename = (filename) => {
         return path.join(TEST_CALENDARS_DIR, filename);
     };
 
@@ -34,8 +34,33 @@ describe('Calendar Merging API', () => {
         return fs.readFileSync(path.join(EXPECTED_OUTPUTS_DIR, filename), 'utf8');
     };
 
+    test('Preserve nextcloud calendar', async () => {
+        const input = getTestCalendarFilename('nextcloud-minimal.ics');
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'nextcloud-minimal',
+                calendars: [
+                    {
+                        url: input,
+                        prefix: '',
+                        override: false,
+                    },
+                ],
+            });
+        expect(response.status).toBe(200);
+        // Check if the file was created in the test directory
+        const filePath = path.join(CALENDARS_DIR, 'nextcloud-minimal.ics');
+        console.log('Checking if file exists at:', filePath);
+        expect(fs.existsSync(filePath)).toBe(true);
+        // Load expected output and compare
+        const expectedOutput = fs.readFileSync(input, 'utf8');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
+    });
+
     test('Preserve date-based calendar', async () => {
-        const input = loadCalendarFile('US_Holidays.ics');
+        const input = getTestCalendarFilename('US_Holidays.ics');
         const response = await request(server)
             .post('/merge')
             .send({
@@ -57,7 +82,6 @@ describe('Calendar Merging API', () => {
         const expectedOutput = fs.readFileSync(input, 'utf8');
         const actualOutput = fs.readFileSync(filePath, 'utf8');
         expect(actualOutput).toBe(expectedOutput);
-
     });
 
     // test('Merge date-based calendar', async () => {
@@ -67,12 +91,12 @@ describe('Calendar Merging API', () => {
     //             linkGroupName: 'Date Based Calendar',
     //             calendars: [
     //                 {
-    //                     url: loadCalendarFile('holiday_calendar_2023.ics'),
+    //                     url: getTestCalendarFilename('holiday_calendar_2023.ics'),
     //                     prefix: 'holiday_calendar_2023',
     //                     override: false,
     //                 },
     //                 {
-    //                     url: loadCalendarFile('US_Holidays.ics'),
+    //                     url: getTestCalendarFilename('US_Holidays.ics'),
     //                     prefix: 'US_holidays',
     //                     override: false,
     //                 },
@@ -93,7 +117,7 @@ describe('Calendar Merging API', () => {
     // });
 
     test('Merge time-based calendar', async () => {
-        const input = loadCalendarFile('work_task_calendar.ics');
+        const input = getTestCalendarFilename('work_task_calendar.ics');
         const response = await request(server)
             .post('/merge')
             .send({
@@ -121,7 +145,7 @@ describe('Calendar Merging API', () => {
     });
 
     test('EAT Event', async () => {
-        const input = loadCalendarFile('eat_time_zone_event.ics');
+        const input = getTestCalendarFilename('eat_time_zone_event.ics');
         const response = await request(server)
             .post('/merge')
             .send({
@@ -155,7 +179,7 @@ describe('Calendar Merging API', () => {
     //             linkGroupName: 'No Prefix Calendar',
     //             calendars: [
     //                 {
-    //                     url: loadCalendarFile('sf_public_holidays.ics'),
+    //                     url: getTestCalendarFilename('sf_public_holidays.ics'),
     //                     prefix: '',
     //                     override: false,
     //                 },
@@ -182,7 +206,7 @@ describe('Calendar Merging API', () => {
     //             linkGroupName: 'Override Calendar',
     //             calendars: [
     //                 {
-    //                     url: loadCalendarFile('sf_public_holidays.ics'),
+    //                     url: getTestCalendarFilename('sf_public_holidays.ics'),
     //                     prefix: 'Override Event',
     //                     override: true,
     //                 },
@@ -209,12 +233,12 @@ describe('Calendar Merging API', () => {
     //             linkGroupName: 'UTCEAT Time Zone Calendar',
     //             calendars: [
     //                 {
-    //                     url: loadCalendarFile('utc_time_zone_event.ics'),
+    //                     url: getTestCalendarFilename('utc_time_zone_event.ics'),
     //                     prefix: 'UTC_Event',
     //                     override: false,
     //                 },
     //                 {
-    //                     url: loadCalendarFile('eat_time_zone_event.ics'),
+    //                     url: getTestCalendarFilename('eat_time_zone_event.ics'),
     //                     prefix: 'EAT_Event',
     //                     override: false,
     //                 },
@@ -240,12 +264,12 @@ describe('Calendar Merging API', () => {
     //         linkGroupName: 'Merged Date and Time Based Calendar',
     //         calendars: [
     //             {
-    //                 url: loadCalendarFile('holiday_calendar_2023.ics'), // Date-based calendar
+    //                 url: getTestCalendarFilename('holiday_calendar_2023.ics'), // Date-based calendar
     //                 prefix: 'Holiday_2023',
     //                 override: false,
     //             },
     //             {
-    //                 url: loadCalendarFile('work_task_calendar.ics'), // Time-based calendar
+    //                 url: getTestCalendarFilename('work_task_calendar.ics'), // Time-based calendar
     //                 prefix: 'Work_Task',
     //                 override: false,
     //             },
