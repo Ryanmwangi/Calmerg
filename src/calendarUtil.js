@@ -31,6 +31,7 @@ export function createCalendarComponent(name) {
     const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
     calendarComponent.updatePropertyWithValue('name', name);
     calendarComponent.updatePropertyWithValue('version', '2.0');
+    calendarComponent.updatePropertyWithValue('calscale', 'GREGORIAN');
     calendarComponent.updatePropertyWithValue('prodid', '-//CalMerge//Calendar Merger 1.0//EN');
     return calendarComponent;
 }
@@ -103,10 +104,14 @@ export function addEventsToCalendar(calendarComponent, results, overrideFlag = f
                 const recurrenceId = event.getFirstPropertyValue('recurrence-id');
                 if (recurrenceId) newEvent.updatePropertyWithValue('recurrence-id', recurrenceId);
 
-                // 6. Copy SUMMARY
+                // 6. Add SEQUENCE (if available or default to 0)
+                const sequence = event.getFirstPropertyValue('sequence') || 0;
+                newEvent.updatePropertyWithValue('sequence', sequence);
+
+                // 7. Copy SUMMARY
                 newEvent.updatePropertyWithValue('summary', vevent.summary.trim());  
 
-                // 7. Copy UID
+                // 8. Copy UID
                 newEvent.updatePropertyWithValue('uid', vevent.uid);
                 
                 // Add the VEVENT to the calendar
