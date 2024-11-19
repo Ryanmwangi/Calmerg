@@ -43,6 +43,16 @@ export function addEventsToCalendar(calendarComponent, results, overrideFlag = f
             const parsed = ICAL.parse(result.data);
             const component = new ICAL.Component(parsed);
 
+           // Extract METHOD from the parsed data (if available)
+           const method = component.getFirstPropertyValue('method');
+           if (method) {
+               console.log(`Extracted METHOD: ${method}`);
+               // Only add the METHOD property once
+               if (!calendarComponent.getFirstPropertyValue('method')) {
+                   calendarComponent.updatePropertyWithValue('method', method.toUpperCase());
+               }
+           }
+
             // Extract and add VTIMEZONE components
             const timezones = component.getAllSubcomponents('vtimezone');
             timezones.forEach((timezone) => {
