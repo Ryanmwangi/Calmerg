@@ -12,7 +12,7 @@ process.chdir(__dirname)
 // console.log(process.cwd());
 const app = require('../src/server').default;
 
-const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\n').trimEnd();
+const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\r\n').trimEnd(); // Normalize to CRLF
 
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
