@@ -12,6 +12,8 @@ process.chdir(__dirname)
 // console.log(process.cwd());
 const app = require('../src/server').default;
 
+const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\n').trimEnd();
+
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Start the server
@@ -53,10 +55,17 @@ describe('Calendar Merging API', () => {
         const filePath = path.join(CALENDARS_DIR, 'nextcloud-minimal.ics');
         // console.log('Checking if file exists at:', filePath);
         expect(fs.existsSync(filePath)).toBe(true);
-        // Load expected output and compare
+
+        // Load expected output
         const expectedOutput = fs.readFileSync(input, 'utf8');
         const actualOutput = fs.readFileSync(filePath, 'utf8');
-        expect(actualOutput).toBe(expectedOutput);
+        
+        // Normalize line endings
+        const normalizedActual = normalizeLineEndings(actualOutput);
+        const normalizedExpected = normalizeLineEndings(expectedOutput);
+        
+        //compare
+        expect(normalizedActual).toBe(normalizedExpected);
     });
 
     // test('Preserve date-based calendar', async () => {

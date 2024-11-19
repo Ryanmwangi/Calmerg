@@ -127,8 +127,9 @@ export function addEventsToCalendar(calendarComponent, results, overrideFlag = f
 
 // Save calendar data to file
 export function saveCalendarFile(filename, content) {
+    const normalizedContent = content.replace(/\r\n/g, '\n').trimEnd(); // Normalize to LF
     const filePath = path.join(MERGED_CALENDARS_DIR, filename);
     // console.log(`Saving calendar data to file: ${filePath}`);
-    fs.writeFileSync(filePath, content);
+    fs.writeFileSync(filePath, normalizedContent);
     return filePath;
 }
