@@ -38,20 +38,34 @@ export function createCalendarComponent(name) {
 
 // Add events to the calendar component
 export function addEventsToCalendar(calendarComponent, results, overrideFlag = false) {
+    let defaultTimeZone = null; // To store the first found X-WR-TIMEZONE
+    
     results.forEach((result) => {
         try {
             const parsed = ICAL.parse(result.data);
             const component = new ICAL.Component(parsed);
-
-           // Extract METHOD from the parsed data (if available)
-           const method = component.getFirstPropertyValue('method');
-           if (method) {
-               console.log(`Extracted METHOD: ${method}`);
-               // Only add the METHOD property once
-               if (!calendarComponent.getFirstPropertyValue('method')) {
-                   calendarComponent.updatePropertyWithValue('method', method.toUpperCase());
-               }
-           }
+            
+            // Extract METHOD from the parsed data (if available)
+            const method = component.getFirstPropertyValue('method');
+            if (method) {
+                console.log(`Extracted METHOD: ${method}`);
+                // Only add the METHOD property once
+                if (!calendarComponent.getFirstPropertyValue('method')) {
+                    calendarComponent.updatePropertyWithValue('method', method.toUpperCase());
+                }
+            }
+            // Extract X-WR-TIMEZONE if available
+            const wrTimeZone = component.getFirstPropertyValue('x-wr-timezone');
+            if (wrTimeZone) {
+                console.log(`Extracted X-WR-TIMEZONE: ${wrTimeZone}`);
+                // Set it as the default if not already set
+                if (!defaultTimeZone) {
+                    defaultTimeZone = wrTimeZone;
+                    if (!calendarComponent.getFirstPropertyValue('x-wr-timezone')) {
+                        calendarComponent.updatePropertyWithValue('x-wr-timezone', defaultTimeZone);
+                    }
+                }
+            }
 
             // Extract and add VTIMEZONE components
             const timezones = component.getAllSubcomponents('vtimezone');
