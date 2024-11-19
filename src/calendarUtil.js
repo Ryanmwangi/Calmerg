@@ -31,6 +31,7 @@ export function createCalendarComponent(name) {
     const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
     calendarComponent.updatePropertyWithValue('name', name);
     calendarComponent.updatePropertyWithValue('version', '2.0');
+    calendarComponent.updatePropertyWithValue('prodid', '-//CalMerge//Calendar Merger 1.0//EN');
     return calendarComponent;
 }
 
