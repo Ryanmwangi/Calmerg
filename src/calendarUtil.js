@@ -35,7 +35,7 @@ export function createCalendarComponent(name) {
 }
 
 // Add events to the calendar component
-export function addEventsToCalendar(calendarComponent, results) {
+export function addEventsToCalendar(calendarComponent, results, overrideFlag = false) {
     results.forEach((result) => {
         try {
             const parsed = ICAL.parse(result.data);
@@ -84,9 +84,16 @@ export function addEventsToCalendar(calendarComponent, results) {
                     newEvent.addProperty(dtstartProp);
                 }
 
-                // 4. location
-                const location = vevent.location;
-                if (location) newEvent.updatePropertyWithValue('location', location);
+                // Add LOCATION (conditionally included)
+                if (!overrideFlag && vevent.location) {
+                    newEvent.updatePropertyWithValue('location', vevent.location);
+                } else if (overrideFlag && vevent.location) {
+                    // Modify SUMMARY if override is set
+                    const modifiedSummary = `${vevent.summary.trim()} (Location omitted)`;
+                    newEvent.updatePropertyWithValue('summary', modifiedSummary);
+                } else {
+                    newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
+                }
 
                 // 5. Copy Recurrence Rules (RRULE) and Recurrence ID
                 const rrule = event.getFirstPropertyValue('rrule');
