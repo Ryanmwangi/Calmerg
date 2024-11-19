@@ -1,7 +1,8 @@
 BEGIN:VCALENDAR
+NAME:nextcloud-minimal
 VERSION:2.0
 CALSCALE:GREGORIAN
-PRODID:-//SabreDAV//SabreDAV//EN
+PRODID:-//CalMerge//Calendar Merger 1.0//EN
 BEGIN:VTIMEZONE
 TZID:Europe/Berlin
 BEGIN:DAYLIGHT
