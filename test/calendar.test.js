@@ -68,6 +68,39 @@ describe('Calendar Merging API', () => {
         expect(normalizedActual).toBe(normalizedExpected);
     });
 
+    test('Preserve google calendar', async () => {
+        const input = getTestCalendarFilename('google-calendar-minimal.ics');
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'google-calendar-minimal',
+                calendars: [
+                    {
+                        url: input,
+                        prefix: '',
+                        override: false,
+                    },
+                ],
+            });
+        expect(response.status).toBe(200);
+        // Check if the file was created in the test directory
+        const filePath = path.join(CALENDARS_DIR, 'google-calendar-minimal.ics');
+        // console.log('Checking if file exists at:', filePath);
+        expect(fs.existsSync(filePath)).toBe(true);
+
+        // Load expected output
+        const expectedOutput = fs.readFileSync(input, 'utf8');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        
+        // Normalize line endings
+        const normalizedActual = normalizeLineEndings(actualOutput);
+        const normalizedExpected = normalizeLineEndings(expectedOutput);
+        
+        //compare
+        expect(normalizedActual).toBe(normalizedExpected);
+    });
+
+
     // test('Preserve date-based calendar', async () => {
     //     const input = getTestCalendarFilename('US_Holidays.ics');
     //     const response = await request(server)
