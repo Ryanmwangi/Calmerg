@@ -26,6 +26,30 @@ export async function fetchCalendarData(calendar) {
     }
 }
 
+// Helper function to check if TZID exists in the raw property string
+function hasTZID(rawProperty) {
+    return rawProperty.includes('TZID=');
+}
+
+// Function to process DTSTART/DTEND
+function processDateTimeProperty(event, propertyName, newEvent) {
+    const rawProperty = event.getFirstProperty(propertyName)?.toICALString();
+    if (!rawProperty) return;
+
+    const dateTime = event.getFirstPropertyValue(propertyName);
+    const dateTimeString = dateTime.toString();
+
+    const property = new ICAL.Property(propertyName, newEvent);
+    property.setValue(dateTimeString);
+
+    if (hasTZID(rawProperty)) {
+        // If raw property includes TZID, add it
+        property.setParameter('TZID', dateTime.zone.tzid);
+    }
+
+    newEvent.addProperty(property);
+}
+
 // Create a top-level VCALENDAR component
 export function createCalendarComponent(name) {
     const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
@@ -80,31 +104,11 @@ export function addEventsToCalendar(calendarComponent, results, overrideFlag = f
                 const vevent = new ICAL.Event(event);
                 const newEvent = new ICAL.Component('vevent');
 
-                // 1. DTSTART with time zone
-                if (vevent.startDate) {
-                   const startTime = vevent.startDate.toString(); // Format start date properly
-                   const dtstartProp = new ICAL.Property('dtstart', newEvent);
-                   dtstartProp.setValue(startTime);
-               
-                   // Add TZID parameter if zone is present
-                   if (vevent.startDate.zone) {
-                       dtstartProp.setParameter('TZID', vevent.startDate.zone.tzid);
-                   }
-                   newEvent.addProperty(dtstartProp);
-                }
-
-                // 2. DTEND with time zone
-                if (vevent.endDate) {
-                    const endTime = vevent.endDate.toString(); // Format end date properly
-                    const dtendProp = new ICAL.Property('dtend', newEvent);
-                    dtendProp.setValue(endTime);
+                // 1. Add DTSTART
+                processDateTimeProperty(event, 'dtstart', newEvent);
                 
-                    // Add TZID parameter if zone is present
-                    if (vevent.endDate.zone) {
-                        dtendProp.setParameter('TZID', vevent.endDate.zone.tzid);
-                    }
-                    newEvent.addProperty(dtendProp);
-                }
+                // 2. Add DTEND
+                processDateTimeProperty(event, 'dtend', newEvent);
 
                 // 3. Copy DTSTAMP
                 const dtstamp = event.getFirstPropertyValue('dtstamp');
