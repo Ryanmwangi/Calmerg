@@ -1,4 +1,7 @@
-const ICAL = require('./ical.js');
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
+const ICAL = require('./ical.cjs');
 (function() {
   function register(tzdata) { ICAL.TimezoneService.register(ICAL.Component.fromString("BEGIN:VTIMEZONE\r\n" + tzdata + "\r\nEND:VTIMEZONE")) };
   ICAL.TimezoneService.IANA_TZDB_VERSION = "2024b";

@@ -15,8 +15,8 @@
   },
   "description": "calmerger",
   "main": "server.js",
-  "type": "module",
   "author": "Ryan",
+  "type": "module",
   "license": "ISC",
   "devDependencies": {
     "@babel/preset-env": "^7.26.0",
