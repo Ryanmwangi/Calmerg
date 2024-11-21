@@ -39,6 +39,50 @@ The application also generates a unique URL for the merged calendar and updates 
    ```bash
    npm start
    ```
+## Building and Running with Docker
+
+### 1. Build the Docker Image
+
+Run the following command to build the Docker image:
+
+```bash
+docker build -t calmerger-app .
+```
+
+### 2. Run the Docker Container
+
+To start the container, use:
+
+```bash
+docker run -d --name calmerger -p 3000:3000 calmerger-app
+
+```
+
+This maps the container's port `3000` to the host system's port `3000`. The application will be accessible at [http://localhost:3000](http://localhost:3000).
+
+### 3. Using Docker Compose (Optional)
+
+If you prefer to use Docker Compose, ensure you have a `docker-compose.yml` file in your project directory. Then, run:
+
+```bash
+docker-compose up -d
+```
+
+This will automatically build and start the container based on the configuration in the `docker-compose.yml` file.
+
+### 4. Stopping the Docker Container
+
+To stop the running container, use:
+
+```bash
+docker stop calmerger
+```
+
+To remove the container:
+
+```bash
+docker rm calmerger
+```
 
 ## Running Tests
 
