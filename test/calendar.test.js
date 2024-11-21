@@ -2,6 +2,12 @@ import request from 'supertest';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import { jest } from '@jest/globals';
+import { fileURLToPath } from 'url';
+
+// ESM equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const CALENDARS_DIR = path.join(__dirname, 'calendar');
 const TEST_CALENDARS_DIR = path.join(__dirname, 'test_calendars');
@@ -10,7 +16,7 @@ const EXPECTED_OUTPUTS_DIR = path.join(__dirname, 'expected_outputs');
 let server;
 process.chdir(__dirname)
 // console.log(process.cwd());
-const app = require('../src/server').default;
+import app from '../src/server.js';
 
 const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\r\n').trimEnd(); // Normalize to CRLF
 

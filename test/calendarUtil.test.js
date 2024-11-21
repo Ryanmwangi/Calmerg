@@ -2,6 +2,12 @@ import ICAL from '../src/lib/ical.timezones';
 import fs from 'fs';
 import path from 'path';
 import axios from 'axios';
+import { jest } from '@jest/globals';
+import { fileURLToPath } from 'url';
+
+// ESM equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Describe the test suite for Calendar Utility Functions
 describe('Calendar Utility Functions', () => {
