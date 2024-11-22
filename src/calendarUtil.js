@@ -34,9 +34,58 @@ function hasTZID(rawProperty) {
 // Function to process DTSTART/DTEND
 function processDateTimeProperty(event, propertyName, newEvent) {
     const rawProperty = event.getFirstProperty(propertyName)?.toICALString();
-    if (!rawProperty) return;
+    if (!rawProperty) {
+        console.log(`No raw property found for ${propertyName}`);
+        return;
+    }
 
-    const dateTime = event.getFirstPropertyValue(propertyName);
+    console.log(`Raw property: ${rawProperty}`);  // Log the raw property
+
+    // Check if it's a date-based event (VALUE=DATE)
+    if (rawProperty.includes('VALUE=DATE')) {
+        console.log(`Date-based event detected for ${propertyName}: ${rawProperty}`);
+
+        // Split to get the date part (should be in the format YYYYMMDD)
+        const dateOnly = rawProperty.split(':')[1]; // e.g., "20231225"
+        console.log(`Extracted date string: ${dateOnly}`);
+
+        if (!dateOnly) {
+            console.error(`Error: Could not extract date from ${rawProperty}`);
+            return;
+        }
+
+        // Ensure the date string is valid (no dashes, just YYYYMMDD)
+        const year = dateOnly.slice(0, 4);
+        const month = dateOnly.slice(4, 6);
+        const day = dateOnly.slice(6, 8);
+
+        console.log(`Parsed date: ${year}-${month}-${day}`);
+
+        // Check if the date is valid
+        if (!year || !month || !day || isNaN(new Date(`${year}-${month}-${day}`))) {
+            console.error(`Invalid date parsed from raw property: ${rawProperty}`);
+            return;
+        }
+
+        const formattedDate = dateOnly; // Use the date string as is (YYYYMMDD format)
+        console.log(`Formatted date: ${formattedDate}`);
+
+        // Log before adding the property to ensure it's correct
+        console.log(`Adding date-based property with value: ${propertyName};VALUE=DATE:${formattedDate}`);
+
+        // Correct property name usage (DTSTART not dtstart)
+        const property = new ICAL.Property(propertyName.toUpperCase(), newEvent);  // Use uppercase "DTSTART"
+        property.setValue(`VALUE=DATE:${formattedDate}`);
+
+        // Log the property object before adding it to ensure everything is correct
+        console.log(`Property to add:`, property);
+
+        newEvent.addProperty(property);
+    } else {
+        console.log(`Time-based event detected for ${propertyName}: ${rawProperty}`);
+
+        // Time-based event processing (existing logic)
+        const dateTime = event.getFirstPropertyValue(propertyName);
     const dateTimeString = dateTime.toString();
 
     const property = new ICAL.Property(propertyName, newEvent);
@@ -48,7 +97,9 @@ function processDateTimeProperty(event, propertyName, newEvent) {
     }
 
     newEvent.addProperty(property);
+    }
 }
+
 
 // Create a top-level VCALENDAR component
 export function createCalendarComponent(name) {
@@ -157,7 +208,7 @@ export function addEventsToCalendar(calendarComponent, results, overrideFlag = f
 export function saveCalendarFile(filename, content) {
     const normalizedContent = content.replace(/\r?\n/g, '\r\n').trimEnd(); // Normalize to CRLF
     const filePath = path.join(MERGED_CALENDARS_DIR, filename);
-    // console.log(`Saving calendar data to file: ${filePath}`);
+    console.log(`Saving calendar data to file: ${filePath}`);
     fs.writeFileSync(filePath, normalizedContent);
     return filePath;
 }
