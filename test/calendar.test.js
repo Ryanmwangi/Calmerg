@@ -15,7 +15,7 @@ const EXPECTED_OUTPUTS_DIR = path.join(__dirname, 'expected_outputs');
 
 let server;
 process.chdir(__dirname)
-// console.log(process.cwd());
+console.log(process.cwd());
 import app from '../src/server.js';
 
 const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\r\n').trimEnd(); // Normalize to CRLF
@@ -59,7 +59,7 @@ describe('Calendar Merging API', () => {
         expect(response.status).toBe(200);
         // Check if the file was created in the test directory
         const filePath = path.join(CALENDARS_DIR, 'nextcloud-minimal.ics');
-        // console.log('Checking if file exists at:', filePath);
+        console.log('Checking if file exists at:', filePath);
         expect(fs.existsSync(filePath)).toBe(true);
 
         // Load expected output
@@ -91,7 +91,7 @@ describe('Calendar Merging API', () => {
         expect(response.status).toBe(200);
         // Check if the file was created in the test directory
         const filePath = path.join(CALENDARS_DIR, 'google-calendar-minimal.ics');
-        // console.log('Checking if file exists at:', filePath);
+        console.log('Checking if file exists at:', filePath);
         expect(fs.existsSync(filePath)).toBe(true);
 
         // Load expected output
@@ -107,30 +107,30 @@ describe('Calendar Merging API', () => {
     });
 
 
-    // test('Preserve date-based calendar', async () => {
-    //     const input = getTestCalendarFilename('US_Holidays.ics');
-    //     const response = await request(server)
-    //         .post('/merge')
-    //         .send({
-    //             linkGroupName: 'US Holidays',
-    //             calendars: [
-    //                 {
-    //                     url: input,
-    //                     prefix: '',
-    //                     override: false,
-    //                 },
-    //             ],
-    //         });
-    //     expect(response.status).toBe(200);
-    //     // Check if the file was created in the test directory
-    //     const filePath = path.join(CALENDARS_DIR, 'US_Holidays.ics');
-    //     console.log('Checking if file exists at:', filePath);
-    //     expect(fs.existsSync(filePath)).toBe(true);
-    //     // Load expected output and compare
-    //     const expectedOutput = fs.readFileSync(input, 'utf8');
-    //     const actualOutput = fs.readFileSync(filePath, 'utf8');
-    //     expect(actualOutput).toBe(expectedOutput);
-    // });
+    test('Preserve date-based calendar', async () => {
+        const input = getTestCalendarFilename('US_Holidays.ics');
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'US Holidays',
+                calendars: [
+                    {
+                        url: input,
+                        prefix: '',
+                        override: false,
+                    },
+                ],
+            });
+        expect(response.status).toBe(200);
+        // Check if the file was created in the test directory
+        const filePath = path.join(CALENDARS_DIR, 'US_Holidays.ics');
+        console.log('Checking if file exists at:', filePath);
+        expect(fs.existsSync(filePath)).toBe(true);
+        // Load expected output and compare
+        const expectedOutput = fs.readFileSync(input, 'utf8');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
+    });
 
     // test('Merge date-based calendar', async () => {
     //     const response = await request(server)
