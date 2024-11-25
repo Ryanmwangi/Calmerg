@@ -1,8 +1,6 @@
 import request from 'supertest';
-import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { jest } from '@jest/globals';
 import { fileURLToPath } from 'url';
 
 // ESM equivalent of __dirname
@@ -15,15 +13,14 @@ const EXPECTED_OUTPUTS_DIR = path.join(__dirname, 'expected_outputs');
 
 let server;
 process.chdir(__dirname)
-console.log(process.cwd());
-import app from '../src/server.js';
+const app = await import('../src/server');
 
 const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\r\n').trimEnd(); // Normalize to CRLF
 
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Start the server
-        server = app.listen(0);
+        server = app.default.listen(0);
     });
 
     afterAll(async () => {
