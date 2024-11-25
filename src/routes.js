@@ -47,9 +47,9 @@ async function refreshCalendarData(calendarName) {
     // Read the JSON file to get the source URL and other details
     const { calendars } = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
 
-    const results = await Promise.all(calendars.map(fetchCalendarData));
+    const calendarResults = await Promise.all(calendars.map(fetchCalendarData));
     const calendarComponent = createCalendarComponent(calendarName);
-    addEventsToCalendar(calendarComponent, results);
+    addEventsToCalendar(calendarComponent, calendarResults);
 
     saveCalendarFile(`${calendarName}.ics`, calendarComponent.toString());
     console.log('Calendar data refreshed and saved.');

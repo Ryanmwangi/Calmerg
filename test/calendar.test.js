@@ -1,8 +1,6 @@
 import request from 'supertest';
-import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { jest } from '@jest/globals';
 import { fileURLToPath } from 'url';
 
 // ESM equivalent of __dirname
@@ -15,20 +13,18 @@ const EXPECTED_OUTPUTS_DIR = path.join(__dirname, 'expected_outputs');
 
 let server;
 process.chdir(__dirname)
-console.log(process.cwd());
-import app from '../src/server.js';
-
-const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\r\n').trimEnd(); // Normalize to CRLF
+const app = await import('../src/server');
 
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
-        // Start the server
-        server = app.listen(0);
+        
         // Clean up the merged calendars directory before tests
         fs.rmdirSync(CALENDARS_DIR, { recursive: true });
         if (fs.existsSync(CALENDARS_DIR)) {
             fs.rmdirSync(CALENDARS_DIR, { recursive: true });
         }
+        // Start the server
+        server = app.default.listen(0);
     });
 
     afterAll(async () => {
@@ -71,12 +67,8 @@ describe('Calendar Merging API', () => {
         const expectedOutput = fs.readFileSync(input, 'utf8');
         const actualOutput = fs.readFileSync(filePath, 'utf8');
         
-        // Normalize line endings
-        const normalizedActual = normalizeLineEndings(actualOutput);
-        const normalizedExpected = normalizeLineEndings(expectedOutput);
-        
         //compare
-        expect(normalizedActual).toBe(normalizedExpected);
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Preserve google calendar', async () => {
@@ -103,12 +95,8 @@ describe('Calendar Merging API', () => {
         const expectedOutput = fs.readFileSync(input, 'utf8');
         const actualOutput = fs.readFileSync(filePath, 'utf8');
         
-        // Normalize line endings
-        const normalizedActual = normalizeLineEndings(actualOutput);
-        const normalizedExpected = normalizeLineEndings(expectedOutput);
-        
         //compare
-        expect(normalizedActual).toBe(normalizedExpected);
+        expect(actualOutput).toBe(expectedOutput);
     });
 
 
