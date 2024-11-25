@@ -17,12 +17,6 @@ const app = await import('../src/server');
 
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
-        
-        // Clean up the merged calendars directory before tests
-        fs.rmdirSync(CALENDARS_DIR, { recursive: true });
-        if (fs.existsSync(CALENDARS_DIR)) {
-            fs.rmdirSync(CALENDARS_DIR, { recursive: true });
-        }
         // Start the server
         server = app.default.listen(0);
     });
@@ -125,37 +119,37 @@ describe('Calendar Merging API', () => {
         expect(actualOutput).toBe(expectedOutput);
     });
 
-    // test('Merge date-based calendar', async () => {
-    //     const response = await request(server)
-    //         .post('/merge')
-    //         .send({
-    //             linkGroupName: 'Date Based Calendar',
-    //             calendars: [
-    //                 {
-    //                     url: getTestCalendarFilename('holiday_calendar_2023.ics'),
-    //                     prefix: 'holiday_calendar_2023',
-    //                     override: false,
-    //                 },
-    //                 {
-    //                     url: getTestCalendarFilename('US_Holidays.ics'),
-    //                     prefix: 'US_holidays',
-    //                     override: false,
-    //                 },
-    //             ],
-    //         });
-    //     expect(response.status).toBe(200);
-    //     expect(response.body.url).toMatch(new RegExp(`calendar/Date_Based_Calendar`));
+    test('Merge date-based calendar', async () => {
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'Date Based Calendar',
+                calendars: [
+                    {
+                        url: getTestCalendarFilename('holiday_calendar_2023.ics'),
+                        prefix: 'holiday_calendar_2023',
+                        override: false,
+                    },
+                    {
+                        url: getTestCalendarFilename('US_Holidays.ics'),
+                        prefix: 'US_holidays',
+                        override: false,
+                    },
+                ],
+            });
+        expect(response.status).toBe(200);
+        expect(response.body.url).toMatch(new RegExp(`calendar/Date_Based_Calendar`));
 
-    //     // Check if the file was created in the test directory
-    //     const filePath = path.join(CALENDARS_DIR, 'Date_Based_Calendar.ics');
-    //     console.log('Checking if file exists at:', filePath);
-    //     expect(fs.existsSync(filePath)).toBe(true);
+        // Check if the file was created in the test directory
+        const filePath = path.join(CALENDARS_DIR, 'Date_Based_Calendar.ics');
+        console.log('Checking if file exists at:', filePath);
+        expect(fs.existsSync(filePath)).toBe(true);
 
-    //     // Load expected output and compare
-    //     const expectedOutput = loadExpectedOutput('Date_Based_Calendar.ics');
-    //     const actualOutput = fs.readFileSync(filePath, 'utf8');
-    //     expect(actualOutput).toBe(expectedOutput);
-    // });
+        // Load expected output and compare
+        const expectedOutput = loadExpectedOutput('Date_Based_Calendar.ics');
+        const actualOutput = fs.readFileSync(filePath, 'utf8');
+        expect(actualOutput).toBe(expectedOutput);
+    });
 
     // test('Merge time-based calendar', async () => {
     //     const input = getTestCalendarFilename('work_task_calendar.ics');
