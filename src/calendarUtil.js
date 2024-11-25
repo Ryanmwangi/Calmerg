@@ -37,11 +37,12 @@ export function createCalendarComponent(name) {
 }
 
 // Add events to the calendar component
-export function addEventsToCalendar(newCalendar, calendars, overrideFlag = false) {
+export function addEventsToCalendar(newCalendar, calendars) {
     let defaultTimeZone = null; // To store the first found X-WR-TIMEZONE
     
     calendars.forEach((calendarRaw) => {
         try {
+            const { data, prefix, override } = calendarRaw; // Extract prefix and override
             const calendar = new ICAL.Component(ICAL.parse(calendarRaw.data));
             
             // Extract METHOD from the parsed data (if available)
@@ -87,13 +88,13 @@ export function addEventsToCalendar(newCalendar, calendars, overrideFlag = false
                 const dtstamp = vevent.getFirstPropertyValue('dtstamp');
                 if (dtstamp) newEvent.component.updatePropertyWithValue('dtstamp', dtstamp);
 
-                if (overrideFlag) {
-                    newEvent.summary = 'Busy'
+                if (override) {
+                    newEvent.summary = prefix || 'Busy';
                 } else {
-                    newEvent.summary = event.summary;
+                    newEvent.summary = prefix ? `${prefix} ${event.summary}` : event.summary;
                     if (event.location) newEvent.location = event.location;
                 }
-
+                
                 const rrule = vevent.getFirstPropertyValue('rrule');
                 if (rrule) newEvent.component.updatePropertyWithValue('rrule', rrule);
 
