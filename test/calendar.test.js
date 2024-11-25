@@ -24,6 +24,11 @@ describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Start the server
         server = app.listen(0);
+        // Clean up the merged calendars directory before tests
+        fs.rmdirSync(CALENDARS_DIR, { recursive: true });
+        if (fs.existsSync(CALENDARS_DIR)) {
+            fs.rmdirSync(CALENDARS_DIR, { recursive: true });
+        }
     });
 
     afterAll(async () => {
