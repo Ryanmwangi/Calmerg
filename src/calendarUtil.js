@@ -112,12 +112,12 @@ export function createCalendarComponent(name) {
 }
 
 // Add events to the calendar component
-export function addEventsToCalendar(calendarComponent, results, overrideFlag = false) {
+export function addEventsToCalendar(calendarComponent, calendars, overrideFlag = false) {
     let defaultTimeZone = null; // To store the first found X-WR-TIMEZONE
     
-    results.forEach((result) => {
+    calendars.forEach((calendar) => {
         try {
-            const parsed = ICAL.parse(result.data);
+            const parsed = ICAL.parse(calendar.data);
             const component = new ICAL.Component(parsed);
             
             // Extract METHOD from the parsed data (if available)
@@ -153,53 +153,36 @@ export function addEventsToCalendar(calendarComponent, results, overrideFlag = f
             // Process VEVENT components
             component.getAllSubcomponents('vevent').forEach((event) => {
                 const vevent = new ICAL.Event(event);
-                const newEvent = new ICAL.Component('vevent');
+                const newEvent = new ICAL.Event(newEvent);
 
-                // 1. Add DTSTART
-                processDateTimeProperty(event, 'dtstart', newEvent);
-                
-                // 2. Add DTEND
-                processDateTimeProperty(event, 'dtend', newEvent);
+                newEvent.startDate = vevent.startDate
+                newEvent.endDate = vevent.endDate
 
                 // 3. Copy DTSTAMP
                 const dtstamp = event.getFirstPropertyValue('dtstamp');
-                if (dtstamp) newEvent.updatePropertyWithValue('dtstamp', dtstamp);
+                if (dtstamp) newEvent.component.updatePropertyWithValue('dtstamp', dtstamp);
 
                 // 4. Copy UID
-                newEvent.updatePropertyWithValue('uid', vevent.uid);
+                newEvent.uid = vevent.uid;
 
                 // 5. Add LOCATION (conditionally included)
-                if (!overrideFlag && vevent.location) {
-                    newEvent.updatePropertyWithValue('location', vevent.location);
-                } else if (overrideFlag && vevent.location) {
-                    // Modify SUMMARY if override is set
-                    const modifiedSummary = `${vevent.summary.trim()} (Location omitted)`;
-                    newEvent.updatePropertyWithValue('summary', modifiedSummary);
+                if (overrideFlag) {
+                    newEvent.summary = 'Busy'
                 } else {
-                    newEvent.updatePropertyWithValue('summary', vevent.summary.trim());
+                    newEvent.summary = vevent.summary;
+                    if (vevent.location) newEvent.location = vevent.location;
                 }
 
-                // 6. Copy Recurrence Rules (RRULE) and Recurrence ID
                 const rrule = event.getFirstPropertyValue('rrule');
-                if (rrule) newEvent.updatePropertyWithValue('rrule', rrule);
+                if (rrule) newEvent.component.updatePropertyWithValue('rrule', rrule);
 
-                const recurrenceId = event.getFirstPropertyValue('recurrence-id');
-                if (recurrenceId) newEvent.updatePropertyWithValue('recurrence-id', recurrenceId);
-                
-                // 7. Copy SUMMARY
-                newEvent.updatePropertyWithValue('summary', vevent.summary.trim());  
-
-                // 8. Add SEQUENCE (if available or default to 0)
-                const sequence = event.getFirstPropertyValue('sequence') || 0;
-                newEvent.updatePropertyWithValue('sequence', sequence);
-               
                 // Add the VEVENT to the calendar
-                calendarComponent.addSubcomponent(newEvent);
+                calendarComponent.addSubcomponent(newEvent.component);
             });
 
-            console.log(`Processed VEVENT components for calendar: ${result.name}`);
-      } catch (error) {
-            console.error('Error processing calendar data:', error.message);
+            console.log(`Processed VEVENT components for calendar: ${calendar.name}`);
+        } catch (error) {
+            console.error(`Error processing calendar:`, calendar, error);
         }
     });
 }
