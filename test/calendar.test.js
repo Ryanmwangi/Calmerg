@@ -15,8 +15,6 @@ let server;
 process.chdir(__dirname)
 const app = await import('../src/server');
 
-const normalizeLineEndings = (str) => str.replace(/\r\n/g, '\r\n').trimEnd(); // Normalize to CRLF
-
 describe('Calendar Merging API', () => {
     beforeAll(async () => {
         // Start the server
@@ -63,12 +61,8 @@ describe('Calendar Merging API', () => {
         const expectedOutput = fs.readFileSync(input, 'utf8');
         const actualOutput = fs.readFileSync(filePath, 'utf8');
         
-        // Normalize line endings
-        const normalizedActual = normalizeLineEndings(actualOutput);
-        const normalizedExpected = normalizeLineEndings(expectedOutput);
-        
         //compare
-        expect(normalizedActual).toBe(normalizedExpected);
+        expect(actualOutput).toBe(expectedOutput);
     });
 
     test('Preserve google calendar', async () => {
@@ -95,12 +89,8 @@ describe('Calendar Merging API', () => {
         const expectedOutput = fs.readFileSync(input, 'utf8');
         const actualOutput = fs.readFileSync(filePath, 'utf8');
         
-        // Normalize line endings
-        const normalizedActual = normalizeLineEndings(actualOutput);
-        const normalizedExpected = normalizeLineEndings(expectedOutput);
-        
         //compare
-        expect(normalizedActual).toBe(normalizedExpected);
+        expect(actualOutput).toBe(expectedOutput);
     });
 
 
