@@ -1,7 +1,8 @@
-import ICAL from './lib/ical.timezones.js'
-import fs from 'fs'
-import path from 'path'
-import axios from 'axios'
+import ICAL from './lib/ical.timezones.js';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import logger from './logger.js';
 
 export const MERGED_CALENDARS_DIR = path.join(process.cwd(), 'calendar');
 
@@ -16,18 +17,22 @@ export async function fetchCalendarData(calendar) {
     const isFilePath = !calendar.url.startsWith('http');
     try {
         if (isFilePath) {
+            // logger.debug(`Reading calendar from file: ${calendar.url}`);
             return { data: fs.readFileSync(path.resolve(calendar.url), 'utf-8'), ...calendar };
         } else {
+            // logger.debug(`Fetching calendar from URL: ${calendar.url}`);
             const response = await axios.get(calendar.url);
             return { data: response.data, ...calendar };
         }
     } catch (error) {
+        logger.error(`Error retrieving calendar from ${calendar.url}: ${error.message}`);
         throw new Error(`Error retrieving calendar from ${calendar.url}: ${error.message}`);
     }
 }
 
 // Create a top-level VCALENDAR component
 export function createCalendarComponent(name) {
+    logger.info(`Creating calendar component with name: ${name}`);
     const calendarComponent = new ICAL.Component(['vcalendar', [], []]);
     calendarComponent.updatePropertyWithValue('name', name);
     calendarComponent.updatePropertyWithValue('prodid', '-//CalMerge//Calendar Merger 1.0//EN');
@@ -48,7 +53,7 @@ export function addEventsToCalendar(newCalendar, calendars) {
             // Extract METHOD from the parsed data (if available)
             const method = calendar.getFirstPropertyValue('method');
             if (method) {
-                console.log(`Extracted METHOD: ${method}`);
+                logger.info(`Extracted METHOD: ${method}`);
                 // Only add the METHOD property once
                 if (!newCalendar.getFirstPropertyValue('method')) {
                     newCalendar.updatePropertyWithValue('method', method.toUpperCase());
@@ -57,7 +62,7 @@ export function addEventsToCalendar(newCalendar, calendars) {
             // Extract X-WR-TIMEZONE if available
             const wrTimeZone = calendar.getFirstPropertyValue('x-wr-timezone');
             if (wrTimeZone) {
-                console.log(`Extracted X-WR-TIMEZONE: ${wrTimeZone}`);
+                logger.info(`Extracted X-WR-TIMEZONE: ${wrTimeZone}`);
                 // Set it as the default if not already set
                 if (!defaultTimeZone) {
                     defaultTimeZone = wrTimeZone;
@@ -72,6 +77,7 @@ export function addEventsToCalendar(newCalendar, calendars) {
             timezones.forEach((timezone) => {
                 const tzid = timezone.getFirstPropertyValue('tzid');
                 if (!newCalendar.getFirstSubcomponent((comp) => comp.name === 'vtimezone' && comp.getFirstPropertyValue('tzid') === tzid)) {
+                    logger.debug(`Adding VTIMEZONE: ${tzid}`);
                     newCalendar.addSubcomponent(timezone);
                 }
             });
@@ -82,8 +88,8 @@ export function addEventsToCalendar(newCalendar, calendars) {
                 const newEvent = new ICAL.Event();
 
                 newEvent.uid = event.uid;
-                newEvent.startDate = event.startDate
-                newEvent.endDate = event.endDate
+                newEvent.startDate = event.startDate;
+                newEvent.endDate = event.endDate;
 
                 const dtstamp = vevent.getFirstPropertyValue('dtstamp');
                 if (dtstamp) newEvent.component.updatePropertyWithValue('dtstamp', dtstamp);
@@ -102,7 +108,7 @@ export function addEventsToCalendar(newCalendar, calendars) {
                 newCalendar.addSubcomponent(newEvent.component);
             });
         } catch (error) {
-            console.error(`Error processing calendar:`, calendarRaw, error);
+            logger.error(`Error processing calendar: ${error.message}`);
         }
     });
 }
@@ -111,7 +117,7 @@ export function addEventsToCalendar(newCalendar, calendars) {
 export function saveCalendarFile(filename, content) {
     const normalizedContent = content.replace(/\r?\n/g, '\r\n').trimEnd(); // Normalize to CRLF
     const filePath = path.join(MERGED_CALENDARS_DIR, filename);
-    console.log(`Saving calendar data to file: ${filePath}`);
+    logger.info(`Saving calendar data to file: ${filePath}`);
     fs.writeFileSync(filePath, normalizedContent);
     return filePath;
 }
