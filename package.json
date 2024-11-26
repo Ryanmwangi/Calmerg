@@ -11,7 +11,8 @@
     "express": "^4.17.1",
     "ical.js": "^2.1.0",
     "node-cron": "^2.0.3",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "winston": "^3.17.0"
   },
   "description": "calmerger",
   "main": "server.js",
