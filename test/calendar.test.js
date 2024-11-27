@@ -25,6 +25,12 @@ describe('Calendar Merging API', () => {
         // Ensure the server is closed before cleanup
         await new Promise(resolve => server.close(resolve));
 
+        // Clean up the merged calendars directory after tests
+        fs.rmdirSync(CALENDARS_DIR, { recursive: true });
+        if (fs.existsSync(CALENDARS_DIR)) {
+            fs.rmdirSync(CALENDARS_DIR, { recursive: true });
+        }
+
         // Optional: Add a delay to ensure all handles are released
         await new Promise(resolve => setTimeout(resolve, 100));
     });
