@@ -18,8 +18,11 @@ function isValidUrl(url) {
             newCalendar.innerHTML = `
                 <input type="text" id="prefix-${calendarIndex}" placeholder="Event prefix">
                 <input type="url" id="url-${calendarIndex}" placeholder="https://example.com/calendar.ics">
-                <input type="checkbox" id="override-${calendarIndex}">
-                <label for="override-${calendarIndex}">Override</label>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="override-${calendarIndex}">
+                  <label for="override-${calendarIndex}">Override</label>
+                </div>
+                <button type="button" class="remove-btn" title="Remove calendar"></button>
             `;
             calendars.appendChild(newCalendar);
             calendarIndex++;
@@ -73,5 +76,14 @@ function isValidUrl(url) {
                 console.error('Error:', error);
                 result.innerHTML = `Error merging calendars: ${error.message || 'Unknown error'}`
             });
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('remove-btn')) {
+            const calendarEntry = event.target.closest('.calendar-entry');
+            if (calendarEntry) {
+                calendarEntry.remove();
+            }
         }
     });

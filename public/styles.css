@@ -132,3 +132,28 @@
       width: 100%;
     }
   }
+
+  .remove-btn {
+    background: #fef2f2;
+    color: #dc2626;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .remove-btn:hover {
+    background: #fee2e2;
+    transform: scale(1.1);
+  }
+  
+  .remove-btn::before {
+    content: '×';
+    font-size: 1.4rem;
+    line-height: 1;
+  }
