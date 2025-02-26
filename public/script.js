@@ -14,12 +14,12 @@ function isValidUrl(url) {
 
         addCalendarButton.addEventListener('click', () => {
             const newCalendar = document.createElement('div');
-            newCalendar.className = 'calendar';
+            newCalendar.className = 'calendar-entry';
             newCalendar.innerHTML = `
-                <input type="text" id="prefix-${calendarIndex}" placeholder="Prefix">
+                <input type="text" id="prefix-${calendarIndex}" placeholder="Event prefix">
+                <input type="url" id="url-${calendarIndex}" placeholder="https://example.com/calendar.ics">
                 <input type="checkbox" id="override-${calendarIndex}">
                 <label for="override-${calendarIndex}">Override</label>
-                <input type="url" id="url-${calendarIndex}" placeholder="Calendar URL">
             `;
             calendars.appendChild(newCalendar);
             calendarIndex++;

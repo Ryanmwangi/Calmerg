@@ -1,37 +1,134 @@
-body {
-    font-family: Arial, sans-serif;
-}
-
-#merge-form {
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-    display: block;
-    margin-bottom: 10px;
-}
-
-input[type="url"], input[type="text"] {
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+  }
+  
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+    padding: 2rem;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Form Styling */
+  .form-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .input-group {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Calendar Entry Styling */
+  .calendar-entry {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background: var(--background);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    margin-bottom: 1rem;
+  }
+  
+  .calendar-entry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Input Elements */
+  input[type="text"],
+  input[type="url"] {
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 6px;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-}
-
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 10px 20px;
+    transition: border-color 0.2s ease;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  
+  /* Checkbox Styling */
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  input[type="checkbox"] {
+    width: 1.2em;
+    height: 1.2em;
+    accent-color: var(--primary);
+  }
+  
+  /* Button Styling */
+  .button {
+    padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-}
-
-button[type="submit"]:hover {
-    background-color: #3e8e41;
-}
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  
+  .primary-btn {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .primary-btn:hover {
+    background: var(--primary-hover);
+  }
+  
+  .secondary-btn {
+    background: var(--background);
+    border: 2px solid var(--border);
+  }
+  
+  /* Result Display */
+  #result {
+    padding: 1.5rem;
+    background: var(--surface);
+    border-radius: 8px;
+    margin-top: 1rem;
+    border: 2px dashed var(--border);
+  }
+  
+  #result a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .calendar-entry {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+    }
+  }

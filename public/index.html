@@ -4,45 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar Merger</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #calendars {
-            margin-bottom: 20px;
-        }
-        #calendars .calendar {
-            margin-bottom: 10px;
-        }
-        #calendars .calendar input[type="text"] {
-            width: 50%;
-            margin-right: 10px;
-        }
-        #calendars .calendar input[type="url"] {
-            width: 50%;
-        }
-        #add-calendar {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Calendar Merger</h1>
-    <form id="merge-form">
-        <input type="text" id="link-group-name" placeholder="Link Group Name">
-        <div id="calendars">
-            <div class="calendar">
-                <input type="text" id="prefix-0" placeholder="Prefix">
+    <div class="container">
+      <h1>📅 Calendar Merger</h1>
+      
+      <div class="form-card">
+        <form id="merge-form">
+          <div class="input-group">
+            <input type="text" 
+                   id="link-group-name" 
+                   placeholder="Enter collection name"
+                   class="input-field">
+          </div>
+  
+          <div id="calendars">
+            <div class="calendar-entry">
+              <input type="text" id="prefix-0" placeholder="Event prefix">
+              <input type="url" id="url-0" placeholder="https://example.com/calendar.ics">
+              <div class="checkbox-group">
                 <input type="checkbox" id="override-0">
                 <label for="override-0">Override</label>
-                <input type="url" id="url-0" placeholder="Calendar URL">
+              </div>
             </div>
-        </div>
-        <button id="add-calendar" type="button">Add Calendar</button>
-        <button type="submit">Merge Calendars</button>
-    </form>
-    <div id="result"></div>
-
+          </div>
+  
+          <div class="button-group">
+            <button type="button" id="add-calendar" class="button secondary-btn">
+              ➕ Add Another Calendar
+            </button>
+            <button type="submit" class="button primary-btn">
+                🔗  Merge Calendars
+            </button>
+          </div>
+        </form>
+      </div>
+  
+      <div id="result"></div>
+    </div>
+    
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
