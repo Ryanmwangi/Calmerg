@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  calmerge:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NODE_PORT=3000
+    volumes:
+      - ./calendar:/app/calendar
+      - ./logs:/app/logs
+    restart: unless-stopped
