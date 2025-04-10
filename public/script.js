@@ -16,8 +16,8 @@ function isValidUrl(url) {
             const newCalendar = document.createElement('div');
             newCalendar.className = 'calendar-entry';
             newCalendar.innerHTML = `
-                <input type="text" id="prefix-${calendarIndex}" placeholder="Event prefix">
                 <input type="url" id="url-${calendarIndex}" placeholder="https://example.com/calendar.ics">
+                <input type="text" id="prefix-${calendarIndex}" placeholder="Event prefix">
                 <div class="checkbox-group">
                   <input type="checkbox" id="override-${calendarIndex}">
                   <label for="override-${calendarIndex}">Override</label>
