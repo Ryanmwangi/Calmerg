@@ -18,6 +18,17 @@ The application also generates a unique URL for the merged calendar and updates 
 - Generate a unique URL for the merged calendar
 - Automatically update the merged calendar every hour
 
+## Calender Directory
+
+#### `calendar/` (MERGED_CALENDARS_DIR)
+- Location: Created in application's current working directory
+- Purpose: Stores all generated calendar files
+- Contains:
+  - `.ics` files - Final merged calendars in iCalendar format
+  - `.json` files - Configuration preserving original merge parameters
+  - Maintains both formats for each merged calendar group
+
+
 ## Requirements
 
 - [Node.js](https://nodejs.org/) (version 14 or higher)
