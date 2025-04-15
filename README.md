@@ -65,11 +65,11 @@ docker build -t calmerger-app .
 To start the container, use:
 
 ```bash
-docker run -d --name calmerger -p 3000:3000 calmerger-app
+docker run -d --name calmerger -p 3012:3012 calmerger-app
 
 ```
 
-This maps the container's port `3000` to the host system's port `3000`. The application will be accessible at [http://localhost:3000](http://localhost:3000).
+This maps the container's port `3012` to the host system's port `3012`. The application will be accessible at [http://localhost:3012](http://localhost:3012).
 
 ### 3. Using Docker Compose (Optional)
 
@@ -125,7 +125,7 @@ This generates a `coverage` report, showing how much of the codebase is tested.
 
 ## Usage
 
-1. Open a web browser and navigate to `http://localhost:3000`.
+1. Open a web browser and navigate to `http://localhost:3012`.
 2. Click the **Add Calendar** button to add a new calendar.
 3. Enter the Link Group Name, calendar URL, prefix, and override options (if needed).
 4. Click the **Merge Calendars** button to generate the merged calendar.

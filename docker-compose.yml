@@ -1,13 +1,13 @@
-version: '3.3'
+version: "3.3"
 
 services:
   calmerge:
     build: .
     ports:
-      - "3000:3000"
+      - "3012:3012"
     environment:
       - NODE_ENV=production
-      - NODE_PORT=3000
+      - NODE_PORT=3012
     volumes:
       - ./calendar:/app/calendar
       - ./logs:/app/logs
