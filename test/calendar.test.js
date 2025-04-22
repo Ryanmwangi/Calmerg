@@ -2,15 +2,12 @@ import request from 'supertest';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import { fetchCalendarData } from '../src/calendarUtil.js';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const CALENDARS_DIR = path.join(process.cwd(), 'calendar');
+const CALENDARS_DIR = path.join(__dirname, 'calendar');
 const TEST_CALENDARS_DIR = path.join(__dirname, 'test_calendars');
 const EXPECTED_OUTPUTS_DIR = path.join(__dirname, 'expected_outputs');
 
@@ -29,8 +26,9 @@ describe('Calendar Merging API', () => {
         await new Promise(resolve => server.close(resolve));
 
         // Clean up the merged calendars directory after tests
+        fs.rmdirSync(CALENDARS_DIR, { recursive: true });
         if (fs.existsSync(CALENDARS_DIR)) {
-            fs.rmSync(CALENDARS_DIR, { recursive: true, force: true });
+            fs.rmdirSync(CALENDARS_DIR, { recursive: true });
         }
 
         // Optional: Add a delay to ensure all handles are released
@@ -282,60 +280,4 @@ describe('Calendar Merging API', () => {
     expect(actualOutput).toBe(expectedOutput);
     });
 
-    describe('Smart URL Handling', () => {
-        let mockAxios;
-      
-        beforeAll(() => {
-          mockAxios = new MockAdapter(axios);
-        });
-
-        afterEach(() => {
-            mockAxios.reset();
-        });
-
-        afterAll(() => {
-            mockAxios.restore();
-        });
-      
-        test('should use original URL when valid without .ics', async () => {
-          const validUrl = 'https://cals.ftt.gmbh/calendar/germanholithunder';
-          mockAxios.onGet(validUrl).reply(200, 'VALID_CALENDAR');
-          
-          const result = await fetchCalendarData({ url: validUrl });
-          expect(result.data).toBe('VALID_CALENDAR');
-        });
-      
-        test('should try .ics version when original fails', async () => {
-          const invalidUrl = 'https://cals.ftt.gmbh/calendar/germanholithunder.ics';
-          const validUrl = invalidUrl.slice(0, -4);
-          
-          mockAxios
-            .onGet(invalidUrl).reply(404)
-            .onGet(validUrl).reply(200, 'VALID_CALENDAR');
-      
-          const result = await fetchCalendarData({ url: invalidUrl });
-          expect(result.data).toBe('VALID_CALENDAR');
-        });
-      
-        test('should preserve valid .ics URLs', async () => {
-          const googleUrl = 'https://calendar.google.com/.../basic.ics';
-          mockAxios.onGet(googleUrl).reply(200, 'GOOGLE_CALENDAR');
-          
-          const result = await fetchCalendarData({ url: googleUrl });
-          expect(result.data).toBe('GOOGLE_CALENDAR');
-        });
-      
-        test('should try both versions for ambiguous URLs', async () => {
-          const baseUrl = 'https://example.com/calendar';
-          const icsUrl = baseUrl + '.ics';
-          
-          mockAxios
-            .onGet(baseUrl).reply(404)
-            .onGet(icsUrl).reply(200, 'ICS_CALENDAR');
-      
-          const result = await fetchCalendarData({ url: baseUrl });
-          expect(result.data).toBe('ICS_CALENDAR');
-        });
-    });
 });
-

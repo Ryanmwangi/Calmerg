@@ -15,33 +15,18 @@ export const sanitizeFilename = (filename) => filename.replace(/[<>:"/\\|?* ]/g,
 // Fetch calendar data from URL or file
 export async function fetchCalendarData(calendar) {
     const isFilePath = !calendar.url.startsWith('http');
-    if (isFilePath) {
-        // logger.debug(`Reading calendar from file: ${calendar.url}`);
-        return { data: fs.readFileSync(path.resolve(calendar.url), 'utf-8'), ...calendar };
-    }
     try {
-        // First try the original URL
-        const initialResponse = await axios.get(calendar.url);
-        return { data: initialResponse.data, ...calendar };
-    } catch (initialError) {
-        logger.debug(`Initial fetch failed, trying extension adjustment for: ${calendar.url}`);
-        
-        // Determine alternate URL version
-        const altUrl = calendar.url.endsWith('.ics') 
-            ? calendar.url.slice(0, -4)  // Remove .ics
-            : calendar.url + '.ics';     // Add .ics
-
-        try {
-            // Try the alternate version
-            const altResponse = await axios.get(altUrl);
-            logger.debug(`Success with adjusted URL: ${altUrl}`);
-            return { data: altResponse.data, ...calendar };
-        } catch (altError) {
-            logger.error(`Both URL versions failed:
-            Original: ${calendar.url}
-            Adjusted: ${altUrl}`);
-            throw new Error(`Calendar fetch failed for both URL versions`);
+        if (isFilePath) {
+            // logger.debug(`Reading calendar from file: ${calendar.url}`);
+            return { data: fs.readFileSync(path.resolve(calendar.url), 'utf-8'), ...calendar };
+        } else {
+            // logger.debug(`Fetching calendar from URL: ${calendar.url}`);
+            const response = await axios.get(calendar.url);
+            return { data: response.data, ...calendar };
         }
+    } catch (error) {
+        logger.error(`Error retrieving calendar from ${calendar.url}: ${error.message}`);
+        throw new Error(`Error retrieving calendar from ${calendar.url}: ${error.message}`);
     }
 }
 
