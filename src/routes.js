@@ -57,7 +57,12 @@ async function refreshCalendarData(calendarName) {
 
 // Serve the merged calendar file and refresh if older than an hour
 router.get('/calendar/:name', async (req, res) => {
-    const calendarName = req.params.name;
+    // Extract the calendar name and remove .ics extension if present
+    let calendarName = req.params.name;
+    if (calendarName.endsWith('.ics')) {
+        calendarName = calendarName.slice(0, -4);
+    }
+    
     const icsFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
 
     try {
