@@ -280,4 +280,58 @@ describe('Calendar Merging API', () => {
     expect(actualOutput).toBe(expectedOutput);
     });
 
+    // Test accessing calendar with and without .ics extension
+    test('Access calendar with and without .ics extension', async () => {
+        // Create a test calendar
+        const response = await request(server)
+            .post('/merge')
+            .send({
+                linkGroupName: 'Extension Test Calendar',
+                calendars: [
+                    {
+                        url: getTestCalendarFilename('sf_public_holidays.ics'),
+                        prefix: 'Test',
+                        override: false,
+                    },
+                ],
+            });
+
+        expect(response.status).toBe(200);
+        
+        // Check if the file was created
+        const filePath = path.join(CALENDARS_DIR, 'Extension_Test_Calendar.ics');
+        expect(fs.existsSync(filePath)).toBe(true);
+        
+        // Test accessing without .ics extension
+        const responseWithoutExtension = await request(server)
+            .get('/calendar/Extension_Test_Calendar');
+            
+        expect(responseWithoutExtension.status).toBe(200);
+        expect(responseWithoutExtension.headers['content-type']).toMatch(/text\/calendar/);
+        
+        // Test accessing with .ics extension
+        const responseWithExtension = await request(server)
+            .get('/calendar/Extension_Test_Calendar.ics');
+            
+        expect(responseWithExtension.status).toBe(200);
+        expect(responseWithExtension.headers['content-type']).toMatch(/text\/calendar/);
+        
+        // Verify both responses contain the same content
+        expect(responseWithoutExtension.text).toBe(responseWithExtension.text);
+    });
+
+    // Test 404 response for non-existent calendar
+    test('Return 404 for non-existent calendar with and without .ics extension', async () => {
+        // Test accessing non-existent calendar without .ics extension
+        const responseWithoutExtension = await request(server)
+            .get('/calendar/NonExistentCalendar');
+            
+        expect(responseWithoutExtension.status).toBe(404);
+        
+        // Test accessing non-existent calendar with .ics extension
+        const responseWithExtension = await request(server)
+            .get('/calendar/NonExistentCalendar.ics');
+            
+        expect(responseWithExtension.status).toBe(404);
+    });
 });

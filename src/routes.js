@@ -64,7 +64,8 @@ router.get('/calendar/:name', async (req, res) => {
     }
     
     const icsFilePath = path.join(MERGED_CALENDARS_DIR, `${calendarName}.ics`);
-
+    const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+    
     try {
         // Check if the .ics file exists
         console.log(`Serving calendar for: ${calendarName}`);
@@ -78,7 +79,11 @@ router.get('/calendar/:name', async (req, res) => {
             }
             res.setHeader('Content-Type', 'text/calendar');
             res.sendFile(icsFilePath);
+
+            // Log the successful request with URL format and status code
+            console.log(`Serving calendar ${calendarName} for ${fullUrl}: 200`);
         } else {
+            console.log(`Calendar not found: ${calendarName} for ${fullUrl}: 404`);
             res.status(404).json({ error: 'Calendar not found.' });
         }
     } catch (error) {
