@@ -10,6 +10,18 @@
     <div class="container">
       <h1>📅 Calendar Merger</h1>
 
+      <!-- Search Section -->
+      <div class="form-card search-section">
+        <h2>Find Existing Calendar</h2>
+        <div class="input-group">
+          <div class="search-container">
+            <input type="text" id="calendar-search" placeholder="Enter calendar name">
+            <button type="button" id="search-btn" class="button primary-btn">Search</button>
+          </div>
+          <div id="search-result"></div>
+        </div>
+      </div>
+
       <!-- Merge Form -->
       <div class="form-card">
         <form id="merge-form">
@@ -43,24 +55,11 @@
           </div>
         </form>
       </div>
-  
-      <!-- Result Section -->
-      <div id="result-container">
-        <p class="result-info">After merging, your calendar URL will appear here.</p>
-        <div id="result"></div>
-      </div>
-      
-      
-       <!-- Search Section -->
-        <div class="form-card search-section">
-          <h2>Find Existing Calendar</h2>
-          <div class="input-group">
-            <div class="search-container">
-              <input type="text" id="calendar-search" placeholder="Enter calendar name">
-              <button type="button" id="search-btn" class="button primary-btn">Search</button>
-            </div>
-            <div id="search-result"></div>
-          </div>
+
+        <!-- Result Section -->
+        <div id="result-container">
+          <p class="result-info">After merging, your calendar URL will appear here.</p>
+          <div id="result"></div>
         </div>
       
     </div>
